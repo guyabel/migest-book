@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Handling Migration Data in R | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 4 Handling Migration Data in R | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Handling Migration Data in R | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="guyabel/migest-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Handling Migration Data in R | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="migration-concepts.html"/>
+<link rel="next" href="summary-migration-indices.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> .</a></li>
+<li class="chapter" data-level="2" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>2</b> Outline</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>2.1</b> Workshop on Migration Estimation</a></li>
+<li class="chapter" data-level="2.2" data-path="outline.html"><a href="outline.html#general-points"><i class="fa fa-check"></i><b>2.2</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#spatial"><i class="fa fa-check"></i><b>3.1</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence"><i class="fa fa-check"></i><b>3.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.2" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-1"><i class="fa fa-check"></i><b>3.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.3" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-2"><i class="fa fa-check"></i><b>3.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.4" data-path="migration-concepts.html"><a href="migration-concepts.html#courgeau-1979"><i class="fa fa-check"></i><b>3.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.5" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-origin"><i class="fa fa-check"></i><b>3.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="3.1.6" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data"><i class="fa fa-check"></i><b>3.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="3.1.7" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>3.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="3.1.8" data-path="migration-concepts.html"><a href="migration-concepts.html#migrants-and-migration"><i class="fa fa-check"></i><b>3.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="3.1.9" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data"><i class="fa fa-check"></i><b>3.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.10" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-1"><i class="fa fa-check"></i><b>3.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.11" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>3.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.12" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-2"><i class="fa fa-check"></i><b>3.1.12</b> Migration Event Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#temporal"><i class="fa fa-check"></i><b>3.2</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval"><i class="fa fa-check"></i><b>3.2.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="3.2.2" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>3.2.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>3.2.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="3.2.4" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>3.2.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.5" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>3.2.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.6" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>3.2.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#measures"><i class="fa fa-check"></i><b>3.3</b> Measures</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-measures"><i class="fa fa-check"></i><b>3.3.1</b> Migration measures</a></li>
+<li class="chapter" data-level="3.3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures"><i class="fa fa-check"></i><b>3.3.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>3.3.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.4" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals"><i class="fa fa-check"></i><b>3.3.4</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.5" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-1"><i class="fa fa-check"></i><b>3.3.5</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.6" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-2"><i class="fa fa-check"></i><b>3.3.6</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.7" data-path="migration-concepts.html"><a href="migration-concepts.html#rate-measures"><i class="fa fa-check"></i><b>3.3.7</b> Rate measures</a></li>
+<li class="chapter" data-level="3.3.8" data-path="migration-concepts.html"><a href="migration-concepts.html#rates"><i class="fa fa-check"></i><b>3.3.8</b> Rates</a></li>
+<li class="chapter" data-level="3.3.9" data-path="migration-concepts.html"><a href="migration-concepts.html#rates-1"><i class="fa fa-check"></i><b>3.3.9</b> Rates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html"><i class="fa fa-check"></i><b>4</b> Handling Migration Data in R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table"><i class="fa fa-check"></i><b>4.1</b> Contingency Table</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-1"><i class="fa fa-check"></i><b>4.1.1</b> Contingency Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-2"><i class="fa fa-check"></i><b>4.1.2</b> Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-manipulation"><i class="fa fa-check"></i><b>4.2</b> Data Manipulation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array"><i class="fa fa-check"></i><b>4.2.1</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array-1"><i class="fa fa-check"></i><b>4.2.2</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#show-totals"><i class="fa fa-check"></i><b>4.2.3</b> Show totals</a></li>
+<li class="chapter" data-level="4.2.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix"><i class="fa fa-check"></i><b>4.2.4</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-1"><i class="fa fa-check"></i><b>4.2.5</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-2"><i class="fa fa-check"></i><b>4.2.6</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame"><i class="fa fa-check"></i><b>4.2.7</b> Convert to data frame</a></li>
+<li class="chapter" data-level="4.2.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame-1"><i class="fa fa-check"></i><b>4.2.8</b> Convert to data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#matrix-operations"><i class="fa fa-check"></i><b>4.3</b> Matrix Operations</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics"><i class="fa fa-check"></i><b>4.3.1</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics-1"><i class="fa fa-check"></i><b>4.3.2</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names"><i class="fa fa-check"></i><b>4.3.3</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-1"><i class="fa fa-check"></i><b>4.3.4</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-2"><i class="fa fa-check"></i><b>4.3.5</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-scaling"><i class="fa fa-check"></i><b>4.3.6</b> Data scaling</a></li>
+<li class="chapter" data-level="4.3.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#diagonal-elements"><i class="fa fa-check"></i><b>4.3.7</b> Diagonal elements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#summaries"><i class="fa fa-check"></i><b>4.4</b> Summaries</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows"><i class="fa fa-check"></i><b>4.4.1</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows-1"><i class="fa fa-check"></i><b>4.4.2</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals"><i class="fa fa-check"></i><b>4.4.3</b> Totals</a></li>
+<li class="chapter" data-level="4.4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-1"><i class="fa fa-check"></i><b>4.4.4</b> Totals</a></li>
+<li class="chapter" data-level="4.4.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-2"><i class="fa fa-check"></i><b>4.4.5</b> Totals</a></li>
+<li class="chapter" data-level="4.4.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-3"><i class="fa fa-check"></i><b>4.4.6</b> Totals</a></li>
+<li class="chapter" data-level="4.4.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-4"><i class="fa fa-check"></i><b>4.4.7</b> Totals</a></li>
+<li class="chapter" data-level="4.4.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies"><i class="fa fa-check"></i><b>4.4.8</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.9" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-1"><i class="fa fa-check"></i><b>4.4.9</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.10" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-2"><i class="fa fa-check"></i><b>4.4.10</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.11" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-3"><i class="fa fa-check"></i><b>4.4.11</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.12" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#exercise-ex2.r"><i class="fa fa-check"></i><b>4.4.12</b> Exercise (ex2.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html"><i class="fa fa-check"></i><b>5</b> Summary Migration Indices</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-1"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-2"><i class="fa fa-check"></i><b>5.1.2</b> Background</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#intensity"><i class="fa fa-check"></i><b>5.2</b> Intensity</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity"><i class="fa fa-check"></i><b>5.2.1</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#crude-migration-probability"><i class="fa fa-check"></i><b>5.2.2</b> Crude migration probability</a></li>
+<li class="chapter" data-level="5.2.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-1"><i class="fa fa-check"></i><b>5.2.3</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-2"><i class="fa fa-check"></i><b>5.2.4</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-3"><i class="fa fa-check"></i><b>5.2.5</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-4"><i class="fa fa-check"></i><b>5.2.6</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-5"><i class="fa fa-check"></i><b>5.2.7</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-6"><i class="fa fa-check"></i><b>5.2.8</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-7"><i class="fa fa-check"></i><b>5.2.9</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-8"><i class="fa fa-check"></i><b>5.2.10</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.11" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-9"><i class="fa fa-check"></i><b>5.2.11</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.12" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-10"><i class="fa fa-check"></i><b>5.2.12</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.13" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-11"><i class="fa fa-check"></i><b>5.2.13</b> Migration intensity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance"><i class="fa fa-check"></i><b>5.3</b> Distance</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance"><i class="fa fa-check"></i><b>5.3.1</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#average-migration-distance"><i class="fa fa-check"></i><b>5.3.2</b> Average migration distance</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance-decay"><i class="fa fa-check"></i><b>5.3.3</b> Distance decay</a></li>
+<li class="chapter" data-level="5.3.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-1"><i class="fa fa-check"></i><b>5.3.4</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-2"><i class="fa fa-check"></i><b>5.3.5</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-3"><i class="fa fa-check"></i><b>5.3.6</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances"><i class="fa fa-check"></i><b>5.3.7</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-1"><i class="fa fa-check"></i><b>5.3.8</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-2"><i class="fa fa-check"></i><b>5.3.9</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-3"><i class="fa fa-check"></i><b>5.3.10</b> Calculating distances</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity"><i class="fa fa-check"></i><b>5.4</b> Connectivity</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity"><i class="fa fa-check"></i><b>5.4.1</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity-1"><i class="fa fa-check"></i><b>5.4.2</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity-and-inequality"><i class="fa fa-check"></i><b>5.4.3</b> Connectivity and Inequality</a></li>
+<li class="chapter" data-level="5.4.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#gini-measures"><i class="fa fa-check"></i><b>5.4.4</b> Gini measures</a></li>
+<li class="chapter" data-level="5.4.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-totals-gini-and-coefficient-of-variation"><i class="fa fa-check"></i><b>5.4.5</b> Migration totals Gini and Coefficient of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#impact"><i class="fa fa-check"></i><b>5.5</b> Impact</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact"><i class="fa fa-check"></i><b>5.5.1</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-effectiveness-index"><i class="fa fa-check"></i><b>5.5.2</b> Migration effectiveness index</a></li>
+<li class="chapter" data-level="5.5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#aggregate-net-migration-rate"><i class="fa fa-check"></i><b>5.5.3</b> Aggregate net migration rate</a></li>
+<li class="chapter" data-level="5.5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#preference-and-velocity"><i class="fa fa-check"></i><b>5.5.4</b> Preference and velocity</a></li>
+<li class="chapter" data-level="5.5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-1"><i class="fa fa-check"></i><b>5.5.5</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-2"><i class="fa fa-check"></i><b>5.5.6</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-3"><i class="fa fa-check"></i><b>5.5.7</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#exercise-ex3.r"><i class="fa fa-check"></i><b>5.5.8</b> Exercise (ex3.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html"><i class="fa fa-check"></i><b>6</b> Estimating Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration"><i class="fa fa-check"></i><b>6.1</b> Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-1"><i class="fa fa-check"></i><b>6.1.1</b> Net migration</a></li>
+<li class="chapter" data-level="6.1.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-estimation"><i class="fa fa-check"></i><b>6.1.2</b> Net migration estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statstics"><i class="fa fa-check"></i><b>6.2</b> Vital Statstics</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics"><i class="fa fa-check"></i><b>6.2.1</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-1"><i class="fa fa-check"></i><b>6.2.2</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-2"><i class="fa fa-check"></i><b>6.2.3</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-3"><i class="fa fa-check"></i><b>6.2.4</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties"><i class="fa fa-check"></i><b>6.2.5</b> Difficulties</a></li>
+<li class="chapter" data-level="6.2.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties-1"><i class="fa fa-check"></i><b>6.2.6</b> Difficulties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods"><i class="fa fa-check"></i><b>6.3</b> Survival Methods</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-1"><i class="fa fa-check"></i><b>6.3.1</b> Survival methods</a></li>
+<li class="chapter" data-level="6.3.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#forward-survival-ratios"><i class="fa fa-check"></i><b>6.3.2</b> Forward survival ratios</a></li>
+<li class="chapter" data-level="6.3.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#reverse-survival-ratios"><i class="fa fa-check"></i><b>6.3.3</b> Reverse survival ratios</a></li>
+<li class="chapter" data-level="6.3.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#average-survival-ratios"><i class="fa fa-check"></i><b>6.3.4</b> Average survival ratios</a></li>
+<li class="chapter" data-level="6.3.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r"><i class="fa fa-check"></i><b>6.3.5</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-1"><i class="fa fa-check"></i><b>6.3.6</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-2"><i class="fa fa-check"></i><b>6.3.7</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-3"><i class="fa fa-check"></i><b>6.3.8</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-4"><i class="fa fa-check"></i><b>6.3.9</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-ratios"><i class="fa fa-check"></i><b>6.3.10</b> Survival ratios</a></li>
+<li class="chapter" data-level="6.3.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#life-table-survival-ratios"><i class="fa fa-check"></i><b>6.3.11</b> Life table survival ratios</a></li>
+<li class="chapter" data-level="6.3.12" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios"><i class="fa fa-check"></i><b>6.3.12</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.13" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data"><i class="fa fa-check"></i><b>6.3.13</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.14" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-1"><i class="fa fa-check"></i><b>6.3.14</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.15" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios-1"><i class="fa fa-check"></i><b>6.3.15</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.16" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#limitations-of-census-survival-ratios"><i class="fa fa-check"></i><b>6.3.16</b> Limitations of census survival ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace"><i class="fa fa-check"></i><b>6.4</b> Birthplace</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-1"><i class="fa fa-check"></i><b>6.4.1</b> Birthplace</a></li>
+<li class="chapter" data-level="6.4.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals"><i class="fa fa-check"></i><b>6.4.2</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-1"><i class="fa fa-check"></i><b>6.4.3</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-2"><i class="fa fa-check"></i><b>6.4.4</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-3"><i class="fa fa-check"></i><b>6.4.5</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-4"><i class="fa fa-check"></i><b>6.4.6</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-5"><i class="fa fa-check"></i><b>6.4.7</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-2"><i class="fa fa-check"></i><b>6.4.8</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-3"><i class="fa fa-check"></i><b>6.4.9</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-4"><i class="fa fa-check"></i><b>6.4.10</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#exercise-ex4.r"><i class="fa fa-check"></i><b>6.4.11</b> Exercise (ex4.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html"><i class="fa fa-check"></i><b>7</b> Describing and Estimating Migration Age Structures</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro"><i class="fa fa-check"></i><b>7.1</b> Rogers Castro</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.1.1</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.1.2</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.1.3</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.1.4</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.1.5</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.1.6</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.1.7</b> Rogers Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-schedules"><i class="fa fa-check"></i><b>7.2</b> Model schedules</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules"><i class="fa fa-check"></i><b>7.2.1</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.2.2</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.2.3</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.2.4</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.2.5</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.2.6</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.2.7</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-7"><i class="fa fa-check"></i><b>7.2.8</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-8"><i class="fa fa-check"></i><b>7.2.9</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-9"><i class="fa fa-check"></i><b>7.2.10</b> Model migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-schedules"><i class="fa fa-check"></i><b>7.3</b> Fitting schedules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.3.1</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.3.2</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.3.3</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.3.4</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.3.5</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.3.6</b> Fitting Roger Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices"><i class="fa fa-check"></i><b>7.4</b> Age Indices</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-1"><i class="fa fa-check"></i><b>7.4.1</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-2"><i class="fa fa-check"></i><b>7.4.2</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-3"><i class="fa fa-check"></i><b>7.4.3</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-4"><i class="fa fa-check"></i><b>7.4.4</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-5"><i class="fa fa-check"></i><b>7.4.5</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-6"><i class="fa fa-check"></i><b>7.4.6</b> Age Indices</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#smoothing"><i class="fa fa-check"></i><b>7.5</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions"><i class="fa fa-check"></i><b>7.5.1</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-1"><i class="fa fa-check"></i><b>7.5.2</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-2"><i class="fa fa-check"></i><b>7.5.3</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-3"><i class="fa fa-check"></i><b>7.5.4</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing"><i class="fa fa-check"></i><b>7.5.5</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing-1"><i class="fa fa-check"></i><b>7.5.6</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing"><i class="fa fa-check"></i><b>7.5.7</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing-1"><i class="fa fa-check"></i><b>7.5.8</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing"><i class="fa fa-check"></i><b>7.5.9</b> Cubic spline smoothing</a></li>
+<li class="chapter" data-level="7.5.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing-1"><i class="fa fa-check"></i><b>7.5.10</b> Cubic spline smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating"><i class="fa fa-check"></i><b>7.6</b> Graduating</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-1"><i class="fa fa-check"></i><b>7.6.1</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-2"><i class="fa fa-check"></i><b>7.6.2</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-3"><i class="fa fa-check"></i><b>7.6.3</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-4"><i class="fa fa-check"></i><b>7.6.4</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#exercise-5-ex5.r"><i class="fa fa-check"></i><b>7.6.5</b> Exercise 5 (ex5.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html"><i class="fa fa-check"></i><b>8</b> Describing Bilteral Migration Data</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#components"><i class="fa fa-check"></i><b>8.1</b> Components</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model"><i class="fa fa-check"></i><b>8.1.1</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-1"><i class="fa fa-check"></i><b>8.1.2</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-2"><i class="fa fa-check"></i><b>8.1.3</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-3"><i class="fa fa-check"></i><b>8.1.4</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-4"><i class="fa fa-check"></i><b>8.1.5</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-5"><i class="fa fa-check"></i><b>8.1.6</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-6"><i class="fa fa-check"></i><b>8.1.7</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-7"><i class="fa fa-check"></i><b>8.1.8</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.9" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-8"><i class="fa fa-check"></i><b>8.1.9</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.10" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-9"><i class="fa fa-check"></i><b>8.1.10</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.11" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-10"><i class="fa fa-check"></i><b>8.1.11</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.12" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-11"><i class="fa fa-check"></i><b>8.1.12</b> Multiplicative Component Model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models"><i class="fa fa-check"></i><b>8.2</b> Log-Linear Models</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-1"><i class="fa fa-check"></i><b>8.2.1</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-2"><i class="fa fa-check"></i><b>8.2.2</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-3"><i class="fa fa-check"></i><b>8.2.3</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-4"><i class="fa fa-check"></i><b>8.2.4</b> Log-Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#dimensions"><i class="fa fa-check"></i><b>8.3</b> Dimensions</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis"><i class="fa fa-check"></i><b>8.3.1</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-1"><i class="fa fa-check"></i><b>8.3.2</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-2"><i class="fa fa-check"></i><b>8.3.3</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-3"><i class="fa fa-check"></i><b>8.3.4</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-4"><i class="fa fa-check"></i><b>8.3.5</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-5"><i class="fa fa-check"></i><b>8.3.6</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-6"><i class="fa fa-check"></i><b>8.3.7</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#exercise-ex6.r"><i class="fa fa-check"></i><b>8.3.8</b> Exercise (ex6.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html"><i class="fa fa-check"></i><b>9</b> Estimating Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp"><i class="fa fa-check"></i><b>9.1</b> IPFP</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-1"><i class="fa fa-check"></i><b>9.1.1</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-2"><i class="fa fa-check"></i><b>9.1.2</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-3"><i class="fa fa-check"></i><b>9.1.3</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-4"><i class="fa fa-check"></i><b>9.1.4</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-5"><i class="fa fa-check"></i><b>9.1.5</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp"><i class="fa fa-check"></i><b>9.1.6</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.7" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-1"><i class="fa fa-check"></i><b>9.1.7</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.8" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-2"><i class="fa fa-check"></i><b>9.1.8</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-3"><i class="fa fa-check"></i><b>9.1.9</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.10" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-4"><i class="fa fa-check"></i><b>9.1.10</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.11" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#three-dimensions"><i class="fa fa-check"></i><b>9.1.11</b> Three dimensions</a></li>
+<li class="chapter" data-level="9.1.12" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-more-complicated-data-situations"><i class="fa fa-check"></i><b>9.1.12</b> IPFP More Complicated Data Situations</a></li>
+<li class="chapter" data-level="9.1.13" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#estimating-detailed-bilateral-migration"><i class="fa fa-check"></i><b>9.1.13</b> Estimating Detailed Bilateral Migration</a></li>
+<li class="chapter" data-level="9.1.14" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-5"><i class="fa fa-check"></i><b>9.1.14</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.15" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-6"><i class="fa fa-check"></i><b>9.1.15</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.16" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-7"><i class="fa fa-check"></i><b>9.1.16</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.17" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-8"><i class="fa fa-check"></i><b>9.1.17</b> mipfp</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constraints"><i class="fa fa-check"></i><b>9.2</b> Net Constraints</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows"><i class="fa fa-check"></i><b>9.2.1</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-1"><i class="fa fa-check"></i><b>9.2.2</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-2"><i class="fa fa-check"></i><b>9.2.3</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-3"><i class="fa fa-check"></i><b>9.2.4</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-4"><i class="fa fa-check"></i><b>9.2.5</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#exercise-ex7.r"><i class="fa fa-check"></i><b>9.2.6</b> Exercise (ex7.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>10</b> Chord Diagrams for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#section-1"><i class="fa fa-check"></i><b>10.1</b> .</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#background-3"><i class="fa fa-check"></i><b>10.1.1</b> Background</a></li>
+<li class="chapter" data-level="10.1.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#map-based---the-emigrants-of-the-world-minard-1858."><i class="fa fa-check"></i><b>10.1.2</b> Map Based - The Emigrants of the World, Minard 1858.</a></li>
+<li class="chapter" data-level="10.1.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#flowline-maps"><i class="fa fa-check"></i><b>10.1.3</b> Flowline Maps</a></li>
+<li class="chapter" data-level="10.1.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#criticised-new-york-times-refugee-flow-map"><i class="fa fa-check"></i><b>10.1.4</b> Criticised New York Times refugee flow map</a></li>
+<li class="chapter" data-level="10.1.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#martin-grandjeans-attempt-to-rectify"><i class="fa fa-check"></i><b>10.1.5</b> Martin Grandjean’s attempt to rectify</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagram"><i class="fa fa-check"></i><b>10.2</b> Chord Diagram</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams"><i class="fa fa-check"></i><b>10.2.1</b> Chord Diagrams</a></li>
+<li class="chapter" data-level="10.2.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#new-york-times-2007"><i class="fa fa-check"></i><b>10.2.2</b> New York Times 2007</a></li>
+<li class="chapter" data-level="10.2.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data"><i class="fa fa-check"></i><b>10.2.3</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-1"><i class="fa fa-check"></i><b>10.2.4</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-2"><i class="fa fa-check"></i><b>10.2.5</b> Chord Diagrams with Migration Data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#circlize"><i class="fa fa-check"></i><b>10.3</b> circlize</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-in-r"><i class="fa fa-check"></i><b>10.3.1</b> Chord Diagrams in R</a></li>
+<li class="chapter" data-level="10.3.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020"><i class="fa fa-check"></i><b>10.3.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-1"><i class="fa fa-check"></i><b>10.3.3</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-2"><i class="fa fa-check"></i><b>10.3.4</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram"><i class="fa fa-check"></i><b>10.3.5</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-1"><i class="fa fa-check"></i><b>10.3.6</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-2"><i class="fa fa-check"></i><b>10.3.7</b> Default <code>chordDiagram()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sectors"><i class="fa fa-check"></i><b>10.4</b> Sectors</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-axis"><i class="fa fa-check"></i><b>10.4.1</b> Sector Axis</a></li>
+<li class="chapter" data-level="10.4.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering"><i class="fa fa-check"></i><b>10.4.2</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering-1"><i class="fa fa-check"></i><b>10.4.3</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#orientation-and-gaps"><i class="fa fa-check"></i><b>10.4.4</b> Orientation and gaps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#colour"><i class="fa fa-check"></i><b>10.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colours"><i class="fa fa-check"></i><b>10.5.1</b> Sector colours</a></li>
+<li class="chapter" data-level="10.5.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colour"><i class="fa fa-check"></i><b>10.5.2</b> Sector colour</a></li>
+<li class="chapter" data-level="10.5.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours"><i class="fa fa-check"></i><b>10.5.3</b> Chord colours</a></li>
+<li class="chapter" data-level="10.5.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours-1"><i class="fa fa-check"></i><b>10.5.4</b> Chord colours</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chords"><i class="fa fa-check"></i><b>10.6</b> Chords</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction"><i class="fa fa-check"></i><b>10.6.1</b> Direction</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-1"><i class="fa fa-check"></i><b>10.7</b> Direction</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-2"><i class="fa fa-check"></i><b>10.7.1</b> Direction</a></li>
+<li class="chapter" data-level="10.7.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-ordering"><i class="fa fa-check"></i><b>10.7.2</b> Chord ordering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels"><i class="fa fa-check"></i><b>10.8</b> Labels</a>
+<ul>
+<li class="chapter" data-level="10.8.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-1"><i class="fa fa-check"></i><b>10.8.1</b> Labels</a></li>
+<li class="chapter" data-level="10.8.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-2"><i class="fa fa-check"></i><b>10.8.2</b> Labels</a></li>
+<li class="chapter" data-level="10.8.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-3"><i class="fa fa-check"></i><b>10.8.3</b> Labels</a></li>
+<li class="chapter" data-level="10.8.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-4"><i class="fa fa-check"></i><b>10.8.4</b> Labels</a></li>
+<li class="chapter" data-level="10.8.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-5"><i class="fa fa-check"></i><b>10.8.5</b> Labels</a></li>
+<li class="chapter" data-level="10.8.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving"><i class="fa fa-check"></i><b>10.8.6</b> Saving</a></li>
+<li class="chapter" data-level="10.8.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving-1"><i class="fa fa-check"></i><b>10.8.7</b> Saving</a></li>
+<li class="chapter" data-level="10.8.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#exercise-ex8.r"><i class="fa fa-check"></i><b>10.8.8</b> Exercise (ex8.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>11</b> Sankey Plots for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-4"><i class="fa fa-check"></i><b>11.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-5"><i class="fa fa-check"></i><b>11.1.1</b> Background</a></li>
+<li class="chapter" data-level="11.1.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#men-in-napoleons-1812-russian-campaign"><i class="fa fa-check"></i><b>11.1.2</b> Men in Napoleon’s 1812 Russian Campaign</a></li>
+<li class="chapter" data-level="11.1.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plot-of-migration-in-nature-by-butler2017"><i class="fa fa-check"></i><b>11.1.3</b> Sankey plot of migration in Nature by <span class="citation"><span>Butler</span> (<span>2017</span>)</span></a></li>
+<li class="chapter" data-level="11.1.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r"><i class="fa fa-check"></i><b>11.1.4</b> Sankey plots in R</a></li>
+<li class="chapter" data-level="11.1.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r-1"><i class="fa fa-check"></i><b>11.1.5</b> Sankey plots in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format"><i class="fa fa-check"></i><b>11.2</b> Data Format</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-3"><i class="fa fa-check"></i><b>11.2.1</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-4"><i class="fa fa-check"></i><b>11.2.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-1"><i class="fa fa-check"></i><b>11.2.3</b> Data format</a></li>
+<li class="chapter" data-level="11.2.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-2"><i class="fa fa-check"></i><b>11.2.4</b> Data format</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#parrellel-sets"><i class="fa fa-check"></i><b>11.3</b> Parrellel Sets</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot"><i class="fa fa-check"></i><b>11.3.1</b> Default Plot</a></li>
+<li class="chapter" data-level="11.3.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot-1"><i class="fa fa-check"></i><b>11.3.2</b> Default Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes"><i class="fa fa-check"></i><b>11.4</b> Set Axes</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes-1"><i class="fa fa-check"></i><b>11.4.1</b> Set Axes</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-1"><i class="fa fa-check"></i><b>11.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-2"><i class="fa fa-check"></i><b>11.5.1</b> Colour</a></li>
+<li class="chapter" data-level="11.5.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-colour---failed-axis-colour"><i class="fa fa-check"></i><b>11.5.2</b> Ribbon colour - failed axis colour</a></li>
+<li class="chapter" data-level="11.5.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-transparency"><i class="fa fa-check"></i><b>11.5.3</b> Ribbon transparency</a></li>
+<li class="chapter" data-level="11.5.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour"><i class="fa fa-check"></i><b>11.5.4</b> Axis colour</a></li>
+<li class="chapter" data-level="11.5.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour-1"><i class="fa fa-check"></i><b>11.5.5</b> Axis colour</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-6"><i class="fa fa-check"></i><b>11.6</b> Labels</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-7"><i class="fa fa-check"></i><b>11.6.1</b> Labels</a></li>
+<li class="chapter" data-level="11.6.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-8"><i class="fa fa-check"></i><b>11.6.2</b> Labels</a></li>
+<li class="chapter" data-level="11.6.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-9"><i class="fa fa-check"></i><b>11.6.3</b> Labels</a></li>
+<li class="chapter" data-level="11.6.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-10"><i class="fa fa-check"></i><b>11.6.4</b> Labels</a></li>
+<li class="chapter" data-level="11.6.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-11"><i class="fa fa-check"></i><b>11.6.5</b> Labels</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing"><i class="fa fa-check"></i><b>11.7</b> Spacing</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing-1"><i class="fa fa-check"></i><b>11.7.1</b> Spacing</a></li>
+<li class="chapter" data-level="11.7.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#exercise-ex9.r"><i class="fa fa-check"></i><b>11.7.2</b> Exercise (ex9.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="handling-migration-data-in-r" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Handling Migration Data in R</h1>
+<div id="contingency-table" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Contingency Table</h2>
+<div id="contingency-table-1" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Contingency Table</h3>
+<ul>
+<li>Bilateral migration flow data are commonly represented in square tables.</li>
+<li>Values in non-diagonal cells represent a origin-destination count of migration between a specified set of regions.</li>
+<li>Values in diagonal cells represent some form of non-moving population, or those that move within a region, which are typically not presented.</li>
+</ul>
+<table>
+<tr>
+<td colspan="1">
+<em>Origin</em>
+</td>
+<td colspan="5" style="text-align:center">
+<em>Destination</em>
+</td>
+</tr>
+<tr style="border-bottom:2px solid black">
+<td>
+</td>
+<td>
+A
+</td>
+<td>
+B
+</td>
+<td>
+C
+</td>
+<td>
+D
+</td>
+<td>
+Sum
+</td>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+</td>
+<td>
+100
+</td>
+<td>
+30
+</td>
+<td>
+70
+</td>
+<td>
+200
+</td>
+</tr>
+<tr>
+<td>
+B
+</td>
+<td>
+50
+</td>
+<td>
+</td>
+<td>
+45
+</td>
+<td>
+5
+</td>
+<td>
+100
+</td>
+</tr>
+<tr>
+<td>
+C
+</td>
+<td>
+60
+</td>
+<td>
+35
+</td>
+<td>
+</td>
+<td>
+40
+</td>
+<td>
+135
+</td>
+</tr>
+<tr>
+<td>
+D
+</td>
+<td>
+20
+</td>
+<td>
+25
+</td>
+<td>
+20
+</td>
+<td>
+</td>
+<td>
+65
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td>
+130
+</td>
+<td>
+160
+</td>
+<td>
+95
+</td>
+<td>
+115
+</td>
+<td>
+500
+</td>
+</tr>
+</table>
+<!-- ```{=latex} -->
+<!-- \begin{tabular}{lrrrrr}                                                                                                             -->
+<!-- \toprule                                                                                                            -->
+<!-- \cmidrule{1-6}                                                                                                          -->
+<!-- \textit{Origin}    &    \multicolumn{5}{c}{\textit{Destination}}                                   \\                                                               -->
+<!-- \cmidrule{2-6}                                                                                                          -->
+<!-- \textit{ }     &    A  &    B  &    C  &    D  &    Sum    \\                                                               -->
+<!-- \cmidrule{1-6}                                                                                                          -->
+<!-- A  &       &   100 &   30  &   70  &   200 \\                                                               -->
+<!-- B  &   50  &       &   45  &   5   &   100 \\                                                               -->
+<!-- C  &   60  &   35  &       &   40  &   135 \\                                                               -->
+<!-- D  &   20  &   25  &   20  &       &   65  \\                                                               -->
+<!-- Sum    &   130 &   160 &   95  &   115 &   500 \\                                                               -->
+<!-- \bottomrule                                                                                                             -->
+<!-- \end{tabular}                                                                                                           -->
+<!-- ``` -->
+</div>
+<div id="contingency-table-2" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Contingency Table</h3>
+<ul>
+<li>Often denoted as <span class="math inline">\(m_{ij}\)</span>
+<ul>
+<li>Row totals, the out-migration counts: <span class="math inline">\(\sum_j m_{ij} = m_{i+}\)</span></li>
+<li>Column totals, the in-migration counts: <span class="math inline">\(\sum_i m_{ij} = m_{+j}\)</span></li>
+<li>Net migration totals: <span class="math inline">\(m_{i+} - m_{i+}\)</span></li>
+<li>Total migration: <span class="math inline">\(m_{++}\)</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="data-manipulation" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Data Manipulation</h2>
+<div id="r-matrix-and-array" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> R <code>matrix</code> and <code>array</code></h3>
+<ul>
+<li>Some functions for describing and estimating migration in R require flow tables as <code>matrix</code> or <code>array</code> type objects</li>
+<li>Create a <code>matrix</code> in R using the <code>matrix()</code> function
+<ul>
+<li>Data read in by column. Change change using <code>byrow = FALSE</code></li>
+<li>Use the <code>dimnames</code> argument to supply region names</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="handling-migration-data-in-r.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create region labels</span></span>
+<span id="cb1-2"><a href="handling-migration-data-in-r.html#cb1-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb1-3"><a href="handling-migration-data-in-r.html#cb1-3" aria-hidden="true" tabindex="-1"></a>r</span></code></pre></div>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot;</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="handling-migration-data-in-r.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create matrix</span></span>
+<span id="cb3-2"><a href="handling-migration-data-in-r.html#cb3-2" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">70</span>, <span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">5</span>, <span class="dv">60</span>, <span class="dv">35</span>, <span class="dv">0</span>, <span class="dv">40</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">0</span>), </span>
+<span id="cb3-3"><a href="handling-migration-data-in-r.html#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-4"><a href="handling-migration-data-in-r.html#cb3-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r))</span>
+<span id="cb3-5"><a href="handling-migration-data-in-r.html#cb3-5" aria-hidden="true" tabindex="-1"></a>m0</span></code></pre></div>
+<pre><code>##     dest
+## orig  A   B  C  D
+##    A  0 100 30 70
+##    B 50   0 45  5
+##    C 60  35  0 40
+##    D 20  25 20  0</code></pre>
+</div>
+<div id="r-matrix-and-array-1" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> R <code>matrix</code> and <code>array</code></h3>
+<ul>
+<li>Create an <code>array</code> in R using the <code>array()</code> function</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="handling-migration-data-in-r.html#cb5-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">size =</span> <span class="dv">32</span>), </span>
+<span id="cb5-2"><a href="handling-migration-data-in-r.html#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>), </span>
+<span id="cb5-3"><a href="handling-migration-data-in-r.html#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r, <span class="at">sex =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>)))</span>
+<span id="cb5-4"><a href="handling-migration-data-in-r.html#cb5-4" aria-hidden="true" tabindex="-1"></a>m1</span></code></pre></div>
+<pre><code>## , , sex = female
+## 
+##     dest
+## orig  A  B  C  D
+##    A 58 69 33 35
+##    B 74 85 31 53
+##    C  2 62 48 75
+##    D 55 84 42 19
+## 
+## , , sex = male
+## 
+##     dest
+## orig  A  B   C  D
+##    A 93 86   4 81
+##    B 12 94 100 47
+##    C 51 24  95 22
+##    D 63  3  21 10</code></pre>
+</div>
+<div id="show-totals" class="section level3" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Show totals</h3>
+<ul>
+<li>The <code>addmargins()</code> functions adds extra row, column and tables to display the dimension sums.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="handling-migration-data-in-r.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="at">A =</span> m0)</span></code></pre></div>
+<pre><code>##      dest
+## orig    A   B  C   D Sum
+##   A     0 100 30  70 200
+##   B    50   0 45   5 100
+##   C    60  35  0  40 135
+##   D    20  25 20   0  65
+##   Sum 130 160 95 115 500</code></pre>
+</div>
+<div id="convert-to-matrix" class="section level3" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Convert to matrix</h3>
+<ul>
+<li>Data will not always come as an <code>matrix</code> or an <code>array</code>.</li>
+<li>There a couple of useful functions in R to convert data to when working with migration tables in R</li>
+<li>The <code>xtab()</code> function converts data frames into a <code>matrix</code> or <code>array</code>
+<ul>
+<li><code>formula</code> column names with
+<ul>
+<li>left hand side the column name to fill the <code>matrix</code> or <code>array</code></li>
+<li>a <code>~</code> to separate the left and right hand side</li>
+<li>right hand side the columns to cross-classifying the left hand variable (separated by <code>+</code>).</li>
+</ul></li>
+<li><code>data</code> containing the variables for <code>formula</code></li>
+</ul></li>
+<li>The <code>as.data.frame.table()</code> function takes a <code>matrix</code> or <code>array</code> and converts it to a <code>data.frame</code> based on the array dimension names.
+<ul>
+<li><code>responseName</code> to set the column name of based on the cells of the <code>matrix</code> or <code>array</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="convert-to-matrix-1" class="section level3" number="4.2.5">
+<h3><span class="header-section-number">4.2.5</span> Convert to matrix</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="handling-migration-data-in-r.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tidy migration data</span></span>
+<span id="cb9-2"><a href="handling-migration-data-in-r.html#cb9-2" aria-hidden="true" tabindex="-1"></a>d0</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 3
+##    orig  dest   flow
+##    &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+##  1 A     A         1
+##  2 A     B         2
+##  3 A     C         3
+##  4 A     D         4
+##  5 B     A         5
+##  6 B     B         6
+##  7 B     C         7
+##  8 B     D         8
+##  9 C     A         9
+## 10 C     B        10
+## 11 C     C        11
+## 12 C     D        12
+## 13 D     A        13
+## 14 D     B        14
+## 15 D     C        15
+## 16 D     D        16</code></pre>
+</div>
+<div id="convert-to-matrix-2" class="section level3" number="4.2.6">
+<h3><span class="header-section-number">4.2.6</span> Convert to matrix</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="handling-migration-data-in-r.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to matrix</span></span>
+<span id="cb11-2"><a href="handling-migration-data-in-r.html#cb11-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="at">formula =</span> flow <span class="sc">~</span> orig <span class="sc">+</span> dest, <span class="at">data =</span> d0)</span>
+<span id="cb11-3"><a href="handling-migration-data-in-r.html#cb11-3" aria-hidden="true" tabindex="-1"></a>m2</span></code></pre></div>
+<pre><code>##     dest
+## orig  A  B  C  D
+##    A  1  2  3  4
+##    B  5  6  7  8
+##    C  9 10 11 12
+##    D 13 14 15 16</code></pre>
+</div>
+<div id="convert-to-data-frame" class="section level3" number="4.2.7">
+<h3><span class="header-section-number">4.2.7</span> Convert to data frame</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="handling-migration-data-in-r.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert back to tibble</span></span>
+<span id="cb13-2"><a href="handling-migration-data-in-r.html#cb13-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="handling-migration-data-in-r.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">&quot;flow&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="handling-migration-data-in-r.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 3
+##    orig  dest   flow
+##    &lt;fct&gt; &lt;fct&gt; &lt;int&gt;
+##  1 A     A         1
+##  2 B     A         5
+##  3 C     A         9
+##  4 D     A        13
+##  5 A     B         2
+##  6 B     B         6
+##  7 C     B        10
+##  8 D     B        14
+##  9 A     C         3
+## 10 B     C         7
+## 11 C     C        11
+## 12 D     C        15
+## 13 A     D         4
+## 14 B     D         8
+## 15 C     D        12
+## 16 D     D        16</code></pre>
+</div>
+<div id="convert-to-data-frame-1" class="section level3" number="4.2.8">
+<h3><span class="header-section-number">4.2.8</span> Convert to data frame</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="handling-migration-data-in-r.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert array to tibble</span></span>
+<span id="cb15-2"><a href="handling-migration-data-in-r.html#cb15-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> m1 <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="handling-migration-data-in-r.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">&quot;flow&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="handling-migration-data-in-r.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb15-5"><a href="handling-migration-data-in-r.html#cb15-5" aria-hidden="true" tabindex="-1"></a>d1</span></code></pre></div>
+<pre><code>## # A tibble: 32 x 4
+##    orig  dest  sex     flow
+##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;  &lt;int&gt;
+##  1 A     A     female    58
+##  2 B     A     female    74
+##  3 C     A     female     2
+##  4 D     A     female    55
+##  5 A     B     female    69
+##  6 B     B     female    85
+##  7 C     B     female    62
+##  8 D     B     female    84
+##  9 A     C     female    33
+## 10 B     C     female    31
+## # ... with 22 more rows</code></pre>
+</div>
+</div>
+<div id="matrix-operations" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Matrix Operations</h2>
+<div id="displaying-migration-matrics" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Displaying migration matrics</h3>
+<ul>
+<li>When dealing with migration <code>matrix</code> objects in R, they often are difficult to view
+<ul>
+<li>Lengthy dimension names,</li>
+<li>Unit size</li>
+<li>Diagonal terms included but not of interest</li>
+</ul></li>
+<li>Some helpful R functions to adapt objects for easier viewing</li>
+<li>Demonstrate with the <code>uar_1960</code> object in the <em>migest</em> package
+<ul>
+<li>Lifetime migration matrix for Governorates of United Arab Republic in 1960 used in the manual of <span class="citation"><a href="#ref-UnitedNations1983" role="doc-biblioref">United Nations Department of Economic and Social Affairs Population Division</a> (<a href="#ref-UnitedNations1983" role="doc-biblioref">1983</a>)</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="displaying-migration-matrics-1" class="section level3" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Displaying migration matrics</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="handling-migration-data-in-r.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb17-2"><a href="handling-migration-data-in-r.html#cb17-2" aria-hidden="true" tabindex="-1"></a>uar_1960</span></code></pre></div>
+<pre><code>##             dest
+## orig           Cairo Alexandria Port-Said Ismailia Kalyubia Gharbia Menoufia
+##   Cairo      2079434      31049      5293     9813    23837   10034     7038
+##   Alexandria   47220    1085602      2641     2625     2135    4921     1505
+##   Port-Said     9464       2562    168046     6461      496     817      323
+##   Ismailia      9518       1395      3490   171297      718     910      306
+##   Kalyubia     90668       4730       758     3182   886464    3727     3523
+##   Gharbia      99179      39953      1742     3347     7870 1604851     6313
+##   Menoufia    216764      46781      1640     3338     2918   29580  1308283
+##   Giza         64584       4899       513     2013     2887    1503     2161
+##   Assyiut     100305      25497      1738     2522      122    2245      636
+##   Souhag      100100      63712     12087     9436      295    2791     1095
+##   All others  456464     177476     43898    66973    49816   47315    12179
+##             dest
+## orig            Giza Assyiut  Souhag All others
+##   Cairo        88543    4951    2569      58476
+##   Alexandria    6910    1355    1467      29534
+##   Port-Said     1505     326     454      11184
+##   Ismailia      1593     319     263      10269
+##   Kalyubia     10279     340     128      18076
+##   Gharbia      14529     848     491      64140
+##   Menoufia     30915     567     401      47843
+##   Giza       1040179     540     433      13518
+##   Assyiut      13153 1290255    5955      35157
+##   Souhag       17958   11608 1540020      53224
+##   All others   94577   14690   22375   11900302</code></pre>
+</div>
+<div id="abbriviate-names" class="section level3" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> Abbriviate names</h3>
+<ul>
+<li>View and alter the <code>matrix</code> dimension names using <code>rownames()</code> and <code>colnames()</code> or <code>dimnames()</code></li>
+<li>The <code>abbreviate()</code> function applies an algorithm to shorten names</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="handling-migration-data-in-r.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(uar_1960)</span></code></pre></div>
+<pre><code>## $orig
+##  [1] &quot;Cairo&quot;      &quot;Alexandria&quot; &quot;Port-Said&quot;  &quot;Ismailia&quot;   &quot;Kalyubia&quot;  
+##  [6] &quot;Gharbia&quot;    &quot;Menoufia&quot;   &quot;Giza&quot;       &quot;Assyiut&quot;    &quot;Souhag&quot;    
+## [11] &quot;All others&quot;
+## 
+## $dest
+##  [1] &quot;Cairo&quot;      &quot;Alexandria&quot; &quot;Port-Said&quot;  &quot;Ismailia&quot;   &quot;Kalyubia&quot;  
+##  [6] &quot;Gharbia&quot;    &quot;Menoufia&quot;   &quot;Giza&quot;       &quot;Assyiut&quot;    &quot;Souhag&quot;    
+## [11] &quot;All others&quot;</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="handling-migration-data-in-r.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a copy</span></span>
+<span id="cb21-2"><a href="handling-migration-data-in-r.html#cb21-2" aria-hidden="true" tabindex="-1"></a>u0 <span class="ot">&lt;-</span> uar_1960</span>
+<span id="cb21-3"><a href="handling-migration-data-in-r.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># new abbreviated region names</span></span>
+<span id="cb21-4"><a href="handling-migration-data-in-r.html#cb21-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> uar_1960 <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="handling-migration-data-in-r.html#cb21-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="handling-migration-data-in-r.html#cb21-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>(),</span>
+<span id="cb21-7"><a href="handling-migration-data-in-r.html#cb21-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">dest =</span> uar_1960 <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="handling-migration-data-in-r.html#cb21-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">colnames</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="handling-migration-data-in-r.html#cb21-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>())</span></code></pre></div>
+</div>
+<div id="abbriviate-names-1" class="section level3" number="4.3.4">
+<h3><span class="header-section-number">4.3.4</span> Abbriviate names</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="handling-migration-data-in-r.html#cb22-1" aria-hidden="true" tabindex="-1"></a>r</span></code></pre></div>
+<pre><code>## $orig
+##      Cairo Alexandria  Port-Said   Ismailia   Kalyubia    Gharbia   Menoufia 
+##     &quot;Cair&quot;     &quot;Alxn&quot;     &quot;Pr-S&quot;     &quot;Isml&quot;     &quot;Klyb&quot;     &quot;Ghrb&quot;     &quot;Menf&quot; 
+##       Giza    Assyiut     Souhag All others 
+##     &quot;Giza&quot;     &quot;Assy&quot;     &quot;Sohg&quot;     &quot;Allo&quot; 
+## 
+## $dest
+##      Cairo Alexandria  Port-Said   Ismailia   Kalyubia    Gharbia   Menoufia 
+##     &quot;Cair&quot;     &quot;Alxn&quot;     &quot;Pr-S&quot;     &quot;Isml&quot;     &quot;Klyb&quot;     &quot;Ghrb&quot;     &quot;Menf&quot; 
+##       Giza    Assyiut     Souhag All others 
+##     &quot;Giza&quot;     &quot;Assy&quot;     &quot;Sohg&quot;     &quot;Allo&quot;</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="handling-migration-data-in-r.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># apply the abbreviated region names</span></span>
+<span id="cb24-2"><a href="handling-migration-data-in-r.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(u0) <span class="ot">&lt;-</span> r</span></code></pre></div>
+</div>
+<div id="abbriviate-names-2" class="section level3" number="4.3.5">
+<h3><span class="header-section-number">4.3.5</span> Abbriviate names</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="handling-migration-data-in-r.html#cb25-1" aria-hidden="true" tabindex="-1"></a>u0</span></code></pre></div>
+<pre><code>##       dest
+## orig      Cair    Alxn   Pr-S   Isml   Klyb    Ghrb    Menf    Giza    Assy
+##   Cair 2079434   31049   5293   9813  23837   10034    7038   88543    4951
+##   Alxn   47220 1085602   2641   2625   2135    4921    1505    6910    1355
+##   Pr-S    9464    2562 168046   6461    496     817     323    1505     326
+##   Isml    9518    1395   3490 171297    718     910     306    1593     319
+##   Klyb   90668    4730    758   3182 886464    3727    3523   10279     340
+##   Ghrb   99179   39953   1742   3347   7870 1604851    6313   14529     848
+##   Menf  216764   46781   1640   3338   2918   29580 1308283   30915     567
+##   Giza   64584    4899    513   2013   2887    1503    2161 1040179     540
+##   Assy  100305   25497   1738   2522    122    2245     636   13153 1290255
+##   Sohg  100100   63712  12087   9436    295    2791    1095   17958   11608
+##   Allo  456464  177476  43898  66973  49816   47315   12179   94577   14690
+##       dest
+## orig      Sohg     Allo
+##   Cair    2569    58476
+##   Alxn    1467    29534
+##   Pr-S     454    11184
+##   Isml     263    10269
+##   Klyb     128    18076
+##   Ghrb     491    64140
+##   Menf     401    47843
+##   Giza     433    13518
+##   Assy    5955    35157
+##   Sohg 1540020    53224
+##   Allo   22375 11900302</code></pre>
+</div>
+<div id="data-scaling" class="section level3" number="4.3.6">
+<h3><span class="header-section-number">4.3.6</span> Data scaling</h3>
+<ul>
+<li>Basic arithmetic operators to scale the data to an appropriate level</li>
+<li>The <code>round()</code> function to specify precision of numbers</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="handling-migration-data-in-r.html#cb27-1" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="at">x =</span> u0<span class="sc">/</span><span class="dv">1000</span>, <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="handling-migration-data-in-r.html#cb27-2" aria-hidden="true" tabindex="-1"></a>u1</span></code></pre></div>
+<pre><code>##       dest
+## orig     Cair   Alxn  Pr-S  Isml  Klyb   Ghrb   Menf   Giza   Assy   Sohg
+##   Cair 2079.4   31.0   5.3   9.8  23.8   10.0    7.0   88.5    5.0    2.6
+##   Alxn   47.2 1085.6   2.6   2.6   2.1    4.9    1.5    6.9    1.4    1.5
+##   Pr-S    9.5    2.6 168.0   6.5   0.5    0.8    0.3    1.5    0.3    0.5
+##   Isml    9.5    1.4   3.5 171.3   0.7    0.9    0.3    1.6    0.3    0.3
+##   Klyb   90.7    4.7   0.8   3.2 886.5    3.7    3.5   10.3    0.3    0.1
+##   Ghrb   99.2   40.0   1.7   3.3   7.9 1604.9    6.3   14.5    0.8    0.5
+##   Menf  216.8   46.8   1.6   3.3   2.9   29.6 1308.3   30.9    0.6    0.4
+##   Giza   64.6    4.9   0.5   2.0   2.9    1.5    2.2 1040.2    0.5    0.4
+##   Assy  100.3   25.5   1.7   2.5   0.1    2.2    0.6   13.2 1290.3    6.0
+##   Sohg  100.1   63.7  12.1   9.4   0.3    2.8    1.1   18.0   11.6 1540.0
+##   Allo  456.5  177.5  43.9  67.0  49.8   47.3   12.2   94.6   14.7   22.4
+##       dest
+## orig      Allo
+##   Cair    58.5
+##   Alxn    29.5
+##   Pr-S    11.2
+##   Isml    10.3
+##   Klyb    18.1
+##   Ghrb    64.1
+##   Menf    47.8
+##   Giza    13.5
+##   Assy    35.2
+##   Sohg    53.2
+##   Allo 11900.3</code></pre>
+</div>
+<div id="diagonal-elements" class="section level3" number="4.3.7">
+<h3><span class="header-section-number">4.3.7</span> Diagonal elements</h3>
+<ul>
+<li>Set diagonal terms (non-movers) to zero using the <code>diag()</code> function</li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="handling-migration-data-in-r.html#cb29-1" aria-hidden="true" tabindex="-1"></a>u2 <span class="ot">&lt;-</span> u0</span>
+<span id="cb29-2"><a href="handling-migration-data-in-r.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(u2) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb29-3"><a href="handling-migration-data-in-r.html#cb29-3" aria-hidden="true" tabindex="-1"></a>u2</span></code></pre></div>
+<pre><code>##       dest
+## orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
+##   Cair      0  31049  5293  9813 23837 10034  7038 88543  4951  2569 58476
+##   Alxn  47220      0  2641  2625  2135  4921  1505  6910  1355  1467 29534
+##   Pr-S   9464   2562     0  6461   496   817   323  1505   326   454 11184
+##   Isml   9518   1395  3490     0   718   910   306  1593   319   263 10269
+##   Klyb  90668   4730   758  3182     0  3727  3523 10279   340   128 18076
+##   Ghrb  99179  39953  1742  3347  7870     0  6313 14529   848   491 64140
+##   Menf 216764  46781  1640  3338  2918 29580     0 30915   567   401 47843
+##   Giza  64584   4899   513  2013  2887  1503  2161     0   540   433 13518
+##   Assy 100305  25497  1738  2522   122  2245   636 13153     0  5955 35157
+##   Sohg 100100  63712 12087  9436   295  2791  1095 17958 11608     0 53224
+##   Allo 456464 177476 43898 66973 49816 47315 12179 94577 14690 22375     0</code></pre>
+</div>
+</div>
+<div id="summaries" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Summaries</h2>
+<div id="net-flows-and-counterflows" class="section level3" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Net flows and counterflows</h3>
+<ul>
+<li>The <em>migest</em> package contains a number of functions to provide summaries of origin-destination migration data</li>
+<li>The <code>counter()</code> function calculates the counter flow and net flow
+<ul>
+<li>Accepts <code>matrix</code> or <code>data.frame</code> (or <code>tibble</code>) inputs</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="handling-migration-data-in-r.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">counter</span>(m0)</span></code></pre></div>
+<pre><code>## # A tibble: 12 x 7
+##    orig  dest  corridor pair   flow counter_flow net_flow
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;
+##  1 B     A     B -&gt; A   A - B    50          100      -50
+##  2 C     A     C -&gt; A   A - C    60           30       30
+##  3 D     A     D -&gt; A   A - D    20           70      -50
+##  4 A     B     A -&gt; B   A - B   100           50       50
+##  5 C     B     C -&gt; B   B - C    35           45      -10
+##  6 D     B     D -&gt; B   B - D    25            5       20
+##  7 A     C     A -&gt; C   A - C    30           60      -30
+##  8 B     C     B -&gt; C   B - C    45           35       10
+##  9 D     C     D -&gt; C   C - D    20           40      -20
+## 10 A     D     A -&gt; D   A - D    70           20       50
+## 11 B     D     B -&gt; D   B - D     5           25      -20
+## 12 C     D     C -&gt; D   C - D    40           20       20</code></pre>
+</div>
+<div id="net-flows-and-counterflows-1" class="section level3" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Net flows and counterflows</h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="handling-migration-data-in-r.html#cb33-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="handling-migration-data-in-r.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="handling-migration-data-in-r.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">counter</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 24 x 8
+## # Groups:   sex [2]
+##    orig  dest  corridor pair  sex     flow counter_flow net_flow
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;fct&gt;  &lt;int&gt;        &lt;int&gt;    &lt;int&gt;
+##  1 B     A     B -&gt; A   A - B female    74           69        5
+##  2 C     A     C -&gt; A   A - C female     2           33      -31
+##  3 D     A     D -&gt; A   A - D female    55           35       20
+##  4 A     B     A -&gt; B   A - B female    69           74       -5
+##  5 C     B     C -&gt; B   B - C female    62           31       31
+##  6 D     B     D -&gt; B   B - D female    84           53       31
+##  7 A     C     A -&gt; C   A - C female    33            2       31
+##  8 B     C     B -&gt; C   B - C female    31           62      -31
+##  9 D     C     D -&gt; C   C - D female    42           75      -33
+## 10 A     D     A -&gt; D   A - D female    35           55      -20
+## # ... with 14 more rows</code></pre>
+</div>
+<div id="totals" class="section level3" number="4.4.3">
+<h3><span class="header-section-number">4.4.3</span> Totals</h3>
+<ul>
+<li>The <code>sum_turnover()</code> provides summary in-migration, out-migration, net-migration and turnover totals for each region
+<ul>
+<li>Accepts <code>matrix</code> or <code>data.frame</code> (or <code>tibble</code>) inputs</li>
+<li>Setting <code>type = "international"</code> to change labels in outputs</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="handling-migration-data-in-r.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_turnover</span>(m0)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   region in_mig out_mig  turn   net
+##   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A         130     200   330   -70
+## 2 B         160     100   260    60
+## 3 C          95     135   230   -40
+## 4 D         115      65   180    50</code></pre>
+</div>
+<div id="totals-1" class="section level3" number="4.4.4">
+<h3><span class="header-section-number">4.4.4</span> Totals</h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="handling-migration-data-in-r.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_turnover</span>(<span class="at">m =</span> d0, <span class="at">type =</span> <span class="st">&quot;international&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   country   imm   emi  turn   net
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A          27     9    36    18
+## 2 B          26    20    46     6
+## 3 C          25    31    56    -6
+## 4 D          24    42    66   -18</code></pre>
+</div>
+<div id="totals-2" class="section level3" number="4.4.5">
+<h3><span class="header-section-number">4.4.5</span> Totals</h3>
+<ul>
+<li>The <code>sum_turnover()</code> function can be applied with to large data sets spanning multiple years (groups)</li>
+<li>Demonstrate using international flow estimates of <span class="citation"><a href="#ref-Abel2019" role="doc-biblioref">Abel and Cohen</a> (<a href="#ref-Abel2019" role="doc-biblioref">2019</a>)</span></li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="handling-migration-data-in-r.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data from web depository</span></span>
+<span id="cb39-2"><a href="handling-migration-data-in-r.html#cb39-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://ndownloader.figshare.com/files/26239945&quot;</span>)</span>
+<span id="cb39-3"><a href="handling-migration-data-in-r.html#cb39-3" aria-hidden="true" tabindex="-1"></a>f</span></code></pre></div>
+<pre><code>## # A tibble: 235,236 x 9
+##    year0 orig  dest  sd_drop_neg sd_rev_neg mig_rate da_min_open da_min_closed
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;
+##  1  1990 BDI   BDI             0          0        0           0             0
+##  2  1990 COM   BDI             0          0        0           0             0
+##  3  1990 DJI   BDI             0          0        0           0             0
+##  4  1990 ERI   BDI             0          0        0           0             0
+##  5  1990 ETH   BDI             0          0        0           0             0
+##  6  1990 KEN   BDI            30         30       69          45            29
+##  7  1990 MDG   BDI             0          0        0           0             0
+##  8  1990 MWI   BDI             0          0        0           0             0
+##  9  1990 MUS   BDI             0          0        0           0             1
+## 10  1990 MYT   BDI             0          0        0           0             0
+## # ... with 235,226 more rows, and 1 more variable: da_pb_closed &lt;dbl&gt;</code></pre>
+</div>
+<div id="totals-3" class="section level3" number="4.4.6">
+<h3><span class="header-section-number">4.4.6</span> Totals</h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="handling-migration-data-in-r.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single period</span></span>
+<span id="cb41-2"><a href="handling-migration-data-in-r.html#cb41-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="handling-migration-data-in-r.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year0 <span class="sc">==</span> <span class="dv">1990</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="handling-migration-data-in-r.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_turnover</span>(<span class="at">flow_col =</span> <span class="st">&quot;da_pb_closed&quot;</span>, <span class="at">type =</span> <span class="st">&quot;international&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 197 x 5
+##    country     imm    emi    turn     net
+##    &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 BDI       61630 381611  443241 -319981
+##  2 COM        9009  12011   21020   -3002
+##  3 DJI       10949  55945   66894  -44996
+##  4 ERI       14633 329383  344016 -314750
+##  5 ETH     1635513 177334 1812847 1458179
+##  6 KEN      306517  84833  391350  221684
+##  7 MDG        9706  19159   28865   -9453
+##  8 MWI      112416 974278 1086694 -861862
+##  9 MUS       16862  22475   39337   -5613
+## 10 MYT       13763   3021   16784   10742
+## # ... with 187 more rows</code></pre>
+</div>
+<div id="totals-4" class="section level3" number="4.4.7">
+<h3><span class="header-section-number">4.4.7</span> Totals</h3>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="handling-migration-data-in-r.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all periods using group_by</span></span>
+<span id="cb43-2"><a href="handling-migration-data-in-r.html#cb43-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span> </span>
+<span id="cb43-3"><a href="handling-migration-data-in-r.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year0) <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="handling-migration-data-in-r.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_turnover</span>(<span class="at">flow_col =</span> <span class="st">&quot;da_pb_closed&quot;</span>, <span class="at">type =</span> <span class="st">&quot;international&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="handling-migration-data-in-r.html#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(country)</span></code></pre></div>
+<pre><code>## Adding missing grouping variables: `year0`</code></pre>
+<pre><code>## # A tibble: 1,188 x 6
+## # Groups:   year0 [6]
+##    year0 country     imm     emi    turn      net
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1  1990 ABW       15874    1662   17536    14212
+##  2  1995 ABW       10945    4007   14952     6938
+##  3  2000 ABW       10064    3814   13878     6250
+##  4  2005 ABW        7124    7544   14668     -420
+##  5  2010 ABW        9910    8654   18564     1256
+##  6  2015 ABW       17316   16306   33622     1010
+##  7  1990 AFG     3421712  345255 3766967  3076457
+##  8  1995 AFG      418906 1286436 1705342  -867530
+##  9  2000 AFG     1178865  434706 1613571   744159
+## 10  2005 AFG      457339 1500149 1957488 -1042810
+## # ... with 1,178 more rows</code></pre>
+</div>
+<div id="rest-of-categroies" class="section level3" number="4.4.8">
+<h3><span class="header-section-number">4.4.8</span> Rest of categroies</h3>
+<ul>
+<li>The <code>sum_lump()</code> function can be used to aggregate up smaller regions.
+<ul>
+<li>Specify the the desired level of small flows using the <code>threshold</code> argument</li>
+<li>Specify the <code>lump</code> argument to apply the <code>threshold</code> argument to either the <code>flow</code> values or the <code>in</code> and <code>out</code> totals.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="handling-migration-data-in-r.html#cb46-1" aria-hidden="true" tabindex="-1"></a>m0</span></code></pre></div>
+<pre><code>##     dest
+## orig  A   B  C  D
+##    A  0 100 30 70
+##    B 50   0 45  5
+##    C 60  35  0 40
+##    D 20  25 20  0</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="handling-migration-data-in-r.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># threshold on flows (default)</span></span>
+<span id="cb48-2"><a href="handling-migration-data-in-r.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_lump</span>(m0, <span class="at">threshold =</span> <span class="dv">50</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 3
+##   orig  dest   flow
+##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1 A     B       100
+## 2 A     D        70
+## 3 B     A        50
+## 4 C     A        60
+## 5 other other   220</code></pre>
+</div>
+<div id="rest-of-categroies-1" class="section level3" number="4.4.9">
+<h3><span class="header-section-number">4.4.9</span> Rest of categroies</h3>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="handling-migration-data-in-r.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(m0)</span></code></pre></div>
+<pre><code>##      dest
+## orig    A   B  C   D Sum
+##   A     0 100 30  70 200
+##   B    50   0 45   5 100
+##   C    60  35  0  40 135
+##   D    20  25 20   0  65
+##   Sum 130 160 95 115 500</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="handling-migration-data-in-r.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># threshold on in and out totals</span></span>
+<span id="cb52-2"><a href="handling-migration-data-in-r.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_lump</span>(m0, <span class="at">threshold =</span> <span class="dv">120</span>, <span class="at">lump =</span> <span class="fu">c</span>(<span class="st">&quot;in&quot;</span>, <span class="st">&quot;out&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 3
+##   orig  dest   flow
+##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1 A     A         0
+## 2 A     C        30
+## 3 A     other   170
+## 4 B     A        50
+## 5 B     C        45
+## 6 B     other     5
+## 7 other A        80
+## 8 other C        20
+## 9 other other   100</code></pre>
+</div>
+<div id="rest-of-categroies-2" class="section level3" number="4.4.10">
+<h3><span class="header-section-number">4.4.10</span> Rest of categroies</h3>
+<ul>
+<li>Useful to reduce the number of corridors when plotting large data sets:</li>
+</ul>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="handling-migration-data-in-r.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add continental regions to the global flow data set</span></span>
+<span id="cb54-2"><a href="handling-migration-data-in-r.html#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(countrycode)</span>
+<span id="cb54-3"><a href="handling-migration-data-in-r.html#cb54-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> f <span class="sc">%&gt;%</span> </span>
+<span id="cb54-4"><a href="handling-migration-data-in-r.html#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year0 <span class="sc">==</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-5"><a href="handling-migration-data-in-r.html#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb54-6"><a href="handling-migration-data-in-r.html#cb54-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">orig_reg =</span> </span>
+<span id="cb54-7"><a href="handling-migration-data-in-r.html#cb54-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">countrycode</span>(<span class="at">sourcevar =</span> orig, <span class="at">origin =</span> <span class="st">&quot;iso3c&quot;</span>, <span class="at">dest =</span> <span class="st">&quot;un.region.name&quot;</span>),</span>
+<span id="cb54-8"><a href="handling-migration-data-in-r.html#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dest_reg =</span> </span>
+<span id="cb54-9"><a href="handling-migration-data-in-r.html#cb54-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">countrycode</span>(<span class="at">sourcevar =</span> dest, <span class="at">origin =</span> <span class="st">&quot;iso3c&quot;</span>, <span class="at">dest =</span> <span class="st">&quot;un.region.name&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb54-10"><a href="handling-migration-data-in-r.html#cb54-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="fu">contains</span>(<span class="st">&quot;orig&quot;</span>), <span class="fu">contains</span>(<span class="st">&quot;dest&quot;</span>))</span>
+<span id="cb54-11"><a href="handling-migration-data-in-r.html#cb54-11" aria-hidden="true" tabindex="-1"></a>d</span></code></pre></div>
+<pre><code>## # A tibble: 40,000 x 11
+##    orig  orig_reg dest  dest_reg year0 sd_drop_neg sd_rev_neg mig_rate
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+##  1 BDI   Africa   BDI   Africa    2015           0          0        0
+##  2 COM   Africa   BDI   Africa    2015           0          0        0
+##  3 DJI   Africa   BDI   Africa    2015           0          0        0
+##  4 ERI   Africa   BDI   Africa    2015           0        131        0
+##  5 ETH   Africa   BDI   Africa    2015           0         14        0
+##  6 KEN   Africa   BDI   Africa    2015         194        194      211
+##  7 MDG   Africa   BDI   Africa    2015           0          0        0
+##  8 MWI   Africa   BDI   Africa    2015           0          0        0
+##  9 MUS   Africa   BDI   Africa    2015           0          0        0
+## 10 MYT   Africa   BDI   Africa    2015           0          0        0
+## # ... with 39,990 more rows, and 3 more variables: da_min_open &lt;dbl&gt;,
+## #   da_min_closed &lt;dbl&gt;, da_pb_closed &lt;dbl&gt;</code></pre>
+</div>
+<div id="rest-of-categroies-3" class="section level3" number="4.4.11">
+<h3><span class="header-section-number">4.4.11</span> Rest of categroies</h3>
+<ul>
+<li>Apply the <code>sum_lump()</code> function to lump together smaller flows (less than 100,000) within and between continents.</li>
+</ul>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="handling-migration-data-in-r.html#cb56-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href="handling-migration-data-in-r.html#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(orig_reg, dest_reg) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3"><a href="handling-migration-data-in-r.html#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_lump</span>(<span class="at">threshold =</span> <span class="fl">1e5</span>, <span class="at">flow_col =</span> <span class="st">&quot;da_pb_closed&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 221 x 5
+## # Groups:   orig_reg, dest_reg [36]
+##    orig_reg dest_reg orig  dest     flow
+##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
+##  1 Africa   Africa   BFA   CIV    329531
+##  2 Africa   Africa   CAF   COD    163440
+##  3 Africa   Africa   CIV   BFA    260320
+##  4 Africa   Africa   CIV   MLI    107902
+##  5 Africa   Africa   COD   UGA    111439
+##  6 Africa   Africa   MLI   CIV    138475
+##  7 Africa   Africa   MOZ   ZAF    112554
+##  8 Africa   Africa   other other 5091888
+##  9 Africa   Africa   SDN   SSD    380532
+## 10 Africa   Africa   SDN   TCD    121964
+## # ... with 211 more rows</code></pre>
+</div>
+<div id="exercise-ex2.r" class="section level3" number="4.4.12">
+<h3><span class="header-section-number">4.4.12</span> Exercise (ex2.R)</h3>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="handling-migration-data-in-r.html#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.  a) Load the KOSTAT2021.Rproj file. </span></span>
+<span id="cb58-2"><a href="handling-migration-data-in-r.html#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     Run the getwd() below. It should print the directory where the </span></span>
+<span id="cb58-3"><a href="handling-migration-data-in-r.html#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     KOSTAT2021.Rproj file is located.</span></span>
+<span id="cb58-4"><a href="handling-migration-data-in-r.html#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb58-5"><a href="handling-migration-data-in-r.html#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     b) Load the packages used in this exercise</span></span>
+<span id="cb58-6"><a href="handling-migration-data-in-r.html#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb58-7"><a href="handling-migration-data-in-r.html#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb58-8"><a href="handling-migration-data-in-r.html#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb58-9"><a href="handling-migration-data-in-r.html#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb58-10"><a href="handling-migration-data-in-r.html#cb58-10" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb58-11"><a href="handling-migration-data-in-r.html#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run the code below to read in the bilateral data in uk_census_2011_tidy.csv </span></span>
+<span id="cb58-12"><a href="handling-migration-data-in-r.html#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="co">#    from the ONS 2011 British Census</span></span>
+<span id="cb58-13"><a href="handling-migration-data-in-r.html#cb58-13" aria-hidden="true" tabindex="-1"></a>uk <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./data/uk_census_2011_tidy.csv&quot;</span>)</span>
+<span id="cb58-14"><a href="handling-migration-data-in-r.html#cb58-14" aria-hidden="true" tabindex="-1"></a>uk</span>
+<span id="cb58-15"><a href="handling-migration-data-in-r.html#cb58-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create a 12 by 12 origin-destination matrix m based on the bilateral flows</span></span>
+<span id="cb58-16"><a href="handling-migration-data-in-r.html#cb58-16" aria-hidden="true" tabindex="-1"></a><span class="co">#    given in data frame uk</span></span>
+<span id="cb58-17"><a href="handling-migration-data-in-r.html#cb58-17" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="do">#####(formula = flow ~ orig + #####, data = #####)</span></span>
+<span id="cb58-18"><a href="handling-migration-data-in-r.html#cb58-18" aria-hidden="true" tabindex="-1"></a>m</span>
+<span id="cb58-19"><a href="handling-migration-data-in-r.html#cb58-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Print the matrix m again, this time include the in- and out-migration </span></span>
+<span id="cb58-20"><a href="handling-migration-data-in-r.html#cb58-20" aria-hidden="true" tabindex="-1"></a><span class="co">#    sum totals</span></span>
+<span id="cb58-21"><a href="handling-migration-data-in-r.html#cb58-21" aria-hidden="true" tabindex="-1"></a><span class="do">#####(m1)</span></span>
+<span id="cb58-22"><a href="handling-migration-data-in-r.html#cb58-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Create a 12 by 12 by 2 sex-specific origin-destination array based on the</span></span>
+<span id="cb58-23"><a href="handling-migration-data-in-r.html#cb58-23" aria-hidden="true" tabindex="-1"></a><span class="co">#    bilateral flows given in data frame uk</span></span>
+<span id="cb58-24"><a href="handling-migration-data-in-r.html#cb58-24" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="do">#####(formula = ##### ~ ##### + dest + #####, data = uk)</span></span>
+<span id="cb58-25"><a href="handling-migration-data-in-r.html#cb58-25" aria-hidden="true" tabindex="-1"></a>s</span>
+<span id="cb58-26"><a href="handling-migration-data-in-r.html#cb58-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Run the code below to check that s has 12 x 12 x 2 dimensions</span></span>
+<span id="cb58-27"><a href="handling-migration-data-in-r.html#cb58-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(s)</span>
+<span id="cb58-28"><a href="handling-migration-data-in-r.html#cb58-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Convert object s from above into a tibble with four columns, orig, dest, </span></span>
+<span id="cb58-29"><a href="handling-migration-data-in-r.html#cb58-29" aria-hidden="true" tabindex="-1"></a><span class="co">#    sex and flow</span></span>
+<span id="cb58-30"><a href="handling-migration-data-in-r.html#cb58-30" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> s <span class="sc">%&gt;%</span></span>
+<span id="cb58-31"><a href="handling-migration-data-in-r.html#cb58-31" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####(responseName = &quot;#####&quot;) %&gt;%</span></span>
+<span id="cb58-32"><a href="handling-migration-data-in-r.html#cb58-32" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####()</span></span>
+<span id="cb58-33"><a href="handling-migration-data-in-r.html#cb58-33" aria-hidden="true" tabindex="-1"></a>d</span>
+<span id="cb58-34"><a href="handling-migration-data-in-r.html#cb58-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Calculate the counter-flow and net-flow for each migration pair in the </span></span>
+<span id="cb58-35"><a href="handling-migration-data-in-r.html#cb58-35" aria-hidden="true" tabindex="-1"></a><span class="co">#    matrix m. Use the arrange() function to show the top 10 migration corridors</span></span>
+<span id="cb58-36"><a href="handling-migration-data-in-r.html#cb58-36" aria-hidden="true" tabindex="-1"></a><span class="co">#    with biggest net losses </span></span>
+<span id="cb58-37"><a href="handling-migration-data-in-r.html#cb58-37" aria-hidden="true" tabindex="-1"></a>m <span class="sc">%&gt;%</span></span>
+<span id="cb58-38"><a href="handling-migration-data-in-r.html#cb58-38" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####() %&gt;%</span></span>
+<span id="cb58-39"><a href="handling-migration-data-in-r.html#cb58-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(net_flow)</span>
+<span id="cb58-40"><a href="handling-migration-data-in-r.html#cb58-40" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. Calculate the sex-specific in-migration, out-migration, turnover and net </span></span>
+<span id="cb58-41"><a href="handling-migration-data-in-r.html#cb58-41" aria-hidden="true" tabindex="-1"></a><span class="co">#    migration totals for each origin in s. Arrange the results by the smallest</span></span>
+<span id="cb58-42"><a href="handling-migration-data-in-r.html#cb58-42" aria-hidden="true" tabindex="-1"></a><span class="co">#    turnover totals</span></span>
+<span id="cb58-43"><a href="handling-migration-data-in-r.html#cb58-43" aria-hidden="true" tabindex="-1"></a>s <span class="sc">%&gt;%</span></span>
+<span id="cb58-44"><a href="handling-migration-data-in-r.html#cb58-44" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####(responseName = &quot;flow&quot;) %&gt;%</span></span>
+<span id="cb58-45"><a href="handling-migration-data-in-r.html#cb58-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="do">#####) %&gt;%</span></span>
+<span id="cb58-46"><a href="handling-migration-data-in-r.html#cb58-46" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####() %&gt;%</span></span>
+<span id="cb58-47"><a href="handling-migration-data-in-r.html#cb58-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(turn)</span></code></pre></div>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Abel2019" class="csl-entry">
+Abel, Guy J., and Joel E. Cohen. 2019. <span>“<span class="nocase">Bilateral international migration flow estimates for 200 countries</span>.”</span> <em>Scientific Data</em> 6 (1): 82. <a href="https://doi.org/10.1038/s41597-019-0089-3">https://doi.org/10.1038/s41597-019-0089-3</a>.
+</div>
+<div id="ref-UnitedNations1983" class="csl-entry">
+United Nations Department of Economic and Social Affairs Population Division. 1983. <em><span class="nocase">Methods of measuring internal migration.</span></em> New York, New York, USA: United Nations Publication. <a href="https://www.un.org/en/development/desa/population/publications/manual/migration/measuring-migration.asp">https://www.un.org/en/development/desa/population/publications/manual/migration/measuring-migration.asp</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="migration-concepts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="summary-migration-indices.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-data.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

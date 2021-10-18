@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Describing Bilteral Migration Data | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 8 Describing Bilteral Migration Data | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Describing Bilteral Migration Data | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="guyabel/migest-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Describing Bilteral Migration Data | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="describing-and-estimating-migration-age-structures.html"/>
+<link rel="next" href="estimating-bilateral-migration.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> .</a></li>
+<li class="chapter" data-level="2" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>2</b> Outline</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>2.1</b> Workshop on Migration Estimation</a></li>
+<li class="chapter" data-level="2.2" data-path="outline.html"><a href="outline.html#general-points"><i class="fa fa-check"></i><b>2.2</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#spatial"><i class="fa fa-check"></i><b>3.1</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence"><i class="fa fa-check"></i><b>3.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.2" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-1"><i class="fa fa-check"></i><b>3.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.3" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-2"><i class="fa fa-check"></i><b>3.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.4" data-path="migration-concepts.html"><a href="migration-concepts.html#courgeau-1979"><i class="fa fa-check"></i><b>3.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.5" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-origin"><i class="fa fa-check"></i><b>3.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="3.1.6" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data"><i class="fa fa-check"></i><b>3.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="3.1.7" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>3.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="3.1.8" data-path="migration-concepts.html"><a href="migration-concepts.html#migrants-and-migration"><i class="fa fa-check"></i><b>3.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="3.1.9" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data"><i class="fa fa-check"></i><b>3.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.10" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-1"><i class="fa fa-check"></i><b>3.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.11" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>3.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.12" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-2"><i class="fa fa-check"></i><b>3.1.12</b> Migration Event Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#temporal"><i class="fa fa-check"></i><b>3.2</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval"><i class="fa fa-check"></i><b>3.2.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="3.2.2" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>3.2.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>3.2.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="3.2.4" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>3.2.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.5" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>3.2.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.6" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>3.2.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#measures"><i class="fa fa-check"></i><b>3.3</b> Measures</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-measures"><i class="fa fa-check"></i><b>3.3.1</b> Migration measures</a></li>
+<li class="chapter" data-level="3.3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures"><i class="fa fa-check"></i><b>3.3.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>3.3.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.4" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals"><i class="fa fa-check"></i><b>3.3.4</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.5" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-1"><i class="fa fa-check"></i><b>3.3.5</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.6" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-2"><i class="fa fa-check"></i><b>3.3.6</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.7" data-path="migration-concepts.html"><a href="migration-concepts.html#rate-measures"><i class="fa fa-check"></i><b>3.3.7</b> Rate measures</a></li>
+<li class="chapter" data-level="3.3.8" data-path="migration-concepts.html"><a href="migration-concepts.html#rates"><i class="fa fa-check"></i><b>3.3.8</b> Rates</a></li>
+<li class="chapter" data-level="3.3.9" data-path="migration-concepts.html"><a href="migration-concepts.html#rates-1"><i class="fa fa-check"></i><b>3.3.9</b> Rates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html"><i class="fa fa-check"></i><b>4</b> Handling Migration Data in R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table"><i class="fa fa-check"></i><b>4.1</b> Contingency Table</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-1"><i class="fa fa-check"></i><b>4.1.1</b> Contingency Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-2"><i class="fa fa-check"></i><b>4.1.2</b> Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-manipulation"><i class="fa fa-check"></i><b>4.2</b> Data Manipulation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array"><i class="fa fa-check"></i><b>4.2.1</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array-1"><i class="fa fa-check"></i><b>4.2.2</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#show-totals"><i class="fa fa-check"></i><b>4.2.3</b> Show totals</a></li>
+<li class="chapter" data-level="4.2.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix"><i class="fa fa-check"></i><b>4.2.4</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-1"><i class="fa fa-check"></i><b>4.2.5</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-2"><i class="fa fa-check"></i><b>4.2.6</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame"><i class="fa fa-check"></i><b>4.2.7</b> Convert to data frame</a></li>
+<li class="chapter" data-level="4.2.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame-1"><i class="fa fa-check"></i><b>4.2.8</b> Convert to data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#matrix-operations"><i class="fa fa-check"></i><b>4.3</b> Matrix Operations</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics"><i class="fa fa-check"></i><b>4.3.1</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics-1"><i class="fa fa-check"></i><b>4.3.2</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names"><i class="fa fa-check"></i><b>4.3.3</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-1"><i class="fa fa-check"></i><b>4.3.4</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-2"><i class="fa fa-check"></i><b>4.3.5</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-scaling"><i class="fa fa-check"></i><b>4.3.6</b> Data scaling</a></li>
+<li class="chapter" data-level="4.3.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#diagonal-elements"><i class="fa fa-check"></i><b>4.3.7</b> Diagonal elements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#summaries"><i class="fa fa-check"></i><b>4.4</b> Summaries</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows"><i class="fa fa-check"></i><b>4.4.1</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows-1"><i class="fa fa-check"></i><b>4.4.2</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals"><i class="fa fa-check"></i><b>4.4.3</b> Totals</a></li>
+<li class="chapter" data-level="4.4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-1"><i class="fa fa-check"></i><b>4.4.4</b> Totals</a></li>
+<li class="chapter" data-level="4.4.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-2"><i class="fa fa-check"></i><b>4.4.5</b> Totals</a></li>
+<li class="chapter" data-level="4.4.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-3"><i class="fa fa-check"></i><b>4.4.6</b> Totals</a></li>
+<li class="chapter" data-level="4.4.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-4"><i class="fa fa-check"></i><b>4.4.7</b> Totals</a></li>
+<li class="chapter" data-level="4.4.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies"><i class="fa fa-check"></i><b>4.4.8</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.9" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-1"><i class="fa fa-check"></i><b>4.4.9</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.10" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-2"><i class="fa fa-check"></i><b>4.4.10</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.11" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-3"><i class="fa fa-check"></i><b>4.4.11</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.12" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#exercise-ex2.r"><i class="fa fa-check"></i><b>4.4.12</b> Exercise (ex2.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html"><i class="fa fa-check"></i><b>5</b> Summary Migration Indices</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-1"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-2"><i class="fa fa-check"></i><b>5.1.2</b> Background</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#intensity"><i class="fa fa-check"></i><b>5.2</b> Intensity</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity"><i class="fa fa-check"></i><b>5.2.1</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#crude-migration-probability"><i class="fa fa-check"></i><b>5.2.2</b> Crude migration probability</a></li>
+<li class="chapter" data-level="5.2.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-1"><i class="fa fa-check"></i><b>5.2.3</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-2"><i class="fa fa-check"></i><b>5.2.4</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-3"><i class="fa fa-check"></i><b>5.2.5</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-4"><i class="fa fa-check"></i><b>5.2.6</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-5"><i class="fa fa-check"></i><b>5.2.7</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-6"><i class="fa fa-check"></i><b>5.2.8</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-7"><i class="fa fa-check"></i><b>5.2.9</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-8"><i class="fa fa-check"></i><b>5.2.10</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.11" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-9"><i class="fa fa-check"></i><b>5.2.11</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.12" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-10"><i class="fa fa-check"></i><b>5.2.12</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.13" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-11"><i class="fa fa-check"></i><b>5.2.13</b> Migration intensity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance"><i class="fa fa-check"></i><b>5.3</b> Distance</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance"><i class="fa fa-check"></i><b>5.3.1</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#average-migration-distance"><i class="fa fa-check"></i><b>5.3.2</b> Average migration distance</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance-decay"><i class="fa fa-check"></i><b>5.3.3</b> Distance decay</a></li>
+<li class="chapter" data-level="5.3.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-1"><i class="fa fa-check"></i><b>5.3.4</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-2"><i class="fa fa-check"></i><b>5.3.5</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-3"><i class="fa fa-check"></i><b>5.3.6</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances"><i class="fa fa-check"></i><b>5.3.7</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-1"><i class="fa fa-check"></i><b>5.3.8</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-2"><i class="fa fa-check"></i><b>5.3.9</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-3"><i class="fa fa-check"></i><b>5.3.10</b> Calculating distances</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity"><i class="fa fa-check"></i><b>5.4</b> Connectivity</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity"><i class="fa fa-check"></i><b>5.4.1</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity-1"><i class="fa fa-check"></i><b>5.4.2</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity-and-inequality"><i class="fa fa-check"></i><b>5.4.3</b> Connectivity and Inequality</a></li>
+<li class="chapter" data-level="5.4.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#gini-measures"><i class="fa fa-check"></i><b>5.4.4</b> Gini measures</a></li>
+<li class="chapter" data-level="5.4.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-totals-gini-and-coefficient-of-variation"><i class="fa fa-check"></i><b>5.4.5</b> Migration totals Gini and Coefficient of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#impact"><i class="fa fa-check"></i><b>5.5</b> Impact</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact"><i class="fa fa-check"></i><b>5.5.1</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-effectiveness-index"><i class="fa fa-check"></i><b>5.5.2</b> Migration effectiveness index</a></li>
+<li class="chapter" data-level="5.5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#aggregate-net-migration-rate"><i class="fa fa-check"></i><b>5.5.3</b> Aggregate net migration rate</a></li>
+<li class="chapter" data-level="5.5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#preference-and-velocity"><i class="fa fa-check"></i><b>5.5.4</b> Preference and velocity</a></li>
+<li class="chapter" data-level="5.5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-1"><i class="fa fa-check"></i><b>5.5.5</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-2"><i class="fa fa-check"></i><b>5.5.6</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-3"><i class="fa fa-check"></i><b>5.5.7</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#exercise-ex3.r"><i class="fa fa-check"></i><b>5.5.8</b> Exercise (ex3.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html"><i class="fa fa-check"></i><b>6</b> Estimating Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration"><i class="fa fa-check"></i><b>6.1</b> Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-1"><i class="fa fa-check"></i><b>6.1.1</b> Net migration</a></li>
+<li class="chapter" data-level="6.1.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-estimation"><i class="fa fa-check"></i><b>6.1.2</b> Net migration estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statstics"><i class="fa fa-check"></i><b>6.2</b> Vital Statstics</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics"><i class="fa fa-check"></i><b>6.2.1</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-1"><i class="fa fa-check"></i><b>6.2.2</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-2"><i class="fa fa-check"></i><b>6.2.3</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-3"><i class="fa fa-check"></i><b>6.2.4</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties"><i class="fa fa-check"></i><b>6.2.5</b> Difficulties</a></li>
+<li class="chapter" data-level="6.2.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties-1"><i class="fa fa-check"></i><b>6.2.6</b> Difficulties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods"><i class="fa fa-check"></i><b>6.3</b> Survival Methods</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-1"><i class="fa fa-check"></i><b>6.3.1</b> Survival methods</a></li>
+<li class="chapter" data-level="6.3.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#forward-survival-ratios"><i class="fa fa-check"></i><b>6.3.2</b> Forward survival ratios</a></li>
+<li class="chapter" data-level="6.3.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#reverse-survival-ratios"><i class="fa fa-check"></i><b>6.3.3</b> Reverse survival ratios</a></li>
+<li class="chapter" data-level="6.3.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#average-survival-ratios"><i class="fa fa-check"></i><b>6.3.4</b> Average survival ratios</a></li>
+<li class="chapter" data-level="6.3.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r"><i class="fa fa-check"></i><b>6.3.5</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-1"><i class="fa fa-check"></i><b>6.3.6</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-2"><i class="fa fa-check"></i><b>6.3.7</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-3"><i class="fa fa-check"></i><b>6.3.8</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-4"><i class="fa fa-check"></i><b>6.3.9</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-ratios"><i class="fa fa-check"></i><b>6.3.10</b> Survival ratios</a></li>
+<li class="chapter" data-level="6.3.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#life-table-survival-ratios"><i class="fa fa-check"></i><b>6.3.11</b> Life table survival ratios</a></li>
+<li class="chapter" data-level="6.3.12" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios"><i class="fa fa-check"></i><b>6.3.12</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.13" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data"><i class="fa fa-check"></i><b>6.3.13</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.14" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-1"><i class="fa fa-check"></i><b>6.3.14</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.15" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios-1"><i class="fa fa-check"></i><b>6.3.15</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.16" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#limitations-of-census-survival-ratios"><i class="fa fa-check"></i><b>6.3.16</b> Limitations of census survival ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace"><i class="fa fa-check"></i><b>6.4</b> Birthplace</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-1"><i class="fa fa-check"></i><b>6.4.1</b> Birthplace</a></li>
+<li class="chapter" data-level="6.4.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals"><i class="fa fa-check"></i><b>6.4.2</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-1"><i class="fa fa-check"></i><b>6.4.3</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-2"><i class="fa fa-check"></i><b>6.4.4</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-3"><i class="fa fa-check"></i><b>6.4.5</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-4"><i class="fa fa-check"></i><b>6.4.6</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-5"><i class="fa fa-check"></i><b>6.4.7</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-2"><i class="fa fa-check"></i><b>6.4.8</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-3"><i class="fa fa-check"></i><b>6.4.9</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-4"><i class="fa fa-check"></i><b>6.4.10</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#exercise-ex4.r"><i class="fa fa-check"></i><b>6.4.11</b> Exercise (ex4.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html"><i class="fa fa-check"></i><b>7</b> Describing and Estimating Migration Age Structures</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro"><i class="fa fa-check"></i><b>7.1</b> Rogers Castro</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.1.1</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.1.2</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.1.3</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.1.4</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.1.5</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.1.6</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.1.7</b> Rogers Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-schedules"><i class="fa fa-check"></i><b>7.2</b> Model schedules</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules"><i class="fa fa-check"></i><b>7.2.1</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.2.2</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.2.3</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.2.4</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.2.5</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.2.6</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.2.7</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-7"><i class="fa fa-check"></i><b>7.2.8</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-8"><i class="fa fa-check"></i><b>7.2.9</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-9"><i class="fa fa-check"></i><b>7.2.10</b> Model migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-schedules"><i class="fa fa-check"></i><b>7.3</b> Fitting schedules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.3.1</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.3.2</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.3.3</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.3.4</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.3.5</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.3.6</b> Fitting Roger Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices"><i class="fa fa-check"></i><b>7.4</b> Age Indices</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-1"><i class="fa fa-check"></i><b>7.4.1</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-2"><i class="fa fa-check"></i><b>7.4.2</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-3"><i class="fa fa-check"></i><b>7.4.3</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-4"><i class="fa fa-check"></i><b>7.4.4</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-5"><i class="fa fa-check"></i><b>7.4.5</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-6"><i class="fa fa-check"></i><b>7.4.6</b> Age Indices</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#smoothing"><i class="fa fa-check"></i><b>7.5</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions"><i class="fa fa-check"></i><b>7.5.1</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-1"><i class="fa fa-check"></i><b>7.5.2</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-2"><i class="fa fa-check"></i><b>7.5.3</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-3"><i class="fa fa-check"></i><b>7.5.4</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing"><i class="fa fa-check"></i><b>7.5.5</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing-1"><i class="fa fa-check"></i><b>7.5.6</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing"><i class="fa fa-check"></i><b>7.5.7</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing-1"><i class="fa fa-check"></i><b>7.5.8</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing"><i class="fa fa-check"></i><b>7.5.9</b> Cubic spline smoothing</a></li>
+<li class="chapter" data-level="7.5.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing-1"><i class="fa fa-check"></i><b>7.5.10</b> Cubic spline smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating"><i class="fa fa-check"></i><b>7.6</b> Graduating</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-1"><i class="fa fa-check"></i><b>7.6.1</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-2"><i class="fa fa-check"></i><b>7.6.2</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-3"><i class="fa fa-check"></i><b>7.6.3</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-4"><i class="fa fa-check"></i><b>7.6.4</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#exercise-5-ex5.r"><i class="fa fa-check"></i><b>7.6.5</b> Exercise 5 (ex5.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html"><i class="fa fa-check"></i><b>8</b> Describing Bilteral Migration Data</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#components"><i class="fa fa-check"></i><b>8.1</b> Components</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model"><i class="fa fa-check"></i><b>8.1.1</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-1"><i class="fa fa-check"></i><b>8.1.2</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-2"><i class="fa fa-check"></i><b>8.1.3</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-3"><i class="fa fa-check"></i><b>8.1.4</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-4"><i class="fa fa-check"></i><b>8.1.5</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-5"><i class="fa fa-check"></i><b>8.1.6</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-6"><i class="fa fa-check"></i><b>8.1.7</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-7"><i class="fa fa-check"></i><b>8.1.8</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.9" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-8"><i class="fa fa-check"></i><b>8.1.9</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.10" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-9"><i class="fa fa-check"></i><b>8.1.10</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.11" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-10"><i class="fa fa-check"></i><b>8.1.11</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.12" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-11"><i class="fa fa-check"></i><b>8.1.12</b> Multiplicative Component Model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models"><i class="fa fa-check"></i><b>8.2</b> Log-Linear Models</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-1"><i class="fa fa-check"></i><b>8.2.1</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-2"><i class="fa fa-check"></i><b>8.2.2</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-3"><i class="fa fa-check"></i><b>8.2.3</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-4"><i class="fa fa-check"></i><b>8.2.4</b> Log-Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#dimensions"><i class="fa fa-check"></i><b>8.3</b> Dimensions</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis"><i class="fa fa-check"></i><b>8.3.1</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-1"><i class="fa fa-check"></i><b>8.3.2</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-2"><i class="fa fa-check"></i><b>8.3.3</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-3"><i class="fa fa-check"></i><b>8.3.4</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-4"><i class="fa fa-check"></i><b>8.3.5</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-5"><i class="fa fa-check"></i><b>8.3.6</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-6"><i class="fa fa-check"></i><b>8.3.7</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#exercise-ex6.r"><i class="fa fa-check"></i><b>8.3.8</b> Exercise (ex6.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html"><i class="fa fa-check"></i><b>9</b> Estimating Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp"><i class="fa fa-check"></i><b>9.1</b> IPFP</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-1"><i class="fa fa-check"></i><b>9.1.1</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-2"><i class="fa fa-check"></i><b>9.1.2</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-3"><i class="fa fa-check"></i><b>9.1.3</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-4"><i class="fa fa-check"></i><b>9.1.4</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-5"><i class="fa fa-check"></i><b>9.1.5</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp"><i class="fa fa-check"></i><b>9.1.6</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.7" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-1"><i class="fa fa-check"></i><b>9.1.7</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.8" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-2"><i class="fa fa-check"></i><b>9.1.8</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-3"><i class="fa fa-check"></i><b>9.1.9</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.10" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-4"><i class="fa fa-check"></i><b>9.1.10</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.11" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#three-dimensions"><i class="fa fa-check"></i><b>9.1.11</b> Three dimensions</a></li>
+<li class="chapter" data-level="9.1.12" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-more-complicated-data-situations"><i class="fa fa-check"></i><b>9.1.12</b> IPFP More Complicated Data Situations</a></li>
+<li class="chapter" data-level="9.1.13" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#estimating-detailed-bilateral-migration"><i class="fa fa-check"></i><b>9.1.13</b> Estimating Detailed Bilateral Migration</a></li>
+<li class="chapter" data-level="9.1.14" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-5"><i class="fa fa-check"></i><b>9.1.14</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.15" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-6"><i class="fa fa-check"></i><b>9.1.15</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.16" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-7"><i class="fa fa-check"></i><b>9.1.16</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.17" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-8"><i class="fa fa-check"></i><b>9.1.17</b> mipfp</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constraints"><i class="fa fa-check"></i><b>9.2</b> Net Constraints</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows"><i class="fa fa-check"></i><b>9.2.1</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-1"><i class="fa fa-check"></i><b>9.2.2</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-2"><i class="fa fa-check"></i><b>9.2.3</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-3"><i class="fa fa-check"></i><b>9.2.4</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-4"><i class="fa fa-check"></i><b>9.2.5</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#exercise-ex7.r"><i class="fa fa-check"></i><b>9.2.6</b> Exercise (ex7.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>10</b> Chord Diagrams for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#section-1"><i class="fa fa-check"></i><b>10.1</b> .</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#background-3"><i class="fa fa-check"></i><b>10.1.1</b> Background</a></li>
+<li class="chapter" data-level="10.1.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#map-based---the-emigrants-of-the-world-minard-1858."><i class="fa fa-check"></i><b>10.1.2</b> Map Based - The Emigrants of the World, Minard 1858.</a></li>
+<li class="chapter" data-level="10.1.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#flowline-maps"><i class="fa fa-check"></i><b>10.1.3</b> Flowline Maps</a></li>
+<li class="chapter" data-level="10.1.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#criticised-new-york-times-refugee-flow-map"><i class="fa fa-check"></i><b>10.1.4</b> Criticised New York Times refugee flow map</a></li>
+<li class="chapter" data-level="10.1.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#martin-grandjeans-attempt-to-rectify"><i class="fa fa-check"></i><b>10.1.5</b> Martin Grandjean’s attempt to rectify</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagram"><i class="fa fa-check"></i><b>10.2</b> Chord Diagram</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams"><i class="fa fa-check"></i><b>10.2.1</b> Chord Diagrams</a></li>
+<li class="chapter" data-level="10.2.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#new-york-times-2007"><i class="fa fa-check"></i><b>10.2.2</b> New York Times 2007</a></li>
+<li class="chapter" data-level="10.2.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data"><i class="fa fa-check"></i><b>10.2.3</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-1"><i class="fa fa-check"></i><b>10.2.4</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-2"><i class="fa fa-check"></i><b>10.2.5</b> Chord Diagrams with Migration Data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#circlize"><i class="fa fa-check"></i><b>10.3</b> circlize</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-in-r"><i class="fa fa-check"></i><b>10.3.1</b> Chord Diagrams in R</a></li>
+<li class="chapter" data-level="10.3.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020"><i class="fa fa-check"></i><b>10.3.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-1"><i class="fa fa-check"></i><b>10.3.3</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-2"><i class="fa fa-check"></i><b>10.3.4</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram"><i class="fa fa-check"></i><b>10.3.5</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-1"><i class="fa fa-check"></i><b>10.3.6</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-2"><i class="fa fa-check"></i><b>10.3.7</b> Default <code>chordDiagram()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sectors"><i class="fa fa-check"></i><b>10.4</b> Sectors</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-axis"><i class="fa fa-check"></i><b>10.4.1</b> Sector Axis</a></li>
+<li class="chapter" data-level="10.4.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering"><i class="fa fa-check"></i><b>10.4.2</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering-1"><i class="fa fa-check"></i><b>10.4.3</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#orientation-and-gaps"><i class="fa fa-check"></i><b>10.4.4</b> Orientation and gaps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#colour"><i class="fa fa-check"></i><b>10.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colours"><i class="fa fa-check"></i><b>10.5.1</b> Sector colours</a></li>
+<li class="chapter" data-level="10.5.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colour"><i class="fa fa-check"></i><b>10.5.2</b> Sector colour</a></li>
+<li class="chapter" data-level="10.5.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours"><i class="fa fa-check"></i><b>10.5.3</b> Chord colours</a></li>
+<li class="chapter" data-level="10.5.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours-1"><i class="fa fa-check"></i><b>10.5.4</b> Chord colours</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chords"><i class="fa fa-check"></i><b>10.6</b> Chords</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction"><i class="fa fa-check"></i><b>10.6.1</b> Direction</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-1"><i class="fa fa-check"></i><b>10.7</b> Direction</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-2"><i class="fa fa-check"></i><b>10.7.1</b> Direction</a></li>
+<li class="chapter" data-level="10.7.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-ordering"><i class="fa fa-check"></i><b>10.7.2</b> Chord ordering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels"><i class="fa fa-check"></i><b>10.8</b> Labels</a>
+<ul>
+<li class="chapter" data-level="10.8.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-1"><i class="fa fa-check"></i><b>10.8.1</b> Labels</a></li>
+<li class="chapter" data-level="10.8.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-2"><i class="fa fa-check"></i><b>10.8.2</b> Labels</a></li>
+<li class="chapter" data-level="10.8.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-3"><i class="fa fa-check"></i><b>10.8.3</b> Labels</a></li>
+<li class="chapter" data-level="10.8.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-4"><i class="fa fa-check"></i><b>10.8.4</b> Labels</a></li>
+<li class="chapter" data-level="10.8.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-5"><i class="fa fa-check"></i><b>10.8.5</b> Labels</a></li>
+<li class="chapter" data-level="10.8.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving"><i class="fa fa-check"></i><b>10.8.6</b> Saving</a></li>
+<li class="chapter" data-level="10.8.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving-1"><i class="fa fa-check"></i><b>10.8.7</b> Saving</a></li>
+<li class="chapter" data-level="10.8.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#exercise-ex8.r"><i class="fa fa-check"></i><b>10.8.8</b> Exercise (ex8.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>11</b> Sankey Plots for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-4"><i class="fa fa-check"></i><b>11.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-5"><i class="fa fa-check"></i><b>11.1.1</b> Background</a></li>
+<li class="chapter" data-level="11.1.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#men-in-napoleons-1812-russian-campaign"><i class="fa fa-check"></i><b>11.1.2</b> Men in Napoleon’s 1812 Russian Campaign</a></li>
+<li class="chapter" data-level="11.1.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plot-of-migration-in-nature-by-butler2017"><i class="fa fa-check"></i><b>11.1.3</b> Sankey plot of migration in Nature by <span class="citation"><span>Butler</span> (<span>2017</span>)</span></a></li>
+<li class="chapter" data-level="11.1.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r"><i class="fa fa-check"></i><b>11.1.4</b> Sankey plots in R</a></li>
+<li class="chapter" data-level="11.1.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r-1"><i class="fa fa-check"></i><b>11.1.5</b> Sankey plots in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format"><i class="fa fa-check"></i><b>11.2</b> Data Format</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-3"><i class="fa fa-check"></i><b>11.2.1</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-4"><i class="fa fa-check"></i><b>11.2.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-1"><i class="fa fa-check"></i><b>11.2.3</b> Data format</a></li>
+<li class="chapter" data-level="11.2.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-2"><i class="fa fa-check"></i><b>11.2.4</b> Data format</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#parrellel-sets"><i class="fa fa-check"></i><b>11.3</b> Parrellel Sets</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot"><i class="fa fa-check"></i><b>11.3.1</b> Default Plot</a></li>
+<li class="chapter" data-level="11.3.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot-1"><i class="fa fa-check"></i><b>11.3.2</b> Default Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes"><i class="fa fa-check"></i><b>11.4</b> Set Axes</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes-1"><i class="fa fa-check"></i><b>11.4.1</b> Set Axes</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-1"><i class="fa fa-check"></i><b>11.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-2"><i class="fa fa-check"></i><b>11.5.1</b> Colour</a></li>
+<li class="chapter" data-level="11.5.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-colour---failed-axis-colour"><i class="fa fa-check"></i><b>11.5.2</b> Ribbon colour - failed axis colour</a></li>
+<li class="chapter" data-level="11.5.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-transparency"><i class="fa fa-check"></i><b>11.5.3</b> Ribbon transparency</a></li>
+<li class="chapter" data-level="11.5.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour"><i class="fa fa-check"></i><b>11.5.4</b> Axis colour</a></li>
+<li class="chapter" data-level="11.5.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour-1"><i class="fa fa-check"></i><b>11.5.5</b> Axis colour</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-6"><i class="fa fa-check"></i><b>11.6</b> Labels</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-7"><i class="fa fa-check"></i><b>11.6.1</b> Labels</a></li>
+<li class="chapter" data-level="11.6.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-8"><i class="fa fa-check"></i><b>11.6.2</b> Labels</a></li>
+<li class="chapter" data-level="11.6.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-9"><i class="fa fa-check"></i><b>11.6.3</b> Labels</a></li>
+<li class="chapter" data-level="11.6.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-10"><i class="fa fa-check"></i><b>11.6.4</b> Labels</a></li>
+<li class="chapter" data-level="11.6.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-11"><i class="fa fa-check"></i><b>11.6.5</b> Labels</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing"><i class="fa fa-check"></i><b>11.7</b> Spacing</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing-1"><i class="fa fa-check"></i><b>11.7.1</b> Spacing</a></li>
+<li class="chapter" data-level="11.7.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#exercise-ex9.r"><i class="fa fa-check"></i><b>11.7.2</b> Exercise (ex9.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="describing-bilteral-migration-data" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Describing Bilteral Migration Data</h1>
+<div id="components" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Components</h2>
+<div id="multiplicative-component-model" class="section level3" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Multiplicative Component Model</h3>
+<ul>
+<li><span class="citation"><a href="#ref-rogers2002dms" role="doc-biblioref">Rogers et al.</a> (<a href="#ref-rogers2002dms" role="doc-biblioref">2002</a>)</span> proposed dis-aggregating origin-destination flow tables into separate components to allow for an easier examination of migration flows
+<ul>
+<li>Overall component - level of migration <span class="math inline">\(\gamma\)</span></li>
+<li>Origin component - relative ‘pushes’ from each region <span class="math inline">\(\alpha_i\)</span></li>
+<li>Destination component - relative ‘pulls’ to each region <span class="math inline">\(\beta_j\)</span></li>
+<li>Origin–Destination interaction component - physical or social distance between places not explained by the overall and main effects. <span class="math inline">\(\delta_{ij}\)</span></li>
+</ul></li>
+<li>Simple calculations to estimate each component:
+<span class="math display">\[
+\gamma = m_{++} \qquad \alpha_i = \dfrac{m_{i+}}{m_{++}} \qquad \beta_j = \dfrac{m_{+j}}{m_{++}} \qquad  \delta_{ij} = \dfrac{m_{ij}}{\gamma\alpha_i\beta_j}
+\]</span></li>
+<li>The interaction, <span class="math inline">\(\delta_{ij}\)</span>, is the ratio of observed flow to an expected flow (for the case of no interaction).</li>
+</ul>
+</div>
+<div id="multiplicative-component-model-1" class="section level3" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Multiplicative Component Model</h3>
+<ul>
+<li>The dis-aggregation of the components is multiplicative:
+<span class="math display">\[
+m_{ij} = \gamma \alpha_i \beta_j \delta_{ij}
+\]</span></li>
+<li>Equivalent to a saturated Poisson regression model (<span class="math inline">\(R^2 = 1\)</span>) where
+<ul>
+<li><span class="math inline">\(\gamma\)</span> is constant term</li>
+<li><span class="math inline">\(\alpha_i\)</span> is categorical term for the origin regions</li>
+<li><span class="math inline">\(\beta_j\)</span> is categorical term for the destination regions</li>
+<li><span class="math inline">\(\delta_{ij}\)</span> is an interaction term between the <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\beta_j\)</span>
+<span class="math display">\[
+\log m_{ij} = \gamma +  \alpha_i ORIG_i + \beta_j DEST_j +  \delta_i ORIG_i:DEST_j
+\]</span></li>
+</ul></li>
+<li>When data is in a tidy format with row <span class="math inline">\(h\)</span> would be:
+<span class="math display">\[
+\log y_{h} =  \beta_0 +  \beta_1 ORIG_{h} + \beta_2 DEST_{h} + \beta_3 ORIG_{h}:DEST_{h}
+\]</span></li>
+<li>Poisson regression models such as these - where all the predictor variables are categorical - are also know as log-linear models</li>
+<li>Standard functions for fitting regression models, such as <code>glm()</code> in R will provide the same fitted values, but different parameter estimates
+<ul>
+<li>Use different coding system for the constraints when estimating parameters</li>
+<li>Rogers’ terms the parameter estimates using the equations for <span class="math inline">\(\gamma, \alpha_i, \beta_j\)</span> and <span class="math inline">\(\delta_{ij}\)</span> above the <em>total reference</em> coding system</li>
+</ul></li>
+</ul>
+</div>
+<div id="multiplicative-component-model-2" class="section level3" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> Multiplicative Component Model</h3>
+<ul>
+<li>The <em>migest</em> package contains a <code>multi_comp()</code> function to generate parameter estimates from an origin-destination flow matrix
+<ul>
+<li>Demonstrate with previous dummy data set</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="describing-bilteral-migration-data.html#cb217-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb217-2"><a href="describing-bilteral-migration-data.html#cb217-2" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">70</span>, </span>
+<span id="cb217-3"><a href="describing-bilteral-migration-data.html#cb217-3" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">5</span>, </span>
+<span id="cb217-4"><a href="describing-bilteral-migration-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">60</span>, <span class="dv">35</span>, <span class="dv">0</span>, <span class="dv">40</span>, </span>
+<span id="cb217-5"><a href="describing-bilteral-migration-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">0</span>), </span>
+<span id="cb217-6"><a href="describing-bilteral-migration-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb217-7"><a href="describing-bilteral-migration-data.html#cb217-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r))</span>
+<span id="cb217-8"><a href="describing-bilteral-migration-data.html#cb217-8" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(m0)</span></code></pre></div>
+<pre><code>##      dest
+## orig    A   B  C   D Sum
+##   A     0 100 30  70 200
+##   B    50   0 45   5 100
+##   C    60  35  0  40 135
+##   D    20  25 20   0  65
+##   Sum 130 160 95 115 500</code></pre>
+</div>
+<div id="multiplicative-component-model-3" class="section level3" number="8.1.4">
+<h3><span class="header-section-number">8.1.4</span> Multiplicative Component Model</h3>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="describing-bilteral-migration-data.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb219-2"><a href="describing-bilteral-migration-data.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb219-3"><a href="describing-bilteral-migration-data.html#cb219-3" aria-hidden="true" tabindex="-1"></a>m0 <span class="sc">%&gt;%</span></span>
+<span id="cb219-4"><a href="describing-bilteral-migration-data.html#cb219-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multi_comp</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb219-5"><a href="describing-bilteral-migration-data.html#cb219-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##      dest
+## orig        A       B       C       D     Sum
+##   A     0.000   1.563   0.789   1.522   0.400
+##   B     1.923   0.000   2.368   0.217   0.200
+##   C     1.709   0.810   0.000   1.288   0.270
+##   D     1.183   1.202   1.619   0.000   0.130
+##   Sum   0.260   0.320   0.190   0.230 500.000</code></pre>
+</div>
+<div id="multiplicative-component-model-4" class="section level3" number="8.1.5">
+<h3><span class="header-section-number">8.1.5</span> Multiplicative Component Model</h3>
+<ul>
+<li>As the model is saturated, the fitted values are the same as the observed values.</li>
+</ul>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="describing-bilteral-migration-data.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">multi_comp</span>(<span class="at">m =</span> m0)</span></code></pre></div>
+<pre><code>##      dest
+## orig            A           B           C           D         Sum
+##   A     0.0000000   1.5625000   0.7894737   1.5217391   0.4000000
+##   B     1.9230769   0.0000000   2.3684211   0.2173913   0.2000000
+##   C     1.7094017   0.8101852   0.0000000   1.2882448   0.2700000
+##   D     1.1834320   1.2019231   1.6194332   0.0000000   0.1300000
+##   Sum   0.2600000   0.3200000   0.1900000   0.2300000 500.0000000</code></pre>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="describing-bilteral-migration-data.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fitted value for A to B</span></span>
+<span id="cb223-2"><a href="describing-bilteral-migration-data.html#cb223-2" aria-hidden="true" tabindex="-1"></a><span class="dv">500</span> <span class="sc">*</span> <span class="fl">0.4</span> <span class="sc">*</span> <span class="fl">0.32</span> <span class="sc">*</span> <span class="fl">1.5625</span></span></code></pre></div>
+<pre><code>## [1] 100</code></pre>
+</div>
+<div id="multiplicative-component-model-5" class="section level3" number="8.1.6">
+<h3><span class="header-section-number">8.1.6</span> Multiplicative Component Model</h3>
+<ul>
+<li>The total reference coding scheme for the parameter estimates are easier to examine than parameter estimates from a Poisson model fitted using <code>glm()</code>
+<ul>
+<li>More detail on <code>glm()</code> in next section</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="describing-bilteral-migration-data.html#cb225-1" aria-hidden="true" tabindex="-1"></a>d0 <span class="ot">&lt;-</span> <span class="fu">as.data.frame.table</span>(<span class="at">x =</span> m0, <span class="at">responseName =</span> <span class="st">&quot;flow&quot;</span>)</span>
+<span id="cb225-2"><a href="describing-bilteral-migration-data.html#cb225-2" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> flow <span class="sc">~</span> orig <span class="sc">+</span> dest <span class="sc">+</span> orig <span class="sc">*</span> dest, <span class="at">family =</span> <span class="fu">poisson</span>(), </span>
+<span id="cb225-3"><a href="describing-bilteral-migration-data.html#cb225-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> d0)</span>
+<span id="cb225-4"><a href="describing-bilteral-migration-data.html#cb225-4" aria-hidden="true" tabindex="-1"></a>f0</span></code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = flow ~ orig + dest + orig * dest, family = poisson(), 
+##     data = d0)
+## 
+## Coefficients:
+## (Intercept)        origB        origC        origD        destB        destC  
+##      -24.30        28.21        28.40        27.30        28.91        27.70  
+##       destD  origB:destB  origC:destB  origD:destB  origB:destC  origC:destC  
+##       28.55       -57.12       -29.45       -28.68       -27.81       -56.10  
+## origD:destC  origB:destD  origC:destD  origD:destD  
+##      -27.70       -30.85       -28.96       -55.85  
+## 
+## Degrees of Freedom: 15 Total (i.e. Null);  0 Residual
+## Null Deviance:       463.7 
+## Residual Deviance: 2.232e-10     AIC: 96.27</code></pre>
+</div>
+<div id="multiplicative-component-model-6" class="section level3" number="8.1.7">
+<h3><span class="header-section-number">8.1.7</span> Multiplicative Component Model</h3>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="describing-bilteral-migration-data.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fitted and observed values are the same</span></span>
+<span id="cb227-2"><a href="describing-bilteral-migration-data.html#cb227-2" aria-hidden="true" tabindex="-1"></a>d0 <span class="sc">%&gt;%</span> </span>
+<span id="cb227-3"><a href="describing-bilteral-migration-data.html#cb227-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb227-4"><a href="describing-bilteral-migration-data.html#cb227-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fit =</span> <span class="fu">round</span>(f0<span class="sc">$</span>fitted.values, <span class="at">digits =</span> <span class="dv">5</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 4
+##    orig  dest   flow   fit
+##    &lt;fct&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 A     A         0     0
+##  2 B     A        50    50
+##  3 C     A        60    60
+##  4 D     A        20    20
+##  5 A     B       100   100
+##  6 B     B         0     0
+##  7 C     B        35    35
+##  8 D     B        25    25
+##  9 A     C        30    30
+## 10 B     C        45    45
+## 11 C     C         0     0
+## 12 D     C        20    20
+## 13 A     D        70    70
+## 14 B     D         5     5
+## 15 C     D        40    40
+## 16 D     D         0     0</code></pre>
+</div>
+<div id="multiplicative-component-model-7" class="section level3" number="8.1.8">
+<h3><span class="header-section-number">8.1.8</span> Multiplicative Component Model</h3>
+<ul>
+<li>Rogers’ and colleagues have used the multiplicative component model to estimate migration flow tables</li>
+<li>Expand to multiple dimensions</li>
+<li>Rectify bumpy age schedules
+<ul>
+<li>Replace reported age parameters (proportions) in the multiplicative component model with proportions from a more regular schedule.</li>
+<li>Multiply the new age parameters with the existing total, origin, destination and interaction parameters to obtain new estimated flows.</li>
+</ul></li>
+</ul>
+</div>
+<div id="multiplicative-component-model-8" class="section level3" number="8.1.9">
+<h3><span class="header-section-number">8.1.9</span> Multiplicative Component Model</h3>
+<ul>
+<li>Italian data in <em>migest</em> package</li>
+</ul>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="describing-bilteral-migration-data.html#cb229-1" aria-hidden="true" tabindex="-1"></a>italy_area</span></code></pre></div>
+<pre><code>## # A tibble: 3,500 x 5
+##    orig       dest        year age_grp  flow
+##    &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;
+##  1 North-West North-West  1970 0-4         0
+##  2 North-East North-West  1970 0-4      2350
+##  3 Center     North-West  1970 0-4      1687
+##  4 South      North-West  1970 0-4      9697
+##  5 Islands    North-West  1970 0-4      5139
+##  6 North-West North-East  1970 0-4      2448
+##  7 North-East North-East  1970 0-4         0
+##  8 Center     North-East  1970 0-4      1063
+##  9 South      North-East  1970 0-4      1560
+## 10 Islands    North-East  1970 0-4       689
+## # ... with 3,490 more rows</code></pre>
+</div>
+<div id="multiplicative-component-model-9" class="section level3" number="8.1.10">
+<h3><span class="header-section-number">8.1.10</span> Multiplicative Component Model</h3>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="describing-bilteral-migration-data.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single year, multiple age groups</span></span>
+<span id="cb231-2"><a href="describing-bilteral-migration-data.html#cb231-2" aria-hidden="true" tabindex="-1"></a>c0 <span class="ot">&lt;-</span> italy_area <span class="sc">%&gt;%</span></span>
+<span id="cb231-3"><a href="describing-bilteral-migration-data.html#cb231-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb231-4"><a href="describing-bilteral-migration-data.html#cb231-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multi_comp</span>()</span>
+<span id="cb231-5"><a href="describing-bilteral-migration-data.html#cb231-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(c0, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## , , age_grp = 0-4
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.401      0.859      0.909      2.370      0.010
+##   Islands         0.970      0.000      1.181      1.513      0.681      0.012
+##   North-East      1.053      1.916      0.000      1.179      2.501      0.010
+##   North-West      0.877      2.490      0.887      0.000      2.023      0.014
+##   South           1.409      0.531      1.184      1.102      0.000      0.025
+##   Sum             0.016      0.007      0.017      0.018      0.014      0.072
+## 
+## , , age_grp = 5-9
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.589      0.779      0.762      2.243      0.007
+##   Islands         1.166      0.000      1.393      1.707      0.562      0.010
+##   North-East      0.840      1.932      0.000      0.936      2.085      0.006
+##   North-West      0.877      2.714      0.844      0.000      1.963      0.010
+##   South           1.387      0.507      1.283      1.151      0.000      0.018
+##   Sum             0.011      0.005      0.012      0.012      0.009      0.050
+## 
+## , , age_grp = 10-14
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.570      0.738      0.667      1.978      0.005
+##   Islands         1.333      0.000      1.572      1.791      0.463      0.008
+##   North-East      0.861      1.834      0.000      0.840      1.805      0.004
+##   North-West      0.793      2.694      0.826      0.000      1.959      0.007
+##   South           1.424      0.411      1.332      1.226      0.000      0.014
+##   Sum             0.009      0.004      0.010      0.009      0.006      0.037
+## 
+## , , age_grp = 15-19
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.358      0.732      0.668      1.673      0.005
+##   Islands         1.261      0.000      1.617      2.109      0.417      0.009
+##   North-East      0.677      1.769      0.000      0.847      1.697      0.004
+##   North-West      0.629      2.606      0.818      0.000      1.803      0.007
+##   South           1.449      0.347      1.449      1.340      0.000      0.016
+##   Sum             0.009      0.004      0.011      0.011      0.006      0.041
+## 
+## , , age_grp = 20-24
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.044      0.852      0.759      1.552      0.014
+##   Islands         0.983      0.000      1.490      1.948      0.436      0.025
+##   North-East      0.593      1.530      0.000      0.852      1.808      0.012
+##   North-West      0.533      1.880      0.726      0.000      1.449      0.018
+##   South           1.419      0.425      1.788      1.624      0.000      0.055
+##   Sum             0.025      0.009      0.036      0.037      0.017      0.124
+## 
+## , , age_grp = 25-29
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.092      0.992      0.939      2.093      0.027
+##   Islands         0.915      0.000      1.221      1.599      0.544      0.034
+##   North-East      0.910      1.420      0.000      1.161      1.829      0.023
+##   North-West      0.795      1.652      0.947      0.000      1.719      0.034
+##   South           1.473      0.482      1.457      1.373      0.000      0.079
+##   Sum             0.044      0.014      0.053      0.054      0.032      0.197
+## 
+## , , age_grp = 30-34
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.211      1.088      1.159      2.136      0.025
+##   Islands         0.915      0.000      1.053      1.390      0.526      0.025
+##   North-East      1.143      1.384      0.000      1.362      1.837      0.021
+##   North-West      0.945      1.857      1.091      0.000      1.756      0.031
+##   South           1.544      0.445      1.205      1.244      0.000      0.059
+##   Sum             0.039      0.012      0.040      0.043      0.027      0.160
+## 
+## , , age_grp = 35-39
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.439      1.175      1.245      2.126      0.016
+##   Islands         0.956      0.000      1.073      1.372      0.407      0.015
+##   North-East      1.278      1.396      0.000      1.484      1.719      0.013
+##   North-West      1.158      2.026      1.229      0.000      1.753      0.020
+##   South           1.465      0.424      1.089      1.085      0.000      0.032
+##   Sum             0.024      0.008      0.024      0.025      0.015      0.096
+## 
+## , , age_grp = 40-44
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.547      1.283      1.266      2.200      0.009
+##   Islands         1.001      0.000      1.090      1.445      0.367      0.008
+##   North-East      1.322      1.563      0.000      1.417      1.626      0.007
+##   North-West      1.234      2.353      1.261      0.000      1.885      0.012
+##   South           1.317      0.354      1.044      1.001      0.000      0.017
+##   Sum             0.013      0.005      0.014      0.014      0.009      0.054
+## 
+## , , age_grp = 45-49
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.638      1.130      1.204      2.331      0.005
+##   Islands         1.076      0.000      1.100      1.372      0.400      0.005
+##   North-East      1.406      1.701      0.000      1.501      1.607      0.005
+##   North-West      1.320      2.600      1.354      0.000      2.007      0.008
+##   South           1.286      0.408      0.919      0.912      0.000      0.010
+##   Sum             0.008      0.003      0.008      0.008      0.006      0.033
+## 
+## , , age_grp = 50-54
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.887      1.064      1.110      2.579      0.005
+##   Islands         0.997      0.000      0.861      1.226      0.361      0.004
+##   North-East      1.449      1.709      0.000      1.505      1.541      0.004
+##   North-West      1.519      3.174      1.595      0.000      2.391      0.008
+##   South           1.267      0.366      0.738      0.831      0.000      0.007
+##   Sum             0.007      0.003      0.006      0.006      0.005      0.028
+## 
+## , , age_grp = 55-59
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      2.263      1.084      1.029      2.894      0.004
+##   Islands         0.845      0.000      0.643      1.027      0.343      0.003
+##   North-East      1.448      1.641      0.000      1.455      1.391      0.003
+##   North-West      1.724      3.929      1.892      0.000      2.921      0.008
+##   South           1.160      0.398      0.544      0.722      0.000      0.005
+##   Sum             0.006      0.003      0.005      0.005      0.005      0.023
+## 
+## , , age_grp = 60-64
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      2.271      1.067      1.084      3.282      0.004
+##   Islands         0.767      0.000      0.397      0.933      0.414      0.002
+##   North-East      1.331      1.473      0.000      1.578      1.500      0.003
+##   North-West      1.633      4.038      1.938      0.000      3.047      0.008
+##   South           1.245      0.395      0.444      0.734      0.000      0.005
+##   Sum             0.005      0.003      0.004      0.004      0.005      0.022
+## 
+## , , age_grp = 65-69
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      2.383      1.159      1.030      3.451      0.003
+##   Islands         0.827      0.000      0.435      0.876      0.385      0.002
+##   North-East      1.222      1.237      0.000      1.629      1.439      0.002
+##   North-West      1.518      3.324      1.891      0.000      2.933      0.005
+##   South           1.340      0.479      0.419      0.874      0.000      0.004
+##   Sum             0.004      0.002      0.003      0.004      0.004      0.017
+## 
+## , , age_grp = 70-74
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      2.409      0.999      1.353      3.269      0.003
+##   Islands         0.723      0.000      0.381      1.253      0.385      0.002
+##   North-East      1.301      1.200      0.000      1.765      1.113      0.002
+##   North-West      1.421      2.608      1.719      0.000      2.445      0.004
+##   South           1.451      0.432      0.460      1.065      0.000      0.004
+##   Sum             0.004      0.001      0.003      0.004      0.003      0.014
+## 
+## , , age_grp = 75-79
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.926      1.174      1.311      2.957      0.003
+##   Islands         0.819      0.000      0.352      1.352      0.431      0.002
+##   North-East      1.395      0.840      0.000      2.114      0.929      0.002
+##   North-West      1.327      2.463      1.810      0.000      1.963      0.003
+##   South           1.450      0.437      0.488      1.173      0.000      0.004
+##   Sum             0.003      0.001      0.003      0.004      0.002      0.013
+## 
+## , , age_grp = 80-84
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.846      1.070      1.503      2.636      0.002
+##   Islands         0.804      0.000      0.428      1.295      0.519      0.001
+##   North-East      1.466      0.631      0.000      2.117      0.986      0.001
+##   North-West      1.232      2.001      1.825      0.000      1.826      0.002
+##   South           1.571      0.408      0.493      1.258      0.000      0.003
+##   Sum             0.002      0.001      0.002      0.002      0.001      0.008
+## 
+## , , age_grp = 85-89
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.545      1.509      1.606      2.575      0.001
+##   Islands         0.739      0.000      0.383      1.345      0.414      0.001
+##   North-East      1.766      1.254      0.000      2.809      0.913      0.001
+##   North-West      1.090      1.667      1.944      0.000      1.395      0.002
+##   South           1.410      0.301      0.415      1.240      0.000      0.002
+##   Sum             0.002      0.000      0.001      0.002      0.001      0.007
+## 
+## , , age_grp = 90-94
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      1.319      1.211      1.906      2.277      0.001
+##   Islands         0.809      0.000      0.418      1.033      0.359      0.000
+##   North-East      1.469      1.083      0.000      2.835      0.660      0.000
+##   North-West      1.494      1.635      2.216      0.000      1.778      0.001
+##   South           1.452      0.250      0.387      1.142      0.000      0.001
+##   Sum             0.001      0.000      0.001      0.001      0.000      0.003
+## 
+## , , age_grp = 95+
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      0.886      1.076      1.504      2.207      0.000
+##   Islands         0.847      0.000      0.521      0.835      0.523      0.000
+##   North-East      1.383      1.750      0.000      2.340      0.698      0.000
+##   North-West      1.707      2.593      2.149      0.000      2.263      0.000
+##   South           1.394      0.485      0.523      0.965      0.000      0.000
+##   Sum             0.000      0.000      0.000      0.000      0.000      0.001
+## 
+## , , age_grp = Sum
+## 
+##             dest
+## orig             Center    Islands North-East North-West      South        Sum
+##   Center          0.000      0.017      0.037      0.039      0.054      0.148
+##   Islands         0.038      0.000      0.048      0.067      0.013      0.166
+##   North-East      0.030      0.016      0.000      0.041      0.037      0.125
+##   North-West      0.045      0.037      0.056      0.000      0.063      0.202
+##   South           0.120      0.013      0.111      0.115      0.000      0.360
+##   Sum             0.233      0.084      0.253      0.263      0.168 277436.000</code></pre>
+</div>
+<div id="multiplicative-component-model-10" class="section level3" number="8.1.11">
+<h3><span class="header-section-number">8.1.11</span> Multiplicative Component Model</h3>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="describing-bilteral-migration-data.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="co"># origin components (shares)</span></span>
+<span id="cb233-2"><a href="describing-bilteral-migration-data.html#cb233-2" aria-hidden="true" tabindex="-1"></a>c0 <span class="sc">%&gt;%</span></span>
+<span id="cb233-3"><a href="describing-bilteral-migration-data.html#cb233-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">&quot;comp&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb233-4"><a href="describing-bilteral-migration-data.html#cb233-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(orig <span class="sc">!=</span> <span class="st">&quot;Sum&quot;</span>, dest <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>, age_grp <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>)</span></code></pre></div>
+<pre><code>##         orig dest age_grp      comp
+## 1     Center  Sum     Sum 0.1477314
+## 2    Islands  Sum     Sum 0.1663483
+## 3 North-East  Sum     Sum 0.1245945
+## 4 North-West  Sum     Sum 0.2017835
+## 5      South  Sum     Sum 0.3595424</code></pre>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="describing-bilteral-migration-data.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co"># destination components (shares)</span></span>
+<span id="cb235-2"><a href="describing-bilteral-migration-data.html#cb235-2" aria-hidden="true" tabindex="-1"></a>c0 <span class="sc">%&gt;%</span></span>
+<span id="cb235-3"><a href="describing-bilteral-migration-data.html#cb235-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">&quot;comp&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb235-4"><a href="describing-bilteral-migration-data.html#cb235-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(orig <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>, dest <span class="sc">!=</span> <span class="st">&quot;Sum&quot;</span>, age_grp <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>)</span></code></pre></div>
+<pre><code>##   orig       dest age_grp       comp
+## 1  Sum     Center     Sum 0.23305555
+## 2  Sum    Islands     Sum 0.08368777
+## 3  Sum North-East     Sum 0.25254113
+## 4  Sum North-West     Sum 0.26283900
+## 5  Sum      South     Sum 0.16787656</code></pre>
+</div>
+<div id="multiplicative-component-model-11" class="section level3" number="8.1.12">
+<h3><span class="header-section-number">8.1.12</span> Multiplicative Component Model</h3>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="describing-bilteral-migration-data.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="co"># age components</span></span>
+<span id="cb237-2"><a href="describing-bilteral-migration-data.html#cb237-2" aria-hidden="true" tabindex="-1"></a>c0 <span class="sc">%&gt;%</span></span>
+<span id="cb237-3"><a href="describing-bilteral-migration-data.html#cb237-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">&quot;comp&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb237-4"><a href="describing-bilteral-migration-data.html#cb237-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(orig <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>, dest <span class="sc">==</span> <span class="st">&quot;Sum&quot;</span>, age_grp <span class="sc">!=</span> <span class="st">&quot;Sum&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb237-5"><a href="describing-bilteral-migration-data.html#cb237-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age_grp, <span class="at">y =</span> comp, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb237-6"><a href="describing-bilteral-migration-data.html#cb237-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb237-7"><a href="describing-bilteral-migration-data.html#cb237-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-118-1.png" width="672" /></p>
+</div>
+</div>
+<div id="log-linear-models" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Log-Linear Models</h2>
+<div id="log-linear-models-1" class="section level3" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Log-Linear Models</h3>
+<ul>
+<li>Rogers’ and collaborators like to shorten the multiplicative form of the log-linear model to use capital letters to represent parameters
+<span class="math display">\[
+m_{ij} = \gamma \alpha_i \beta_j \delta_{ij} = T O_i D_j OD_{ij}
+\]</span></li>
+<li>When there is multiple origin-destination tables, by different age groups, sex, education level, etc,… the notation can be easily used to study different log-linear models
+<span class="math display">\[
+m_{ij} = T O_i D_j A_x OD_{ij} OA_{ix}
+\]</span></li>
+<li>When data is in a tidy format with row <span class="math inline">\(h\)</span> would be:
+<span class="math display">\[
+\begin{aligned}
+\log y_{h} =&amp;  \beta_0 +  \beta_1 ORIG_{h} + \beta_2 DEST_{h} + \beta_3 AGE_{x} + \\
+&amp;\beta_4 ORIG_{h}:DEST_{h} + \beta_5 ORIG_{h}:AGE_{h} 
+\end{aligned}
+\]</span></li>
+</ul>
+</div>
+<div id="log-linear-models-2" class="section level3" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> Log-Linear Models</h3>
+<ul>
+<li>We can fit log-linear models in R using the <code>glm()</code> function (for generalised linear models)</li>
+<li>Requires a <code>formula</code>, <code>data</code> and <code>family</code> argument</li>
+<li>The <code>formula</code> argument is similar to that in <code>xtabs()</code>, where we use the <code>~</code> symbol to separate the the response and explanatory variables
+<ul>
+<li>For example the model in the previous slide would use <code>formula = flow ~ orig + dest + age + orig:dest + orig:age</code></li>
+<li>Use <code>:</code> or <code>*</code> to denote interactions</li>
+</ul></li>
+<li>The <code>family</code> argument should be set to <code>poisson()</code> for a log-linear model</li>
+</ul>
+</div>
+<div id="log-linear-models-3" class="section level3" number="8.2.3">
+<h3><span class="header-section-number">8.2.3</span> Log-Linear Models</h3>
+<ul>
+<li>Example with age-specific migration flows between Italian regions in 1970</li>
+</ul>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="describing-bilteral-migration-data.html#cb238-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> italy_area <span class="sc">%&gt;%</span></span>
+<span id="cb238-2"><a href="describing-bilteral-migration-data.html#cb238-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(orig <span class="sc">!=</span> dest, </span>
+<span id="cb238-3"><a href="describing-bilteral-migration-data.html#cb238-3" aria-hidden="true" tabindex="-1"></a>         year <span class="sc">==</span> <span class="dv">1970</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb238-4"><a href="describing-bilteral-migration-data.html#cb238-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rename so later output fits on slide</span></span>
+<span id="cb238-5"><a href="describing-bilteral-migration-data.html#cb238-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">age =</span> age_grp)</span>
+<span id="cb238-6"><a href="describing-bilteral-migration-data.html#cb238-6" aria-hidden="true" tabindex="-1"></a>d1</span></code></pre></div>
+<pre><code>## # A tibble: 400 x 5
+##    orig       dest        year age    flow
+##    &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;
+##  1 North-East North-West  1970 0-4    2350
+##  2 Center     North-West  1970 0-4    1687
+##  3 South      North-West  1970 0-4    9697
+##  4 Islands    North-West  1970 0-4    5139
+##  5 North-West North-East  1970 0-4    2448
+##  6 Center     North-East  1970 0-4    1063
+##  7 South      North-East  1970 0-4    1560
+##  8 Islands    North-East  1970 0-4     689
+##  9 North-West Center      1970 0-4    2097
+## 10 North-East Center      1970 0-4    1183
+## # ... with 390 more rows</code></pre>
+</div>
+<div id="log-linear-models-4" class="section level3" number="8.2.4">
+<h3><span class="header-section-number">8.2.4</span> Log-Linear Models</h3>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="describing-bilteral-migration-data.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(<span class="at">formula =</span> flow <span class="sc">~</span> orig <span class="sc">+</span> dest, <span class="at">family =</span> <span class="fu">poisson</span>(), <span class="at">data =</span> d1)</span></code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = flow ~ orig + dest, family = poisson(), data = d1)
+## 
+## Coefficients:
+##    (Intercept)     origIslands  origNorth-East  origNorth-West       origSouth  
+##        6.39791         0.17515        -0.20852         0.99427         0.98847  
+##    destIslands  destNorth-East  destNorth-West       destSouth  
+##       -0.76940        -0.32536         1.08367         0.02188  
+## 
+## Degrees of Freedom: 399 Total (i.e. Null);  391 Residual
+## Null Deviance:       758100 
+## Residual Deviance: 5e+05     AIC: 503100</code></pre>
+</div>
+</div>
+<div id="dimensions" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Dimensions</h2>
+<div id="log-linear-model-analysis" class="section level3" number="8.3.1">
+<h3><span class="header-section-number">8.3.1</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>As we increase the number of dimensions of the data, it might become important to understand which dimensions of the data are most important</li>
+<li>We can use log-linear models with detailled migration data to
+<ul>
+<li>Understand the dominate dimensions, for example <span class="citation"><a href="#ref-VanImhoff1997" role="doc-biblioref">Imhoff et al.</a> (<a href="#ref-VanImhoff1997" role="doc-biblioref">1997</a>)</span> <span class="citation"><a href="#ref-rogers2002dms" role="doc-biblioref">Rogers et al.</a> (<a href="#ref-rogers2002dms" role="doc-biblioref">2002</a>)</span></li>
+<li>Predict origin-destination flows with partial data, for example <span class="citation"><a href="#ref-deBeer2010" role="doc-biblioref">Beer et al.</a> (<a href="#ref-deBeer2010" role="doc-biblioref">2010</a>)</span> <span class="citation"><a href="#ref-Rogers2003a" role="doc-biblioref">Rogers, Willekens, and Raymer</a> (<a href="#ref-Rogers2003a" role="doc-biblioref">2003</a>)</span> <span class="citation"><a href="#ref-Raymer2007b" role="doc-biblioref">Raymer</a> (<a href="#ref-Raymer2007b" role="doc-biblioref">2007</a>)</span></li>
+<li>Project detailed origin-destination flows, for example <span class="citation"><a href="#ref-Raymer2006" role="doc-biblioref">Raymer, Bonaguidi, and Valentini</a> (<a href="#ref-Raymer2006" role="doc-biblioref">2006</a>)</span></li>
+</ul></li>
+<li>All the above examples involve fitting a number log-linear models based on different dimensions of the data frames
+<ul>
+<li>Use model fit statistics to judge the best model</li>
+</ul></li>
+</ul>
+</div>
+<div id="log-linear-model-analysis-1" class="section level3" number="8.3.2">
+<h3><span class="header-section-number">8.3.2</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>One approach to choosing the most important dimensions is to fit all possible combinations of models - known as <em>dredging</em> the model space</li>
+<li>The <code>dredge()</code> function in the <em>MuMIn</em> package will fit all combinations of regression models given an upper limit, i.e. the most complex model.
+<ul>
+<li>The number of combinations grows exponentially with the number of predictors</li>
+<li>Does not allow <code>na.action = "na.omit"</code> - set by default in <code>glm()</code> for handling missing values in regression models</li>
+</ul></li>
+</ul>
+</div>
+<div id="log-linear-model-analysis-2" class="section level3" number="8.3.3">
+<h3><span class="header-section-number">8.3.3</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>Fit the most complex model using <code>glm()</code>.
+<ul>
+<li>Set <code>na.action = na.fail</code> to exclude failed models in when using the <code>dredge()</code> function later</li>
+<li>Most complex model typically involves at least all two-way interactions</li>
+</ul></li>
+<li>The <code>formula</code> argument in <code>glm()</code> allows the use <code>()^2</code> to construct all two-way interactions, i.e. the below give the identical outputs
+<ul>
+<li>Use <code>()^3</code> for all three way interactions</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="describing-bilteral-migration-data.html#cb242-1" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> flow <span class="sc">~</span> (orig <span class="sc">+</span> dest <span class="sc">+</span> age)<span class="sc">^</span><span class="dv">2</span>, </span>
+<span id="cb242-2"><a href="describing-bilteral-migration-data.html#cb242-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">poisson</span>(), <span class="at">data =</span> d1, <span class="at">na.action =</span> na.fail)</span>
+<span id="cb242-3"><a href="describing-bilteral-migration-data.html#cb242-3" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> flow <span class="sc">~</span> orig <span class="sc">*</span> dest <span class="sc">+</span> orig <span class="sc">*</span> age <span class="sc">+</span> dest <span class="sc">*</span> age,</span>
+<span id="cb242-4"><a href="describing-bilteral-migration-data.html#cb242-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">poisson</span>(), <span class="at">data =</span> d1, <span class="at">na.action =</span> na.fail)</span>
+<span id="cb242-5"><a href="describing-bilteral-migration-data.html#cb242-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb242-6"><a href="describing-bilteral-migration-data.html#cb242-6" aria-hidden="true" tabindex="-1"></a><span class="co"># check terms used in models</span></span>
+<span id="cb242-7"><a href="describing-bilteral-migration-data.html#cb242-7" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(f1<span class="sc">$</span>terms, <span class="st">&quot;term.labels&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;orig&quot;      &quot;dest&quot;      &quot;age&quot;       &quot;orig:dest&quot; &quot;orig:age&quot;  &quot;dest:age&quot;</code></pre>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="describing-bilteral-migration-data.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(f2<span class="sc">$</span>terms, <span class="st">&quot;term.labels&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;orig&quot;      &quot;dest&quot;      &quot;age&quot;       &quot;orig:dest&quot; &quot;orig:age&quot;  &quot;dest:age&quot;</code></pre>
+</div>
+<div id="log-linear-model-analysis-3" class="section level3" number="8.3.4">
+<h3><span class="header-section-number">8.3.4</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>Models will have many estimated coefficients
+<ul>
+<li>Some will be non-determinable because no observations (e.g. diagonal terms such as <code>origIslands:destIslands</code> below) as</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="describing-bilteral-migration-data.html#cb246-1" aria-hidden="true" tabindex="-1"></a>f1 <span class="sc">%&gt;%</span> </span>
+<span id="cb246-2"><a href="describing-bilteral-migration-data.html#cb246-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb246-3"><a href="describing-bilteral-migration-data.html#cb246-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code></pre></div>
+<pre><code>## [1] 196</code></pre>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="describing-bilteral-migration-data.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(f1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = flow ~ (orig + dest + age)^2, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -12.1125   -1.4474    0.0186    1.5870    8.3143  
+## 
+## Coefficients: (5 not defined because of singularities)
+##                                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                    6.812e+00  2.085e-02 326.747  &lt; 2e-16 ***
+## origIslands                    4.277e-01  2.236e-02  19.126  &lt; 2e-16 ***
+## origNorth-East                 1.709e-01  2.390e-02   7.151 8.64e-13 ***
+## origNorth-West                 7.906e-01  1.789e-02  44.190  &lt; 2e-16 ***
+## origSouth                      1.381e+00  2.027e-02  68.123  &lt; 2e-16 ***
+## destIslands                   -1.548e-01  2.457e-02  -6.301 2.95e-10 ***
+## destNorth-East                 8.107e-02  2.232e-02   3.632 0.000281 ***
+## destNorth-West                 6.751e-01  1.856e-02  36.367  &lt; 2e-16 ***
+## destSouth                      8.315e-01  1.833e-02  45.350  &lt; 2e-16 ***
+## age5-9                        -1.073e-01  2.726e-02  -3.935 8.32e-05 ***
+## age10-14                      -5.531e-01  3.071e-02 -18.012  &lt; 2e-16 ***
+## age15-19                      -6.345e-01  2.921e-02 -21.725  &lt; 2e-16 ***
+## age20-24                       5.581e-01  2.340e-02  23.850  &lt; 2e-16 ***
+## age25-29                       6.591e-01  2.378e-02  27.715  &lt; 2e-16 ***
+## age30-34                       4.155e-01  2.550e-02  16.296  &lt; 2e-16 ***
+## age35-39                       3.452e-02  2.846e-02   1.213 0.225246    
+## age40-44                      -2.132e-01  3.082e-02  -6.916 4.65e-12 ***
+## age45-49                      -4.331e-01  3.333e-02 -12.995  &lt; 2e-16 ***
+## age50-54                      -8.007e-01  3.911e-02 -20.475  &lt; 2e-16 ***
+## age55-59                      -7.723e-01  3.884e-02 -19.884  &lt; 2e-16 ***
+## age60-64                      -8.835e-01  4.067e-02 -21.721  &lt; 2e-16 ***
+## age65-69                      -1.017e+00  4.508e-02 -22.565  &lt; 2e-16 ***
+## age70-74                      -1.284e+00  5.087e-02 -25.242  &lt; 2e-16 ***
+## age75-79                      -1.602e+00  6.015e-02 -26.628  &lt; 2e-16 ***
+## age80-84                      -2.099e+00  7.796e-02 -26.932  &lt; 2e-16 ***
+## age85-89                      -2.798e+00  1.164e-01 -24.039  &lt; 2e-16 ***
+## age90-94                      -4.022e+00  2.183e-01 -18.422  &lt; 2e-16 ***
+## age95+                        -3.872e+00  1.344e-01 -28.816  &lt; 2e-16 ***
+## origIslands:destIslands               NA         NA      NA       NA    
+## origNorth-East:destIslands    -7.535e-01  2.394e-02 -31.472  &lt; 2e-16 ***
+## origNorth-West:destIslands     4.133e-01  1.590e-02  25.998  &lt; 2e-16 ***
+## origSouth:destIslands         -1.450e+00  2.079e-02 -69.771  &lt; 2e-16 ***
+## origIslands:destNorth-East    -8.276e-01  2.016e-02 -41.062  &lt; 2e-16 ***
+## origNorth-East:destNorth-East         NA         NA      NA       NA    
+## origNorth-West:destNorth-East  1.723e-01  1.388e-02  12.414  &lt; 2e-16 ***
+## origSouth:destNorth-East      -9.378e-01  1.701e-02 -55.130  &lt; 2e-16 ***
+## origIslands:destNorth-West     6.005e-01  1.622e-02  37.030  &lt; 2e-16 ***
+## origNorth-East:destNorth-West  1.862e-01  1.703e-02  10.934  &lt; 2e-16 ***
+## origNorth-West:destNorth-West         NA         NA      NA       NA    
+## origSouth:destNorth-West       2.968e-01  1.460e-02  20.336  &lt; 2e-16 ***
+## origIslands:destSouth         -1.346e+00  1.700e-02 -79.141  &lt; 2e-16 ***
+## origNorth-East:destSouth      -1.000e+00  1.672e-02 -59.838  &lt; 2e-16 ***
+## origNorth-West:destSouth              NA         NA      NA       NA    
+## origSouth:destSouth                   NA         NA      NA       NA    
+## origIslands:age5-9             3.728e-02  2.705e-02   1.379 0.168013    
+## origNorth-East:age5-9         -3.398e-02  2.976e-02  -1.142 0.253461    
+## origNorth-West:age5-9         -2.097e-02  2.469e-02  -0.849 0.395888    
+## origSouth:age5-9               6.147e-02  2.489e-02   2.470 0.013522 *  
+## origIslands:age10-14           2.034e-01  3.009e-02   6.759 1.39e-11 ***
+## origNorth-East:age10-14       -8.982e-02  3.415e-02  -2.630 0.008533 ** 
+## origNorth-West:age10-14       -3.405e-02  2.853e-02  -1.193 0.232730    
+## origSouth:age10-14             2.270e-01  2.788e-02   8.145 3.81e-16 ***
+## origIslands:age15-19           4.832e-01  2.807e-02  17.213  &lt; 2e-16 ***
+## origNorth-East:age15-19       -1.154e-01  3.267e-02  -3.533 0.000410 ***
+## origNorth-West:age15-19       -3.695e-02  2.712e-02  -1.363 0.173004    
+## origSouth:age15-19             5.775e-01  2.617e-02  22.066  &lt; 2e-16 ***
+## origIslands:age20-24           6.953e-02  2.297e-02   3.027 0.002470 ** 
+## origNorth-East:age20-24       -7.223e-02  2.531e-02  -2.853 0.004327 ** 
+## origNorth-West:age20-24       -3.782e-01  2.141e-02 -17.664  &lt; 2e-16 ***
+## origSouth:age20-24             1.541e-01  2.112e-02   7.296 2.96e-13 ***
+## origIslands:age25-29          -2.259e-01  2.368e-02  -9.536  &lt; 2e-16 ***
+## origNorth-East:age25-29       -4.052e-02  2.548e-02  -1.590 0.111742    
+## origNorth-West:age25-29       -3.300e-01  2.148e-02 -15.358  &lt; 2e-16 ***
+## origSouth:age25-29            -2.484e-01  2.170e-02 -11.445  &lt; 2e-16 ***
+## origIslands:age30-34          -3.437e-01  2.586e-02 -13.293  &lt; 2e-16 ***
+## origNorth-East:age30-34       -1.532e-02  2.737e-02  -0.560 0.575692    
+## origNorth-West:age30-34       -2.374e-01  2.295e-02 -10.342  &lt; 2e-16 ***
+## origSouth:age30-34            -3.716e-01  2.357e-02 -15.767  &lt; 2e-16 ***
+## origIslands:age35-39          -3.622e-01  2.905e-02 -12.467  &lt; 2e-16 ***
+## origNorth-East:age35-39       -6.987e-02  3.080e-02  -2.268 0.023322 *  
+## origNorth-West:age35-39       -2.315e-01  2.580e-02  -8.975  &lt; 2e-16 ***
+## origSouth:age35-39            -3.976e-01  2.642e-02 -15.053  &lt; 2e-16 ***
+## origIslands:age40-44          -3.607e-01  3.147e-02 -11.462  &lt; 2e-16 ***
+## origNorth-East:age40-44       -9.838e-02  3.354e-02  -2.933 0.003353 ** 
+## origNorth-West:age40-44       -2.872e-01  2.835e-02 -10.130  &lt; 2e-16 ***
+## origSouth:age40-44            -3.450e-01  2.847e-02 -12.120  &lt; 2e-16 ***
+## origIslands:age45-49          -4.171e-01  3.414e-02 -12.215  &lt; 2e-16 ***
+## origNorth-East:age45-49       -1.373e-01  3.628e-02  -3.784 0.000155 ***
+## origNorth-West:age45-49       -3.409e-01  3.073e-02 -11.093  &lt; 2e-16 ***
+## origSouth:age45-49            -3.791e-01  3.068e-02 -12.360  &lt; 2e-16 ***
+## origIslands:age50-54          -4.729e-01  4.048e-02 -11.681  &lt; 2e-16 ***
+## origNorth-East:age50-54       -1.693e-01  4.272e-02  -3.963 7.41e-05 ***
+## origNorth-West:age50-54       -4.082e-01  3.613e-02 -11.299  &lt; 2e-16 ***
+## origSouth:age50-54            -4.723e-01  3.625e-02 -13.028  &lt; 2e-16 ***
+## origIslands:age55-59          -6.000e-01  4.066e-02 -14.756  &lt; 2e-16 ***
+## origNorth-East:age55-59       -1.545e-01  4.206e-02  -3.673 0.000239 ***
+## origNorth-West:age55-59       -2.769e-01  3.496e-02  -7.920 2.38e-15 ***
+## origSouth:age55-59            -6.989e-01  3.652e-02 -19.140  &lt; 2e-16 ***
+## origIslands:age60-64          -7.392e-01  4.388e-02 -16.847  &lt; 2e-16 ***
+## origNorth-East:age60-64       -1.382e-01  4.412e-02  -3.133 0.001731 ** 
+## origNorth-West:age60-64       -1.846e-01  3.600e-02  -5.128 2.93e-07 ***
+## origSouth:age60-64            -7.990e-01  3.874e-02 -20.624  &lt; 2e-16 ***
+## origIslands:age65-69          -7.861e-01  4.896e-02 -16.054  &lt; 2e-16 ***
+## origNorth-East:age65-69       -1.845e-01  4.884e-02  -3.777 0.000158 ***
+## origNorth-West:age65-69       -3.790e-01  4.019e-02  -9.430  &lt; 2e-16 ***
+## origSouth:age65-69            -8.881e-01  4.337e-02 -20.475  &lt; 2e-16 ***
+## origIslands:age70-74          -7.729e-01  5.541e-02 -13.948  &lt; 2e-16 ***
+## origNorth-East:age70-74       -1.764e-01  5.511e-02  -3.200 0.001375 ** 
+## origNorth-West:age70-74       -4.427e-01  4.583e-02  -9.659  &lt; 2e-16 ***
+## origSouth:age70-74            -8.297e-01  4.879e-02 -17.006  &lt; 2e-16 ***
+## origIslands:age75-79          -7.637e-01  6.539e-02 -11.680  &lt; 2e-16 ***
+## origNorth-East:age75-79       -1.946e-01  6.473e-02  -3.006 0.002648 ** 
+## origNorth-West:age75-79       -6.148e-01  5.490e-02 -11.197  &lt; 2e-16 ***
+## origSouth:age75-79            -8.376e-01  5.775e-02 -14.503  &lt; 2e-16 ***
+## origIslands:age80-84          -8.643e-01  8.598e-02 -10.052  &lt; 2e-16 ***
+## origNorth-East:age80-84       -2.304e-01  8.370e-02  -2.752 0.005924 ** 
+## origNorth-West:age80-84       -6.198e-01  7.212e-02  -8.594  &lt; 2e-16 ***
+## origSouth:age80-84            -9.215e-01  7.535e-02 -12.229  &lt; 2e-16 ***
+## origIslands:age85-89          -9.459e-01  1.281e-01  -7.382 1.56e-13 ***
+## origNorth-East:age85-89       -3.505e-01  1.260e-01  -2.783 0.005392 ** 
+## origNorth-West:age85-89       -7.537e-01  1.086e-01  -6.941 3.91e-12 ***
+## origSouth:age85-89            -1.126e+00  1.145e-01  -9.832  &lt; 2e-16 ***
+## origIslands:age90-94          -7.778e-01  2.418e-01  -3.217 0.001296 ** 
+## origNorth-East:age90-94       -2.249e-01  2.404e-01  -0.935 0.349581    
+## origNorth-West:age90-94       -6.822e-01  2.080e-01  -3.279 0.001041 ** 
+## origSouth:age90-94            -9.923e-01  2.186e-01  -4.539 5.64e-06 ***
+## origIslands:age95+            -1.078e-01  1.304e-01  -0.826 0.408661    
+## origNorth-East:age95+         -1.944e-01  1.469e-01  -1.324 0.185566    
+## origNorth-West:age95+         -2.803e-01  1.106e-01  -2.533 0.011308 *  
+## origSouth:age95+              -2.948e-01  1.218e-01  -2.420 0.015542 *  
+## destIslands:age5-9            -1.202e-01  2.898e-02  -4.149 3.33e-05 ***
+## destNorth-East:age5-9          1.725e-02  2.578e-02   0.669 0.503388    
+## destNorth-West:age5-9          7.266e-03  1.974e-02   0.368 0.712823    
+## destSouth:age5-9              -1.636e-01  2.533e-02  -6.457 1.07e-10 ***
+## destIslands:age10-14          -1.703e-01  3.301e-02  -5.159 2.48e-07 ***
+## destNorth-East:age10-14        1.697e-02  2.858e-02   0.594 0.552693    
+## destNorth-West:age10-14        9.830e-02  2.152e-02   4.567 4.94e-06 ***
+## destSouth:age10-14            -2.812e-01  2.911e-02  -9.660  &lt; 2e-16 ***
+## destIslands:age15-19           1.533e-01  3.050e-02   5.026 5.00e-07 ***
+## destNorth-East:age15-19        1.060e-01  2.717e-02   3.903 9.52e-05 ***
+## destNorth-West:age15-19        3.282e-01  2.014e-02  16.292  &lt; 2e-16 ***
+## destSouth:age15-19             3.606e-02  2.733e-02   1.319 0.187003    
+## destIslands:age20-24           3.125e-02  2.500e-02   1.250 0.211310    
+## destNorth-East:age20-24        1.057e-01  2.238e-02   4.723 2.33e-06 ***
+## destNorth-West:age20-24        9.761e-02  1.695e-02   5.757 8.55e-09 ***
+## destSouth:age20-24            -1.516e-01  2.221e-02  -6.828 8.63e-12 ***
+## destIslands:age25-29          -1.739e-01  2.569e-02  -6.767 1.31e-11 ***
+## destNorth-East:age25-29        1.137e-02  2.299e-02   0.494 0.620982    
+## destNorth-West:age25-29       -8.689e-02  1.763e-02  -4.928 8.32e-07 ***
+## destSouth:age25-29            -2.597e-01  2.245e-02 -11.568  &lt; 2e-16 ***
+## destIslands:age30-34          -3.411e-01  2.782e-02 -12.263  &lt; 2e-16 ***
+## destNorth-East:age30-34       -7.689e-03  2.445e-02  -0.314 0.753161    
+## destNorth-West:age30-34       -2.411e-01  1.911e-02 -12.617  &lt; 2e-16 ***
+## destSouth:age30-34            -3.476e-01  2.397e-02 -14.500  &lt; 2e-16 ***
+## destIslands:age35-39          -4.423e-01  3.165e-02 -13.973  &lt; 2e-16 ***
+## destNorth-East:age35-39       -1.997e-02  2.713e-02  -0.736 0.461614    
+## destNorth-West:age35-39       -2.643e-01  2.137e-02 -12.367  &lt; 2e-16 ***
+## destSouth:age35-39            -4.538e-01  2.710e-02 -16.746  &lt; 2e-16 ***
+## destIslands:age40-44          -5.245e-01  3.517e-02 -14.913  &lt; 2e-16 ***
+## destNorth-East:age40-44       -1.014e-02  2.922e-02  -0.347 0.728693    
+## destNorth-West:age40-44       -2.404e-01  2.293e-02 -10.483  &lt; 2e-16 ***
+## destSouth:age40-44            -5.495e-01  3.000e-02 -18.315  &lt; 2e-16 ***
+## destIslands:age45-49          -4.948e-01  3.830e-02 -12.919  &lt; 2e-16 ***
+## destNorth-East:age45-49        9.649e-03  3.171e-02   0.304 0.760938    
+## destNorth-West:age45-49       -2.253e-01  2.498e-02  -9.021  &lt; 2e-16 ***
+## destSouth:age45-49            -5.734e-01  3.300e-02 -17.373  &lt; 2e-16 ***
+## destIslands:age50-54          -4.942e-01  4.522e-02 -10.927  &lt; 2e-16 ***
+## destNorth-East:age50-54        4.565e-06  3.725e-02   0.000 0.999902    
+## destNorth-West:age50-54       -3.163e-01  2.972e-02 -10.640  &lt; 2e-16 ***
+## destSouth:age50-54            -6.328e-01  3.937e-02 -16.074  &lt; 2e-16 ***
+## destIslands:age55-59          -5.805e-01  4.541e-02 -12.783  &lt; 2e-16 ***
+## destNorth-East:age55-59        9.658e-02  3.664e-02   2.636 0.008385 ** 
+## destNorth-West:age55-59       -2.985e-01  3.060e-02  -9.756  &lt; 2e-16 ***
+## destSouth:age55-59            -6.443e-01  3.864e-02 -16.674  &lt; 2e-16 ***
+## destIslands:age60-64          -6.453e-01  4.780e-02 -13.500  &lt; 2e-16 ***
+## destNorth-East:age60-64        1.870e-01  3.768e-02   4.962 6.99e-07 ***
+## destNorth-West:age60-64       -3.416e-01  3.289e-02 -10.386  &lt; 2e-16 ***
+## destSouth:age60-64            -6.588e-01  4.018e-02 -16.396  &lt; 2e-16 ***
+## destIslands:age65-69          -6.577e-01  5.361e-02 -12.268  &lt; 2e-16 ***
+## destNorth-East:age65-69        8.760e-02  4.258e-02   2.057 0.039641 *  
+## destNorth-West:age65-69       -4.820e-01  3.682e-02 -13.092  &lt; 2e-16 ***
+## destSouth:age65-69            -7.019e-01  4.519e-02 -15.533  &lt; 2e-16 ***
+## destIslands:age70-74          -7.064e-01  6.179e-02 -11.431  &lt; 2e-16 ***
+## destNorth-East:age70-74        5.675e-02  4.816e-02   1.178 0.238672    
+## destNorth-West:age70-74       -5.134e-01  4.125e-02 -12.447  &lt; 2e-16 ***
+## destSouth:age70-74            -7.024e-01  5.130e-02 -13.692  &lt; 2e-16 ***
+## destIslands:age75-79          -6.143e-01  7.225e-02  -8.503  &lt; 2e-16 ***
+## destNorth-East:age75-79       -2.785e-02  5.832e-02  -0.477 0.633038    
+## destNorth-West:age75-79       -5.902e-01  4.883e-02 -12.085  &lt; 2e-16 ***
+## destSouth:age75-79            -6.906e-01  6.135e-02 -11.257  &lt; 2e-16 ***
+## destIslands:age80-84          -7.780e-01  9.764e-02  -7.968 1.61e-15 ***
+## destNorth-East:age80-84       -1.356e-01  7.696e-02  -1.762 0.078011 .  
+## destNorth-West:age80-84       -5.625e-01  6.335e-02  -8.879  &lt; 2e-16 ***
+## destSouth:age80-84            -7.880e-01  8.063e-02  -9.773  &lt; 2e-16 ***
+## destIslands:age85-89          -9.642e-01  1.550e-01  -6.222 4.89e-10 ***
+## destNorth-East:age85-89       -1.953e-01  1.167e-01  -1.674 0.094131 .  
+## destNorth-West:age85-89       -6.426e-01  9.674e-02  -6.642 3.09e-11 ***
+## destSouth:age85-89            -8.860e-01  1.227e-01  -7.220 5.20e-13 ***
+## destIslands:age90-94          -1.047e+00  2.834e-01  -3.696 0.000219 ***
+## destNorth-East:age90-94       -2.522e-01  2.087e-01  -1.209 0.226824    
+## destNorth-West:age90-94       -8.760e-01  1.758e-01  -4.982 6.29e-07 ***
+## destSouth:age90-94            -1.128e+00  2.330e-01  -4.843 1.28e-06 ***
+## destIslands:age95+             2.274e-01  1.434e-01   1.586 0.112675    
+## destNorth-East:age95+          4.667e-01  1.248e-01   3.740 0.000184 ***
+## destNorth-West:age95+         -2.613e-01  1.108e-01  -2.359 0.018329 *  
+## destSouth:age95+               2.250e-01  1.262e-01   1.783 0.074616 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 758059.9  on 399  degrees of freedom
+## Residual deviance:   2767.8  on 209  degrees of freedom
+## AIC: 6272
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div id="log-linear-model-analysis-4" class="section level3" number="8.3.5">
+<h3><span class="header-section-number">8.3.5</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>Pass the upper model to <code>dredge()</code>. Use <code>trace = TRUE</code> to monitor progress.</li>
+</ul>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="describing-bilteral-migration-data.html#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn)</span>
+<span id="cb250-2"><a href="describing-bilteral-migration-data.html#cb250-2" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">dredge</span>(<span class="at">global.model =</span> f1, <span class="at">trace =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Fixed term is &quot;(Intercept)&quot;</code></pre>
+<pre><code>## 0 : glm(formula = flow ~ 1, family = poisson(), data = d1, na.action = na.fail)
+## 1 : glm(formula = flow ~ age + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 2 : glm(formula = flow ~ dest + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 3 : glm(formula = flow ~ age + dest + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 4 : glm(formula = flow ~ orig + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 5 : glm(formula = flow ~ age + orig + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 6 : glm(formula = flow ~ dest + orig + 1, family = poisson(), data = d1, 
+##     na.action = na.fail)
+## 7 : glm(formula = flow ~ age + dest + orig + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 11 : glm(formula = flow ~ age + dest + age:dest + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 15 : glm(formula = flow ~ age + dest + orig + age:dest + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 21 : glm(formula = flow ~ age + orig + age:orig + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 23 : glm(formula = flow ~ age + dest + orig + age:orig + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 31 : glm(formula = flow ~ age + dest + orig + age:dest + age:orig + 
+##     1, family = poisson(), data = d1, na.action = na.fail)
+## 38 : glm(formula = flow ~ dest + orig + dest:orig + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 39 : glm(formula = flow ~ age + dest + orig + dest:orig + 1, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## 47 : glm(formula = flow ~ age + dest + orig + age:dest + dest:orig + 
+##     1, family = poisson(), data = d1, na.action = na.fail)
+## 55 : glm(formula = flow ~ age + dest + orig + age:orig + dest:orig + 
+##     1, family = poisson(), data = d1, na.action = na.fail)
+## 63 : glm(formula = flow ~ age + dest + orig + age:dest + age:orig + 
+##     dest:orig + 1, family = poisson(), data = d1, na.action = na.fail)</code></pre>
+</div>
+<div id="log-linear-model-analysis-5" class="section level3" number="8.3.6">
+<h3><span class="header-section-number">8.3.6</span> Log-Linear Model Analysis</h3>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="describing-bilteral-migration-data.html#cb253-1" aria-hidden="true" tabindex="-1"></a>mm</span></code></pre></div>
+<pre><code>## Global model call: glm(formula = flow ~ (orig + dest + age)^2, family = poisson(), 
+##     data = d1, na.action = na.fail)
+## ---
+## Model selection table 
+##    (Int) age dst org age:dst age:org dst:org  df      logLik     AICc     delta
+## 64 6.515   +   +   +       +       +       + 191   -2944.992   6624.6      0.00
+## 56 6.616   +   +   +               +       + 115   -5286.311  10896.6   4271.97
+## 48 6.619   +   +   +       +               + 115   -7617.005  15558.0   8933.35
+## 40 6.691   +   +   +                       +  39  -11408.460  22903.6  16278.99
+## 32 6.865   +   +   +       +       +         180  -22817.598  46292.7  39668.13
+## 24 6.995   +   +   +               +         104  -25545.324  51372.7  44748.08
+## 16 6.997   +   +   +       +                 104  -27876.018  56034.1  49409.47
+## 8  7.070   +   +   +                          28  -31667.473  63395.3  56770.72
+## 12 7.612   +   +           +                 100  -82409.496 165086.5 158461.95
+## 4  7.684   +   +                              24  -86200.951 172453.1 165828.50
+## 22 7.250   +       +               +         100 -114058.016 228383.6 221758.99
+## 6  7.325   +       +                          24 -120180.165 240411.5 233786.93
+## 2  7.734   +                                  20 -160715.461 321473.1 314848.54
+## 39 6.019       +   +                       +  20 -231284.060 462610.3 455985.74
+## 7  6.398       +   +                           9 -251543.073 503104.6 496480.01
+## 3  7.012       +                               5 -306076.551 612163.3 605538.65
+## 5  6.653           +                           5 -340055.765 680121.7 673497.08
+## 1  7.062                                       1 -380591.061 761184.1 754559.53
+##    weight
+## 64      1
+## 56      0
+## 48      0
+## 40      0
+## 32      0
+## 24      0
+## 16      0
+## 8       0
+## 12      0
+## 4       0
+## 22      0
+## 6       0
+## 2       0
+## 39      0
+## 7       0
+## 3       0
+## 5       0
+## 1       0
+## Models ranked by AICc(x)</code></pre>
+</div>
+<div id="log-linear-model-analysis-6" class="section level3" number="8.3.7">
+<h3><span class="header-section-number">8.3.7</span> Log-Linear Model Analysis</h3>
+<ul>
+<li>Model comparison based on model statistics measuring the goodness of fit.
+<ul>
+<li>AIC measures a goodness of fit with a penalty for the number of predictor variables.</li>
+<li>AICc has a bias correction term for small samples</li>
+</ul></li>
+<li>Typically the origin-destination interaction term is very important for accurately predicting the age-specific origin-destination migration flows</li>
+<li>The time to conduct a dredging analysis increase exponentially as the number of dimensions increases.</li>
+</ul>
+</div>
+<div id="exercise-ex6.r" class="section level3" number="8.3.8">
+<h3><span class="header-section-number">8.3.8</span> Exercise (ex6.R)</h3>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="describing-bilteral-migration-data.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.  a) Load the KOSTAT2021.Rproj file. </span></span>
+<span id="cb255-2"><a href="describing-bilteral-migration-data.html#cb255-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     Run the getwd() below. It should print the directory where the </span></span>
+<span id="cb255-3"><a href="describing-bilteral-migration-data.html#cb255-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     KOSTAT2021.Rproj file is located.</span></span>
+<span id="cb255-4"><a href="describing-bilteral-migration-data.html#cb255-4" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb255-5"><a href="describing-bilteral-migration-data.html#cb255-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     b) Load the packages used in this exercise</span></span>
+<span id="cb255-6"><a href="describing-bilteral-migration-data.html#cb255-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb255-7"><a href="describing-bilteral-migration-data.html#cb255-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb255-8"><a href="describing-bilteral-migration-data.html#cb255-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn)</span>
+<span id="cb255-9"><a href="describing-bilteral-migration-data.html#cb255-9" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb255-10"><a href="describing-bilteral-migration-data.html#cb255-10" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb255-11"><a href="describing-bilteral-migration-data.html#cb255-11" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb255-12"><a href="describing-bilteral-migration-data.html#cb255-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run the code below to read in the migration flow data for flows within the </span></span>
+<span id="cb255-13"><a href="describing-bilteral-migration-data.html#cb255-13" aria-hidden="true" tabindex="-1"></a><span class="co">#    USA, decomposed by move type, from 6 censuses between 1940 and 2000. </span></span>
+<span id="cb255-14"><a href="describing-bilteral-migration-data.html#cb255-14" aria-hidden="true" tabindex="-1"></a>us <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./data/us_area_1940_2000.csv&quot;</span>)</span>
+<span id="cb255-15"><a href="describing-bilteral-migration-data.html#cb255-15" aria-hidden="true" tabindex="-1"></a>us</span>
+<span id="cb255-16"><a href="describing-bilteral-migration-data.html#cb255-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Show the multiplicative components, rounded to 3 digits, for the flows from</span></span>
+<span id="cb255-17"><a href="describing-bilteral-migration-data.html#cb255-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    the 2000 census</span></span>
+<span id="cb255-18"><a href="describing-bilteral-migration-data.html#cb255-18" aria-hidden="true" tabindex="-1"></a>us <span class="sc">%&gt;%</span></span>
+<span id="cb255-19"><a href="describing-bilteral-migration-data.html#cb255-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb255-20"><a href="describing-bilteral-migration-data.html#cb255-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####() %&gt;%</span></span>
+<span id="cb255-21"><a href="describing-bilteral-migration-data.html#cb255-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="do">#####)</span></span>
+<span id="cb255-22"><a href="describing-bilteral-migration-data.html#cb255-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit a log-linear model to the entire data set using all two-way </span></span>
+<span id="cb255-23"><a href="describing-bilteral-migration-data.html#cb255-23" aria-hidden="true" tabindex="-1"></a><span class="co">#    interactions between the four dimensions (orig, dest, period and move_type)</span></span>
+<span id="cb255-24"><a href="describing-bilteral-migration-data.html#cb255-24" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> flow <span class="sc">~</span> (<span class="do">##### + dest + ##### + move_type) ^#####,</span></span>
+<span id="cb255-25"><a href="describing-bilteral-migration-data.html#cb255-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">family =</span> <span class="do">#####(), data = us, na.action = na.fail)</span></span>
+<span id="cb255-26"><a href="describing-bilteral-migration-data.html#cb255-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. View a summary of the model </span></span>
+<span id="cb255-27"><a href="describing-bilteral-migration-data.html#cb255-27" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="do">#####)</span></span>
+<span id="cb255-28"><a href="describing-bilteral-migration-data.html#cb255-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Use dredge() to fit all simpler models than the model saved in f</span></span>
+<span id="cb255-29"><a href="describing-bilteral-migration-data.html#cb255-29" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="do">#####(global.model = f, trace = TRUE)</span></span>
+<span id="cb255-30"><a href="describing-bilteral-migration-data.html#cb255-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Use the View() function to inspect the results of the dredging of the model </span></span>
+<span id="cb255-31"><a href="describing-bilteral-migration-data.html#cb255-31" aria-hidden="true" tabindex="-1"></a><span class="co">#    space and identify the most important dimensions</span></span>
+<span id="cb255-32"><a href="describing-bilteral-migration-data.html#cb255-32" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(mm)</span></code></pre></div>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-deBeer2010" class="csl-entry">
+Beer, Joop de, James Raymer, Rob van der Erf, and Leo van Wissen. 2010. <span>“<span class="nocase">Overcoming the Problems of Inconsistent International Migration data: A New Method Applied to Flows in Europe</span>.”</span> <em>European Journal of Population / Revue Europ<span>é</span>enne de D<span>é</span>mographie</em> 26 (4): 459–81. <a href="https://doi.org/10.1007/s10680-010-9220-z">https://doi.org/10.1007/s10680-010-9220-z</a>.
+</div>
+<div id="ref-VanImhoff1997" class="csl-entry">
+Imhoff, Evert van, Nicole van der Gaag, Leo van Wissen, and Philip H. Rees. 1997. <span>“<span class="nocase">The selection of internal migration models for European regions.</span>”</span> <em>International Journal of Population Geography IJPG</em> 3 (2): 137–59. <a href="https://doi.org/10.1002/(SICI)1099-1220(199706)3:2&lt;137::AID-IJPG63&gt;3.0.CO;2-R">https://doi.org/10.1002/(SICI)1099-1220(199706)3:2&lt;137::AID-IJPG63&gt;3.0.CO;2-R</a>.
+</div>
+<div id="ref-Raymer2007b" class="csl-entry">
+Raymer, James. 2007. <span>“<span class="nocase">The estimation of international migration flows: a general technique focused on the origin–destination association structure</span>.”</span> <em>Environment and Planning A</em> 39 (4): 985–95. <a href="https://doi.org/10.1068/a38264">https://doi.org/10.1068/a38264</a>.
+</div>
+<div id="ref-Raymer2006" class="csl-entry">
+Raymer, James, Alberto Bonaguidi, and Alessandro Valentini. 2006. <span>“<span class="nocase">Describing and projecting the age and spatial structures of interregional migration in Italy</span>.”</span> <em>Population, Space and Place</em> 12 (5): 371–88. <a href="https://doi.org/10.1002/psp.414">https://doi.org/10.1002/psp.414</a>.
+</div>
+<div id="ref-rogers2002dms" class="csl-entry">
+Rogers, Andrei, Frans Willekens, Jani Little, and James Raymer. 2002. <span>“<span class="nocase">Describing migration spatial structure</span>.”</span> <em>Papers in Regional Science</em> 81 (1): 29–48. <a href="https://doi.org/10.1007/s101100100090">https://doi.org/10.1007/s101100100090</a>.
+</div>
+<div id="ref-Rogers2003a" class="csl-entry">
+Rogers, Andrei, Frans Willekens, and James Raymer. 2003. <span>“<span class="nocase">Imposing Age and Spatial Structures on Inadequate Migration-Flow Datasets</span>.”</span> <em>The Professional Geographer</em> 55 (1): 56–69. <a href="https://doi.org/10.1111/0033-0124.01052">https://doi.org/10.1111/0033-0124.01052</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="describing-and-estimating-migration-age-structures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estimating-bilateral-migration.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-spatial1.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

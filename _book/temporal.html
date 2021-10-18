@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Temporal | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 5 Temporal | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Temporal | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Temporal | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial.html"/>
+<link rel="next" href="measures.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>1</b> Outline</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>1.1</b> Workshop on Migration Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="general-points.html"><a href="general-points.html"><i class="fa fa-check"></i><b>2</b> General Points</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="general-points.html"><a href="general-points.html#general-points-1"><i class="fa fa-check"></i><b>2.1</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a></li>
+<li class="chapter" data-level="4" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>4</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="spatial.html"><a href="spatial.html#section"><i class="fa fa-check"></i><b>4.1</b> .</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="spatial.html"><a href="spatial.html#place-of-residence"><i class="fa fa-check"></i><b>4.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="4.1.2" data-path="spatial.html"><a href="spatial.html#place-of-residence-1"><i class="fa fa-check"></i><b>4.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="4.1.3" data-path="spatial.html"><a href="spatial.html#place-of-residence-2"><i class="fa fa-check"></i><b>4.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="4.1.4" data-path="spatial.html"><a href="spatial.html#courgeau-1979"><i class="fa fa-check"></i><b>4.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="4.1.5" data-path="spatial.html"><a href="spatial.html#place-of-origin"><i class="fa fa-check"></i><b>4.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="4.1.6" data-path="spatial.html"><a href="spatial.html#migrant-transition-data"><i class="fa fa-check"></i><b>4.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="4.1.7" data-path="spatial.html"><a href="spatial.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>4.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="4.1.8" data-path="spatial.html"><a href="spatial.html#migrants-and-migration"><i class="fa fa-check"></i><b>4.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="4.1.9" data-path="spatial.html"><a href="spatial.html#migration-event-data"><i class="fa fa-check"></i><b>4.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="4.1.10" data-path="spatial.html"><a href="spatial.html#migration-event-data-1"><i class="fa fa-check"></i><b>4.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="4.1.11" data-path="spatial.html"><a href="spatial.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>4.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="4.1.12" data-path="spatial.html"><a href="spatial.html#migration-event-data-2"><i class="fa fa-check"></i><b>4.1.12</b> Migration Event Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="temporal.html"><a href="temporal.html"><i class="fa fa-check"></i><b>5</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="temporal.html"><a href="temporal.html#section-1"><i class="fa fa-check"></i><b>5.1</b> .</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="temporal.html"><a href="temporal.html#migration-interval"><i class="fa fa-check"></i><b>5.1.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="5.1.2" data-path="temporal.html"><a href="temporal.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>5.1.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="5.1.3" data-path="temporal.html"><a href="temporal.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>5.1.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="5.1.4" data-path="temporal.html"><a href="temporal.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>5.1.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="5.1.5" data-path="temporal.html"><a href="temporal.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>5.1.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="5.1.6" data-path="temporal.html"><a href="temporal.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>5.1.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="measures.html"><a href="measures.html"><i class="fa fa-check"></i><b>6</b> Measures</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="measures.html"><a href="measures.html#section-2"><i class="fa fa-check"></i><b>6.1</b> .</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="measures.html"><a href="measures.html#migration-measures"><i class="fa fa-check"></i><b>6.1.1</b> Migration measures</a></li>
+<li class="chapter" data-level="6.1.2" data-path="measures.html"><a href="measures.html#region-to-region-measures"><i class="fa fa-check"></i><b>6.1.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="6.1.3" data-path="measures.html"><a href="measures.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>6.1.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="6.1.4" data-path="measures.html"><a href="measures.html#region-totals"><i class="fa fa-check"></i><b>6.1.4</b> Region totals</a></li>
+<li class="chapter" data-level="6.1.5" data-path="measures.html"><a href="measures.html#region-totals-1"><i class="fa fa-check"></i><b>6.1.5</b> Region totals</a></li>
+<li class="chapter" data-level="6.1.6" data-path="measures.html"><a href="measures.html#region-totals-2"><i class="fa fa-check"></i><b>6.1.6</b> Region totals</a></li>
+<li class="chapter" data-level="6.1.7" data-path="measures.html"><a href="measures.html#rate-measures"><i class="fa fa-check"></i><b>6.1.7</b> Rate measures</a></li>
+<li class="chapter" data-level="6.1.8" data-path="measures.html"><a href="measures.html#rates"><i class="fa fa-check"></i><b>6.1.8</b> Rates</a></li>
+<li class="chapter" data-level="6.1.9" data-path="measures.html"><a href="measures.html#rates-1"><i class="fa fa-check"></i><b>6.1.9</b> Rates</a></li>
+<li class="chapter" data-level="6.1.10" data-path="measures.html"><a href="measures.html#references"><i class="fa fa-check"></i><b>6.1.10</b> References</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="temporal" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Temporal</h1>
+<div id="section-1" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> .</h2>
+<div id="migration-interval" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Migration Interval</h3>
+<ul>
+<li>Migration occurs continuously over time. In order to study its incidence, data have to be compiled
+with reference to specified periods of time.</li>
+<li>The interval can be
+<ul>
+<li>Definite, e.g., one year, five years, ten years, the intercensal period</li>
+<li>Indefinite, e.g., the lifetime of the population alive at a given date.</li>
+</ul></li>
+<li>Definite interval data typically called fixed-term or period migration (or surviving migrants in the example on the next slide)</li>
+<li>Lifetime migration or data based on place of last residence lack a definite time reference.</li>
+</ul>
+</div>
+<div id="migration-interval---rees-1977" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Migration Interval - Rees (1977)</h3>
+<p></p>
+</div>
+<div id="one-year-five-year-problem" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> One-Year Five-Year Problem</h3>
+<ul>
+<li>Migration data is commonly collected over a one or five year interval.</li>
+<li>In places where both intervals are used, the number of migrants recorded over a five-year interval is far less than five times the number recorded over a one-year interval
+<ul>
+<li>Seen in Courgeau (1979) plots or Rees(1970) tables - see next slides</li>
+</ul></li>
+<li><span class="citation">(<a href="#ref-Rogerson1990" role="doc-biblioref"><strong>Rogerson1990?</strong></a>)</span> no straightforward algebraic solution to comparing one-year and five-year migration probabilities.</li>
+<li>Event data has similar patterns to transition data for the same period, however
+<ul>
+<li>Width of the interval influences the intensity of migration and also the geographic pattern of captured migration flows.</li>
+</ul></li>
+</ul>
+</div>
+<div id="one-year-five-year-problem---rees-1970" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> One-Year Five-Year Problem - Rees 1970</h3>
+<p></p>
+</div>
+<div id="one-year-five-year-problem---rees-1970-1" class="section level3" number="5.1.5">
+<h3><span class="header-section-number">5.1.5</span> One-Year Five-Year Problem - Rees 1970</h3>
+<p></p>
+</div>
+<div id="one-year-five-year-problem---rees-1970-2" class="section level3" number="5.1.6">
+<h3><span class="header-section-number">5.1.6</span> One-Year Five-Year Problem - Rees 1970</h3>
+<p></p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="measures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-concepts.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

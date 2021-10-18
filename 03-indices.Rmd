@@ -1,0 +1,423 @@
+# Summary Migration Indices
+
+## Background
+
+### Background
+
+- Compared with fertility and mortality, little attention given to the way that internal or domestic migration varies between nations.
+- Comparisons of migration over time or between spatial units is complicated by many factors including:
+    - Different or changing definitions of migration
+    - Different or changing collection systems for migration
+    - Different sizes of regions 
+    - Different or changing number of regions
+    - Different ways of measuring distances
+    - Different and changing underlying population sizes and structures
+- @Bell2002 brought together and proposed a number of summary measures to enable better comparisons
+    - A number of these incorporated into the IMAGE software for comparisons of internal migration between many countries; @Bell2015, @Bell2015a, @Stillwell2016, @Rees2016, @Bernard2014
+    
+
+### Background
+
+- @Bell2002 identified four main groups of migration indices:
+    - Intensity of migration
+    - Distance of migration
+    - Migration connectivity
+    - Effect of migration on the redistribution of populations
+
+## Intensity
+
+### Migration intensity
+
+- Migration intensity measures attempt to capture the overall level, or incidence, of mobility.
+- Provide a single measure for comparison of migration intensities over time or space
+- Some indices based on age-specific migration data
+    - Will discuss later in the age-schedule section
+    
+### Crude migration probability
+
+- Crude migration intensity is a simple measure of the overall propensity to migrate
+    - Similar to crude birth or death rate
+- If using migration transition data, the crude migration probability (CMP) is
+$$
+\texttt{CMP} = 100 M/P
+$$
+where $M$ is the total number of migrants in a given time period and $P$ is the population at risk
+
+### Migration intensity
+
+- @Courgeau1973 discussed how the intensity of migration is directly related to the number of regions $n$ in the country
+$$
+\texttt{CMP} = k \log (n^2)
+$$
+- No intrinsic meaning to a single Courgeau's $k$ , but can be used to compare migration intensity that cannot be seen from the raw data because of differences in their zonal systems.
+- Higher the value of $k$, greater the intensity of migration
+
+### Migration intensity
+
+- The `index_intensity()` function in the *migest* package calculates both intensity measures, given a migration and population data 
+- The *migest* package also contains a data set on Korean internal migration and populations of first level administrative districts
+    - Data originally downloaded from `https://kosis.kr/eng`
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(migest)
+korea_reg
+```
+### Migration intensity
+
+- The `korea_pop` contains the resident population in each region and year
+```{r}
+korea_pop
+```
+
+### Migration intensity
+
+- Calculate migration and population totals in 2020
+```{r, warning=FALSE, message=FALSE}
+m <- korea_reg %>%
+  filter(year == 2020,
+         orig != dest) %>%
+  pull(flow) %>%
+  sum()
+m
+p <- korea_pop %>%
+  filter(year == 2020) %>%
+  pull(population) %>%
+  sum()
+p
+
+index_intensity(mig_total = m, pop_total = p,
+                n = n_distinct(korea_pop$region))
+```
+
+
+### Migration intensity
+
+```{r, warning=FALSE, message=FALSE}
+mm <- korea_reg %>%
+  group_by(year) %>%
+  filter(orig != dest) %>%
+  summarise(m = sum(flow))
+mm
+```
+
+### Migration intensity
+
+```{r, warning=FALSE, message=FALSE}
+pp <- korea_pop %>%
+  group_by(year) %>%
+  summarise(p = sum(population))
+pp
+```
+
+### Migration intensity
+
+- Passing the vectors of migration and population totals can lead to confusing output
+```{r, warning=FALSE, message=FALSE}
+d <- mm %>%
+  left_join(pp)
+d
+```
+
+### Migration intensity
+
+```{r, warning=FALSE, message=FALSE}
+index_intensity(mig_total = d$m, pop_total = d$p,
+                n = n_distinct(korea_pop$region))
+```
+
+### Migration intensity
+
+- Set `long = FALSE` to put each indicator in their own column
+```{r, warning=FALSE, message=FALSE}
+index_intensity(mig_total = d$m, pop_total = d$p,
+                n = n_distinct(korea_pop$region), long = FALSE)
+```
+
+### Migration intensity
+
+- Use the `map2()` function in *purrr* to apply the function to subsets of the data
+    - Provides results alongside the `year`
+- Code below produces a nested list `i` containing the intensity measures for each year
+```{r, warning=FALSE, message=FALSE}
+d <- mm %>%
+  left_join(pp) %>%
+  mutate(i = map2(.x = m, .y = p,
+                  .f = ~index_intensity(mig_total = .x,
+                                        pop_total = .y,
+                                        n = n_distinct(korea_pop$region),
+                                        long = FALSE))) 
+d
+```
+
+### Migration intensity
+
+- The `unnest()` function in the *tidyr* package binds each component of column `i` on top of each other
+    - Easier to see changes over time
+```{r}
+unnest(d, cols = i)
+```
+
+
+
+## Distance
+
+### Migration distance
+
+- As migration is a spatial activity, based on movements between two locations, comparisons should take account of the way that intensities of movement vary across space.
+- There are a number of measures that summarize the effects of distance across a migration system
+- The distance measure between each region is not straightforward
+    - Ideally measure the typical distance that migrants travel.
+    - Straight line distance between population-weighted centroids of each region provide a good approximation
+- The costs faced by a migrant may not be represented well by the inter-centroid distance. 
+    - Locations in different regions might be very close to a border, so centroids will exaggerate the distance 
+    - Areas can take many shapes and sizes
+    - Doughnut shaped regions might have centroids not in region
+    - Indented coastlines might make regions look closer than they might be (culturally, travel cost)
+    - Distance measures for within region moves cause another set of problems
+
+### Average migration distance
+
+- Summary of the average migration distance can be calculated by taking a weighted average of the migration counts, where the corresponding distances are the weights
+- @Bell2002 note a median average as clearly preferable to a mean average as the distribution of distances is negatively skewed, reflecting the strong distance decay effect which consistently occurs
+- Comparison with the mean average distance provides a guide to the skewness
+
+### Distance decay
+
+- A more complete method to account for the skewness in migration distances is to fit a model to predict migration counts using the distances between each regions and extract the distance parameter
+- Different models could be potentially used, but tend to be based on a `log(distance)` terms with categorical control variables for the origin and destination
+- The distance decay parameter ($\beta_3$) in a Poisson log-linear model; 
+$$
+\log(m_{ij}) = \beta_0 + \beta_{1i} \texttt{origin} + \beta_{2j} \texttt{destination} + \beta_{3} \log(\texttt{distance})
+$$
+- The distance decay parameter of interest ($\beta_3$ in the equation above) is almost always negative, indicating an increase in migration leads to fewer predicted migrations.
+    - The set of $\beta_{1i}$ and $\beta_{2j}$ represent some form of push and pull factors for each region ($i$ and $j$)
+
+### Migration distance
+
+- The `korea_dist` matrix provides estimates of the 2020 population weighted distances in kilometers between the 17 first level administrative districts in Korea
+    - Data based on WorldPop estimates of @Edwards2021
+```{r}
+korea_dist
+```
+
+### Migration distance
+
+- The `index_distance()` function in the *migest* package provides three summary distance measures given a set of migration and distance measures between each origin and destination. 
+- The origin-destination migration flows can be given as a matrix to `m` or as a data frame, where the column names are assumed to be `orig`, `dest` and `flow`. 
+    - Can change using `orig_col`, `dest_col` and `flow_col` arguments
+- The distance values can also be given as a matrix to `d` or as a data frame, where the column names are assumed to be `orig`, `dest` and `dist`. 
+- Origin and destination names in `m` and `dist` must match
+- Removes all within migration moves from calculations
+    
+```{r}
+# single year
+index_distance(m = filter(korea_reg, year == 2020),
+               d = korea_dist)
+```
+
+
+### Migration distance
+
+```{r}
+korea_reg %>%
+  nest(m = c(orig, dest, flow)) %>%
+  mutate(d = list(korea_dist)) %>%
+  mutate(i = map2(.x = m, .y = d,
+                  .f = ~index_distance(m = .x, d = .y, long = FALSE))) %>%
+  unnest(i)
+```
+
+
+
+### Calculating distances
+
+- There are a number of functions to a calculate distance matrices in R
+- Require a set of longitude and latitudes 
+- If population weighted centriods are not available from national statistics offices, a number of research centers provide estimates
+    - POPGRID Data Collaborative `https://www.popgrid.org/`
+- Example for Ghana using WorldPop 2020 population weighted centroids
+    - CSV from `https://www.worldpop.org/doi/10.5258/SOTON/WP00703`
+
+```{r, message=FALSE, warning=FALSE}
+
+g <- read_csv("data/PWD_2020_sub_national_100m.csv") %>%
+  filter(ISO == "GHA")
+g
+```
+
+### Calculating distances
+
+
+```{r}
+g <- g %>%
+  filter(ISO == "GHA") %>%
+  select(Adm_N, PWC_Lon, PWC_Lat)
+g
+```
+
+
+### Calculating distances
+
+- The `distm()` function in the *geosphere* package provides great circle distance estimates in meters between centroids
+```{r}
+library(geosphere)
+ghana_dist <- g %>%
+  select(PWC_Lon, PWC_Lat) %>%
+  distm()
+
+ghana_dist
+```
+
+
+### Calculating distances
+
+- Add the origin and destination names to the `matrix` row and columns using `dimnames()`
+- Allows to combine with migration data
+- Divide by 1000 to get to kilometers
+```{r}
+dimnames(ghana_dist) <- list(orig = g$Adm_N, dest = g$Adm_N)
+round(ghana_dist/1000)
+```
+
+
+## Connectivity
+
+### Migration connectivity
+
+- The size of migration flows in different migration corridors vary due to many reasons other than population sizes and distance.
+    - Also reflect the strength of many other factors linking regions such as the strength of historical, cultural, social and economic ties, between regions. 
+- @Bell2002 note a fragmentation in the literature on measures of connections in a migration system and the use of a range of terms including *spatial connectivity*, *spatial concentration*, *spatial inequality* and *spatial focusing*
+- There are many indices on migration connectivity. See the *migration.indices* package for example.
+- The `index_connectivity()` function provides 12 different measures, that can broadly be placed into 5 groups.
+    - Requires a matrix or data frame of migration flows
+    - When providing a data frame, function is assuming flows are in a column with name `flow`; change with `flow_col` if not.
+    
+### Migration connectivity
+
+```{r}
+korea_reg %>%
+  filter(year == 2020) %>%
+  index_connectivity()
+```
+### Connectivity and Inequality
+
+- The `connectivity` measure evaluates the proportion of the flows (excluding within region flows) that are non-zeros
+    - More useful when many regions where populations are smaller
+- @Bell2002 inequality measures are based on a distributions of flows compared to distributions of expected flows
+    - `inequality_equal` measures the distance of the observed flows to an expected distribution where all flows are equal
+    - `inequality_sim` measures the distance of the observed flows to an expected distribution from a spatial interaction model equivalent to a Poisson regression mode for an independence fit
+$$
+\widehat{\log(m_{ij})} = \beta_0 + \beta_{1i} \texttt{origin} + \beta_{2j} \texttt{destination}
+$$
+- In both cases, a value of 0 shows the observed flows match the expected values (some form of equality) and 1 shows the maximum distance between the observed flows and the expected flows, i.e. maximum inequality.
+
+### Gini measures
+
+- The Gini measures provide a value for the spatial focusing in a set of migration flow - i.e. how much of the migration is focused on a particular set of migration corridors
+- Compares each flow with every other flow in the migration matrix. 
+- A `gini_total` value of zero indicates all flows are of equal size (no spatial focusing) to 1, only one single flow (maximum focusing).
+- The `gini_orig_standardized` values provide a similar measure but compare every outflow from each origin with every other outflow from that origin.
+    - Measures the extent to which the destination choices of out-migrants are spatially focused. 
+    - The `gini_dest_standardized` does the same but for the spatial focusing of origins of in-migrants.
+    - The standardized values ensure a range of 0 and 1 - zero is no focusing
+
+### Migration totals Gini and Coefficient of Variation
+
+- The migration weighted Gini indexes provide a measure of the focusing for the in-migration and out-migration totals (`mwg_orig` and `mwg_dest`)
+- The `mwg_mean` is a simple average of `mwg_orig` and `mwg_dest` to provide a system wide measure of focusing for all migration totals.
+    - As with the `gini_` measures from `index_connectivity()` values vary between zero (no focusing) and 1 (all migration goes through a single origin or destination)
+- @Rogers1998 proposed a coefficient of variation, provided by `cv` which compares the mean of the flows to the standard deviation of the flows.
+    - Is not limited to 0 and 1
+- The `acv` provides a similar measures of variation but based on the aggregate of coefficient of variations of in- and out-migration totals (based on the means and standard deviations of in- and out-migration totals)
+    - Again, not limited to 0 and 1, but useful for comparisons across time or countries, where rising `cv` or `acv` would indicate greater inequality in migration flows or flow totals
+
+
+## Impact
+
+### Migration impact
+
+- The impact of migration measures the extent to which migration acts to transform the pattern of human settlement
+- Migration is already or becoming predominant mechanism leading to the redistribution of population in many regions of the world
+- Descriptive studies tend to focus on regional net migration patterns
+- Additional measures exist that summarize the overall effect of migration in redistributing a population across the entire system of regions
+
+### Migration effectiveness index
+
+- The migration effectiveness index (MEI) of @Shryock1976 compares the sum of net migration as a proportion of migration turnover, measuring the amount asymmetry or equilibrium in the migration network
+$$
+\texttt{MEI} = 100 \frac{\sum_{i} | \texttt{net} |}{\sum_{i} \texttt{turnover}_i} = 100 \frac{\sum_{i} | m_{+i} - m_{i+}|}{\sum_{i} m_{+i} + m_{i+}}
+$$
+- MEI range between 0 and 100. 
+- High values indicate migration is an efficient mechanism of population redistribution, based on large net totals for the given turnover.
+- Values closer to zero are generated from more balanced migration systems with less population redistribution
+
+### Aggregate net migration rate
+
+- The aggregate net migration rate (ANMR) of @Bell2002 attempts to measure the overall effect of migration on the population settlement patterns by replacing the denominator of $MEI$ with the each regions population $P_i$
+- Index measures the net shift of population between regions per 100 residents in the country
+    - No upper limit
+$$
+\texttt{ANMR} = 100 \frac{1}{2} \frac{\sum_{i} |\texttt{net}_i|}{\sum_{i} P_i} = 100 \frac{1}{2} \frac{\sum_{i} | m_{+i} - m_{i+} |}{\sum_{i} P_i}
+$$
+
+- Product of the CMI and MEI
+
+
+### Preference and velocity
+
+- The manual by @UnitedNations1983 provides two other impact measures, that seem to have fallen out of favor
+- The preference index is based on an expected model of migration intestines based on population shares and the overall level of migration $M \frac{p_{i}}{P}\frac{p_{j}}{P}$, where $M$ is the total migration flow and $P$ is the total population based on the sum of populations in each region ($p_{i}$)
+- Index compares the observed flows to an expected model where migration rates in all populations are the same
+    - No upper limit
+$$
+\texttt{preference} = \sum_{ij}{\frac{m_{ij}}{M \frac{p_{i}}{P}\frac{p_{j}}{P}}}
+$$
+
+- The velocity index is based on a migration velocity measure $\frac{m_{ij}}{p_{i} p_{j}}$, multiplied by the total population and summed
+- Index compares observed flows to an expected models where flows sizes are determined by population sizes alone
+    - No upper limit
+$$
+\texttt{velocity}  = \sum_{ij}{\frac{m_{ij}}{p_{i} p_{j}}{P}}
+$$
+
+### Migration impact
+
+- The `index_impact()` function in *migest* calculates all four measures given a set of migration flows and population sizes in each region
+    - The `p` parameters assumes column names `region` and `pop` for region and population. Change from defaults using `reg_col` and `pop_col`
+```{r}
+index_impact(
+  m = subset(korea_reg, year == 2020),
+  p = subset(korea_pop, year == 2020),
+  pop_col = "population"
+)
+```
+
+
+### Migration impact
+
+- Multiple years require nesting the migration and population data bases besides each other
+```{r}
+d <- korea_reg %>%
+  nest(m = c(orig, dest, flow)) %>%
+  left_join(korea_pop) %>%
+  nest(p = c(region, population))
+d
+```
+
+### Migration impact
+
+- Apply the `index_impact()` function to each row and unnest
+```{r}
+d %>%
+  mutate(i = map2(.x = m, .y = p, 
+                  .f = ~index_impact(m = .x, p = .y, 
+                                     pop_col = "population",
+                                     long = FALSE))) %>%
+  unnest(i)
+```
+
+### Exercise (ex3.R)
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('exercise/ex3.R') }
+```

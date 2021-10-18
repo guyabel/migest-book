@@ -1,0 +1,351 @@
+# Sankey Plots for Visualising Bilateral Migration 
+
+
+## Background
+
+### Background
+
+- An alternative approach to visualize bilateral migration are Sankey or alluvial plots.
+- Sankey plots feature arrows with width proportional to the flow quantity. 
+- Named after Irish Captain Sankey, who used to show the energy efficiency of a steam engine in 1898. 
+- Minard's plot of Napoleon's Russian Campaign of 1812 was made in 1869 - before Sankey 
+- Alluvial plots are a form of Sankey plot
+    - Contain blocks at nodes (e.g. origin and destination of migraiton flows)
+    - No space between blocks, implying a meaningful axis, unlike Sankey plots that do have spaces
+
+### Men in Napoleon’s 1812 Russian Campaign
+
+```{r, echo = FALSE}
+knitr::include_graphics("img/Minard-napolean.png")
+```
+
+### Sankey plot of migration in Nature by @Butler2017
+
+```{r, echo = FALSE}
+knitr::include_graphics("img/Migration_Graphic.pdf")
+```
+
+### Sankey plots in R
+
+-  As the number of regions or countries increases the plot become more cumbersome
+    - Labels for the smaller areas get too small and the plotting area becomes a very long rectangle making it awkward to fit on paper or view on the screen.
+    - In such cases I prefer chord diagrams
+- There are a few packages in R that have functions for Sankey plots, such as *sankey*, *PantaRhei*, *networkD3*, *sankeywheel*, *plotly*, *ggsankey*.
+    - Also *ggalluvial* which produces an allivual plot,  but without any spaces between each sectors.
+- I am going to use *ggforce* which I think is the most flexible
+    - At the cost of a new layout for the data set
+    - Good labels need a some work - as in *circlize* - 
+because Sankey plots tend to have many set axis
+    - Migration data tend to have only two set axis (origin and destinations)
+
+
+### Sankey plots in R
+
+- For Sankey plots with *ggforce*  the `gather_set_data()` function formats the data so that every migration corridor has two rows for the size of the migration at the origin and destination
+- Can then use standard `ggplot()` function to set up the plot format. The mapping argument includes
+    - `id` the id of the ribbons
+    - `value` the size of the ribbons
+    - `split` categories for splitting of the ribbons
+- Add on layers for the ribbons themselves using `geom_parallel_sets()`
+- Add blocks at the end of the ribbons to allow for clear identification of origin and destinations using `geom_parallel_sets_axes()`
+- Add labels at the start and end of the ribbons using `geom_parallel_sets_axes()`
+    
+
+## Data Format
+
+### UN international migrant stock data 2020
+
+- @UNPD2020 stock data as before
+
+```{r, message=FALSE}
+library(tidyverse)
+un <- read_csv(file = "data/un_desa_ims_tidy.csv")
+un
+```
+
+### UN international migrant stock data 2020
+
+- Plot between World Bank income groups
+
+```{r}
+# codes for income groups
+cc <- c(1503:1500, 2003)
+d <- un %>%
+  filter(por_code %in% cc, 
+         pob_code %in% cc,
+         year == 2020) %>%
+  rename(orig = pob_name, 
+         dest = por_name) %>%
+  mutate(stock = stock/1e6)
+d
+```
+
+
+
+### Data format
+
+- Format data for Sankey plot using `gather_set_data()` function in *ggforce*
+```{r}
+library(ggforce)
+
+s <- d %>%
+  select(orig, dest, stock) %>%
+  gather_set_data(x = 1:2)
+s
+```
+### Data format
+
+```{r}
+tail(s)
+```
+
+## Parrellel Sets
+
+### Default Plot
+
+- Pass the different columns to `ggplot()` mappings
+- The `geom_parallel_sets()` plots the ribbons
+
+```{r sankey-default, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets()
+```
+
+### Default Plot
+
+- By default the x-axis goes in alphabetical order
+    - Use factors to set ordering of categorical variable
+```{r sankey-x-axis, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+levels(s$x)
+s <- mutate(s, x = fct_rev(x))
+levels(s$x)
+
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets()
+```
+  
+
+## Set Axes
+
+### Set Axes
+
+- The `geom_parallel_sets_axes()` function adds blocks besides the start and end of the ribbons
+    - Set the width (as a proportion) using `axis.width`
+```{r sankey-set-axis, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+# default axis.width
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets() +
+  geom_parallel_sets_axes()
+
+# wider axis.width
+ggplot(data = s,
+      mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets() +
+  geom_parallel_sets_axes(axis.width = 0.1)
+```
+  
+## Colour 
+
+### Colour 
+
+- Use `mapping` in `geom_parallel_sets()` to set the colours 
+    - Fill the colours following the origin regions, as was the case in the chord diagrams
+- The `geom_parallel_sets_axes()` cannot take a fill colour from the data frame
+
+```{r sankey-col,  fig.width = 6, fig.height = 4, message=TRUE,  warning= TRUE}
+# geom_parallel_sets_axes cannot take fill colours from data
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y, fill = orig)) +
+  geom_parallel_sets() +
+  geom_parallel_sets_axes()
+
+# set fill colour for parallel_sets only
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig)) +
+  geom_parallel_sets_axes()
+```
+   
+### Ribbon colour - failed axis colour
+
+
+
+### Ribbon transparency
+
+- Add some transparency in the ribbons using the `alpha` argument in `geom_parallel_sets()`
+
+```{r sankey-col-tran,  fig.width = 6, fig.height = 4, message=TRUE,  warning= TRUE}
+# transparency of 0.8
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8) +
+  geom_parallel_sets_axes()
+
+# transparency of 0.2
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.2) +
+  geom_parallel_sets_axes()
+
+```
+  
+### Axis colour
+
+- To see the set axis colours we can draw an outline using the `colour` argument.
+    - Also set `fill = "transparent"` in order to view the underlying ribbons
+
+```{r sankey-axis-col, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+# geom_parallel_sets_axes is an axis, can provide outline colour only
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8) +
+  geom_parallel_sets_axes(colour = "black")
+
+# geom_parallel_sets_axes is an axis, can provide outline colour only
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig)) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                            axis.width = 0.1)
+
+```
+
+### Axis colour
+
+- Tweak the width in `geom_parallel_sets()` so that it fills into the axis box
+    - Need to set `fill = "transparent"`
+
+```{r sankey-axis-fill, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, axis.width = -0.1) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.1)
+
+# narrower set axes
+ggplot(data = s,mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, axis.width = -0.05) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05)
+
+```
+
+## Labels
+
+### Labels
+
+- Add labels on the x-axis using `scale_x_discrete()` from *ggplot2*
+- Add labels to the sets using `geom_parallel_sets_labels()` from *ggforce* 
+    - Terrible default positions and angles if labels are not very short.
+
+
+```{r sankey-default-lab, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, axis.width = -0.05) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05) +
+  guides(fill = "none") +
+  geom_parallel_sets_labels() +
+  scale_x_discrete(labels = c(orig = "Place of Birth", 
+                              dest = "Place of Residence"))
+
+ggplot(data = s, mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, axis.width = -0.05) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05) +
+  guides(fill = "none") +
+  geom_parallel_sets_labels(angle = 0) +
+  scale_x_discrete(labels = c(orig = "Place of Birth", 
+                              dest = "Place of Residence"))
+```
+
+
+### Labels
+
+- Change order of origin and destinations by modifying the levels of the factors
+    - Set levels to order they appear in the `y` column using `fct_inorder()` in the *forcats* package
+    - Remove unnecessary parts in the label
+```{r}
+levels(s$y)
+s <- s %>%
+  mutate(y = str_remove(string = y, pattern = "-income countries"),
+         y = fct_inorder(y))
+levels(s$y)
+s
+```
+
+### Labels
+
+- Run same code as before, with updates `s`,...
+
+```{r sankey-fct, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, axis.width = -0.05) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05) +
+  guides(fill = "none") +
+  geom_parallel_sets_labels(angle = 0) +
+  scale_x_discrete(labels = c(orig = "Place of Birth", 
+                              dest = "Place of Residence"))
+```
+
+
+### Labels
+
+- Set up a label data frame to adjust position and alignment
+
+```{r}
+p <- s %>%
+  distinct(x, y) %>%
+  mutate(h = as.numeric(x == "orig"), 
+         n = h * -0.1 + 0.05)
+p
+```
+
+### Labels
+
+- Pass the position coordinates to the ggplot code
+```{r sankey-lab, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, 
+                     axis.width = -0.05) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05) +
+  guides(fill = "none") +
+  geom_parallel_sets_labels(angle = 0, hjust = p$h, 
+                            position = position_nudge(x = p$n)) +
+  scale_x_discrete(labels = c(orig = "Place of Birth", 
+                              dest = "Place of Residence"))
+```
+
+## Spacing
+
+### Spacing
+
+- We convert the Sankey plot to an alluvial plot by reducing the space separating the parallel sets to zero via the `sep` argument
+    - Need to set `sep` in all the geom functions for alignment.
+    - Default is `sep = 0.05` (5\%) 
+    - Might need to reduce when have many regions
+- In alluvial plots the y-axis are more meaningful
+    - Add y-axis labels via `labs()` function
+- Set background to white using `theme_bw()` function
+```{r sankey-spacing, message=FALSE, fig.width = 6, fig.height = 4, message=FALSE,  warning= FALSE}
+ggplot(data = s,
+       mapping = aes(x = x, id = id, value = stock, split = y)) +
+  geom_parallel_sets(mapping = aes(fill = orig), alpha = 0.8, 
+                     axis.width = -0.05, sep = 0) +
+  geom_parallel_sets_axes(fill = "transparent", colour = "black", 
+                          axis.width = 0.05, sep = 0) +
+  guides(fill = "none") +
+  geom_parallel_sets_labels(angle = 0, hjust = p$h, 
+                            position = position_nudge(x = p$n, ), sep = 0) +
+  scale_x_discrete(labels = c(orig = "Place of Birth", 
+                              dest = "Place of Residence")) +
+  labs(y = "Migrants (millions)", x = "") +
+  theme_bw()
+```
+
+
+
+### Exercise (ex9.R)
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('exercise/ex9.R') }
+```

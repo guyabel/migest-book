@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Distance | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 7 Distance | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Distance | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="guyabel/migest-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Distance | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="intensity.html"/>
+<link rel="next" href="connectivity.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> .</a></li>
+<li class="chapter" data-level="2" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>2</b> Outline</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>2.1</b> Workshop on Migration Estimation</a></li>
+<li class="chapter" data-level="2.2" data-path="outline.html"><a href="outline.html#general-points"><i class="fa fa-check"></i><b>2.2</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#spatial"><i class="fa fa-check"></i><b>3.1</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence"><i class="fa fa-check"></i><b>3.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.2" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-1"><i class="fa fa-check"></i><b>3.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.3" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-2"><i class="fa fa-check"></i><b>3.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.4" data-path="migration-concepts.html"><a href="migration-concepts.html#courgeau-1979"><i class="fa fa-check"></i><b>3.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.5" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-origin"><i class="fa fa-check"></i><b>3.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="3.1.6" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data"><i class="fa fa-check"></i><b>3.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="3.1.7" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>3.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="3.1.8" data-path="migration-concepts.html"><a href="migration-concepts.html#migrants-and-migration"><i class="fa fa-check"></i><b>3.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="3.1.9" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data"><i class="fa fa-check"></i><b>3.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.10" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-1"><i class="fa fa-check"></i><b>3.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.11" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>3.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.12" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-2"><i class="fa fa-check"></i><b>3.1.12</b> Migration Event Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#temporal"><i class="fa fa-check"></i><b>3.2</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval"><i class="fa fa-check"></i><b>3.2.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="3.2.2" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>3.2.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>3.2.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="3.2.4" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>3.2.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.5" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>3.2.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.6" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>3.2.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#measures"><i class="fa fa-check"></i><b>3.3</b> Measures</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-measures"><i class="fa fa-check"></i><b>3.3.1</b> Migration measures</a></li>
+<li class="chapter" data-level="3.3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures"><i class="fa fa-check"></i><b>3.3.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>3.3.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.4" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals"><i class="fa fa-check"></i><b>3.3.4</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.5" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-1"><i class="fa fa-check"></i><b>3.3.5</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.6" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-2"><i class="fa fa-check"></i><b>3.3.6</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.7" data-path="migration-concepts.html"><a href="migration-concepts.html#rate-measures"><i class="fa fa-check"></i><b>3.3.7</b> Rate measures</a></li>
+<li class="chapter" data-level="3.3.8" data-path="migration-concepts.html"><a href="migration-concepts.html#rates"><i class="fa fa-check"></i><b>3.3.8</b> Rates</a></li>
+<li class="chapter" data-level="3.3.9" data-path="migration-concepts.html"><a href="migration-concepts.html#rates-1"><i class="fa fa-check"></i><b>3.3.9</b> Rates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html"><i class="fa fa-check"></i><b>4</b> Handling Migration Data in R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table"><i class="fa fa-check"></i><b>4.1</b> Contingency Table</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-1"><i class="fa fa-check"></i><b>4.1.1</b> Contingency Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-2"><i class="fa fa-check"></i><b>4.1.2</b> Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-manipulation"><i class="fa fa-check"></i><b>4.2</b> Data Manipulation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array"><i class="fa fa-check"></i><b>4.2.1</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array-1"><i class="fa fa-check"></i><b>4.2.2</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#show-totals"><i class="fa fa-check"></i><b>4.2.3</b> Show totals</a></li>
+<li class="chapter" data-level="4.2.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix"><i class="fa fa-check"></i><b>4.2.4</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-1"><i class="fa fa-check"></i><b>4.2.5</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-2"><i class="fa fa-check"></i><b>4.2.6</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame"><i class="fa fa-check"></i><b>4.2.7</b> Convert to data frame</a></li>
+<li class="chapter" data-level="4.2.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame-1"><i class="fa fa-check"></i><b>4.2.8</b> Convert to data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#matrix-operations"><i class="fa fa-check"></i><b>4.3</b> Matrix Operations</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics"><i class="fa fa-check"></i><b>4.3.1</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics-1"><i class="fa fa-check"></i><b>4.3.2</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names"><i class="fa fa-check"></i><b>4.3.3</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-1"><i class="fa fa-check"></i><b>4.3.4</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-2"><i class="fa fa-check"></i><b>4.3.5</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-scaling"><i class="fa fa-check"></i><b>4.3.6</b> Data scaling</a></li>
+<li class="chapter" data-level="4.3.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#diagonal-elements"><i class="fa fa-check"></i><b>4.3.7</b> Diagonal elements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#summaries"><i class="fa fa-check"></i><b>4.4</b> Summaries</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows"><i class="fa fa-check"></i><b>4.4.1</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows-1"><i class="fa fa-check"></i><b>4.4.2</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals"><i class="fa fa-check"></i><b>4.4.3</b> Totals</a></li>
+<li class="chapter" data-level="4.4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-1"><i class="fa fa-check"></i><b>4.4.4</b> Totals</a></li>
+<li class="chapter" data-level="4.4.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-2"><i class="fa fa-check"></i><b>4.4.5</b> Totals</a></li>
+<li class="chapter" data-level="4.4.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-3"><i class="fa fa-check"></i><b>4.4.6</b> Totals</a></li>
+<li class="chapter" data-level="4.4.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-4"><i class="fa fa-check"></i><b>4.4.7</b> Totals</a></li>
+<li class="chapter" data-level="4.4.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies"><i class="fa fa-check"></i><b>4.4.8</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.9" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-1"><i class="fa fa-check"></i><b>4.4.9</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.10" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-2"><i class="fa fa-check"></i><b>4.4.10</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.11" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-3"><i class="fa fa-check"></i><b>4.4.11</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.12" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#exercise-ex2.r"><i class="fa fa-check"></i><b>4.4.12</b> Exercise (ex2.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html"><i class="fa fa-check"></i><b>5</b> Summary Migration Indices</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-1"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-2"><i class="fa fa-check"></i><b>5.1.2</b> Background</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="intensity.html"><a href="intensity.html"><i class="fa fa-check"></i><b>6</b> Intensity</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="intensity.html"><a href="intensity.html#section-1"><i class="fa fa-check"></i><b>6.1</b> .</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="intensity.html"><a href="intensity.html#migration-intensity"><i class="fa fa-check"></i><b>6.1.1</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.2" data-path="intensity.html"><a href="intensity.html#crude-migration-probability"><i class="fa fa-check"></i><b>6.1.2</b> Crude migration probability</a></li>
+<li class="chapter" data-level="6.1.3" data-path="intensity.html"><a href="intensity.html#migration-intensity-1"><i class="fa fa-check"></i><b>6.1.3</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.4" data-path="intensity.html"><a href="intensity.html#migration-intensity-2"><i class="fa fa-check"></i><b>6.1.4</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.5" data-path="intensity.html"><a href="intensity.html#migration-intensity-3"><i class="fa fa-check"></i><b>6.1.5</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.6" data-path="intensity.html"><a href="intensity.html#migration-intensity-4"><i class="fa fa-check"></i><b>6.1.6</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.7" data-path="intensity.html"><a href="intensity.html#migration-intensity-5"><i class="fa fa-check"></i><b>6.1.7</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.8" data-path="intensity.html"><a href="intensity.html#migration-intensity-6"><i class="fa fa-check"></i><b>6.1.8</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.9" data-path="intensity.html"><a href="intensity.html#migration-intensity-7"><i class="fa fa-check"></i><b>6.1.9</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.10" data-path="intensity.html"><a href="intensity.html#migration-intensity-8"><i class="fa fa-check"></i><b>6.1.10</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.11" data-path="intensity.html"><a href="intensity.html#migration-intensity-9"><i class="fa fa-check"></i><b>6.1.11</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.12" data-path="intensity.html"><a href="intensity.html#migration-intensity-10"><i class="fa fa-check"></i><b>6.1.12</b> Migration intensity</a></li>
+<li class="chapter" data-level="6.1.13" data-path="intensity.html"><a href="intensity.html#migration-intensity-11"><i class="fa fa-check"></i><b>6.1.13</b> Migration intensity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="distance.html"><a href="distance.html"><i class="fa fa-check"></i><b>7</b> Distance</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="distance.html"><a href="distance.html#section-2"><i class="fa fa-check"></i><b>7.1</b> .</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="distance.html"><a href="distance.html#migration-distance"><i class="fa fa-check"></i><b>7.1.1</b> Migration distance</a></li>
+<li class="chapter" data-level="7.1.2" data-path="distance.html"><a href="distance.html#average-migration-distance"><i class="fa fa-check"></i><b>7.1.2</b> Average migration distance</a></li>
+<li class="chapter" data-level="7.1.3" data-path="distance.html"><a href="distance.html#distance-decay"><i class="fa fa-check"></i><b>7.1.3</b> Distance decay</a></li>
+<li class="chapter" data-level="7.1.4" data-path="distance.html"><a href="distance.html#migration-distance-1"><i class="fa fa-check"></i><b>7.1.4</b> Migration distance</a></li>
+<li class="chapter" data-level="7.1.5" data-path="distance.html"><a href="distance.html#migration-distance-2"><i class="fa fa-check"></i><b>7.1.5</b> Migration distance</a></li>
+<li class="chapter" data-level="7.1.6" data-path="distance.html"><a href="distance.html#migration-distance-3"><i class="fa fa-check"></i><b>7.1.6</b> Migration distance</a></li>
+<li class="chapter" data-level="7.1.7" data-path="distance.html"><a href="distance.html#calculating-distances"><i class="fa fa-check"></i><b>7.1.7</b> Calculating distances</a></li>
+<li class="chapter" data-level="7.1.8" data-path="distance.html"><a href="distance.html#calculating-distances-1"><i class="fa fa-check"></i><b>7.1.8</b> Calculating distances</a></li>
+<li class="chapter" data-level="7.1.9" data-path="distance.html"><a href="distance.html#calculating-distances-2"><i class="fa fa-check"></i><b>7.1.9</b> Calculating distances</a></li>
+<li class="chapter" data-level="7.1.10" data-path="distance.html"><a href="distance.html#calculating-distances-3"><i class="fa fa-check"></i><b>7.1.10</b> Calculating distances</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="connectivity.html"><a href="connectivity.html"><i class="fa fa-check"></i><b>8</b> Connectivity</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="connectivity.html"><a href="connectivity.html#section-3"><i class="fa fa-check"></i><b>8.1</b> .</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="connectivity.html"><a href="connectivity.html#migration-connectivity"><i class="fa fa-check"></i><b>8.1.1</b> Migration connectivity</a></li>
+<li class="chapter" data-level="8.1.2" data-path="connectivity.html"><a href="connectivity.html#migration-connectivity-1"><i class="fa fa-check"></i><b>8.1.2</b> Migration connectivity</a></li>
+<li class="chapter" data-level="8.1.3" data-path="connectivity.html"><a href="connectivity.html#connectivity-and-inequality"><i class="fa fa-check"></i><b>8.1.3</b> Connectivity and Inequality</a></li>
+<li class="chapter" data-level="8.1.4" data-path="connectivity.html"><a href="connectivity.html#gini-measures"><i class="fa fa-check"></i><b>8.1.4</b> Gini measures</a></li>
+<li class="chapter" data-level="8.1.5" data-path="connectivity.html"><a href="connectivity.html#migration-totals-gini-and-coefficient-of-variation"><i class="fa fa-check"></i><b>8.1.5</b> Migration totals Gini and Coefficient of Variation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="impact.html"><a href="impact.html"><i class="fa fa-check"></i><b>9</b> Impact</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="impact.html"><a href="impact.html#section-4"><i class="fa fa-check"></i><b>9.1</b> .</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="impact.html"><a href="impact.html#migration-impact"><i class="fa fa-check"></i><b>9.1.1</b> Migration impact</a></li>
+<li class="chapter" data-level="9.1.2" data-path="impact.html"><a href="impact.html#migration-effectiveness-index"><i class="fa fa-check"></i><b>9.1.2</b> Migration effectiveness index</a></li>
+<li class="chapter" data-level="9.1.3" data-path="impact.html"><a href="impact.html#aggregate-net-migration-rate"><i class="fa fa-check"></i><b>9.1.3</b> Aggregate net migration rate</a></li>
+<li class="chapter" data-level="9.1.4" data-path="impact.html"><a href="impact.html#preference-and-velocity"><i class="fa fa-check"></i><b>9.1.4</b> Preference and velocity</a></li>
+<li class="chapter" data-level="9.1.5" data-path="impact.html"><a href="impact.html#migration-impact-1"><i class="fa fa-check"></i><b>9.1.5</b> Migration impact</a></li>
+<li class="chapter" data-level="9.1.6" data-path="impact.html"><a href="impact.html#migration-impact-2"><i class="fa fa-check"></i><b>9.1.6</b> Migration impact</a></li>
+<li class="chapter" data-level="9.1.7" data-path="impact.html"><a href="impact.html#migration-impact-3"><i class="fa fa-check"></i><b>9.1.7</b> Migration impact</a></li>
+<li class="chapter" data-level="9.1.8" data-path="impact.html"><a href="impact.html#exercise-ex3.r"><i class="fa fa-check"></i><b>9.1.8</b> Exercise (ex3.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="distance" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Distance</h1>
+<div id="section-2" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> .</h2>
+<div id="migration-distance" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Migration distance</h3>
+<ul>
+<li>As migration is a spatial activity, based on movements between two locations, comparisons should take account of the way that intensities of movement vary across space.</li>
+<li>There are a number of measures that summarize the effects of distance across a migration system</li>
+<li>The distance measure between each region is not straightforward
+<ul>
+<li>Ideally measure the typical distance that migrants travel.</li>
+<li>Straight line distance between population-weighted centroids of each region provide a good approximation</li>
+</ul></li>
+<li>The costs faced by a migrant may not be represented well by the inter-centroid distance.
+<ul>
+<li>Locations in different regions might be very close to a border, so centroids will exaggerate the distance</li>
+<li>Areas can take many shapes and sizes</li>
+<li>Doughnut shaped regions might have centroids not in region</li>
+<li>Indented coastlines might make regions look closer than they might be (culturally, travel cost)</li>
+<li>Distance measures for within region moves cause another set of problems</li>
+</ul></li>
+</ul>
+</div>
+<div id="average-migration-distance" class="section level3" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Average migration distance</h3>
+<ul>
+<li>Summary of the average migration distance can be calculated by taking a weighted average of the migration counts, where the corresponding distances are the weights</li>
+<li><span class="citation"><a href="#ref-Bell2002" role="doc-biblioref">Bell et al.</a> (<a href="#ref-Bell2002" role="doc-biblioref">2002</a>)</span> note a median average as clearly preferable to a mean average as the distribution of distances is negatively skewed, reflecting the strong distance decay effect which consistently occurs</li>
+<li>Comparison with the mean average distance provides a guide to the skewness</li>
+</ul>
+</div>
+<div id="distance-decay" class="section level3" number="7.1.3">
+<h3><span class="header-section-number">7.1.3</span> Distance decay</h3>
+<ul>
+<li>A more complete method to account for the skewness in migration distances is to fit a model to predict migration counts using the distances between each regions and extract the distance parameter</li>
+<li>Different models could be potentially used, but tend to be based on a <code>log(distance)</code> terms with categorical control variables for the origin and destination</li>
+<li>The distance decay parameter (<span class="math inline">\(\beta_3\)</span>) in a Poisson log-linear model;
+<span class="math display">\[
+\log(m_{ij}) = \beta_0 + \beta_{1i} \texttt{origin} + \beta_{2j} \texttt{destination} + \beta_{3} \log(\texttt{distance})
+\]</span></li>
+<li>The distance decay parameter of interest (<span class="math inline">\(\beta_3\)</span> in the equation above) is almost always negative, indicating an increase in migration leads to fewer predicted migrations.
+<ul>
+<li>The set of <span class="math inline">\(\beta_{1i}\)</span> and <span class="math inline">\(\beta_{2j}\)</span> represent some form of push and pull factors for each region (<span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>)</li>
+</ul></li>
+</ul>
+</div>
+<div id="migration-distance-1" class="section level3" number="7.1.4">
+<h3><span class="header-section-number">7.1.4</span> Migration distance</h3>
+<ul>
+<li>The <code>korea_dist</code> matrix provides estimates of the 2020 population weighted distances in kilometers between the 17 first level administrative districts in Korea
+<ul>
+<li>Data based on WorldPop estimates of <span class="citation"><a href="#ref-Edwards2021" role="doc-biblioref">Edwards et al.</a> (<a href="#ref-Edwards2021" role="doc-biblioref">2021</a>)</span></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="distance.html#cb25-1" aria-hidden="true" tabindex="-1"></a>korea_dist</span></code></pre></div>
+<pre><code>##                    dest
+## orig                Busan Chungcheongbuk-do Chungcheongnam-do Daegu Daejeon
+##   Busan                 0               216               255    88     201
+##   Chungcheongbuk-do   216                 0                58   130      45
+##   Chungcheongnam-do   255                58                 0   174      54
+##   Daegu                88               130               174     0     122
+##   Daejeon             201                45                54   122       0
+##   Gangwon-do          286               122               159   203     166
+##   Gwangju             202               184               170   175     139
+##   Gyeonggi-do         312                96                83   225     125
+##   Gyeongsangbuk-do    107               125               176    32     128
+##   Gyeongsangnam-do     43               190               222    72     168
+##   Incheon             328               111                85   242     134
+##   Jeju                306               381               368   333     337
+##   Jeollabuk-do        201               111                96   143      66
+##   Jeollanam-do        190               205               197   177     162
+##   Sejong              222                37                34   141      22
+##   Seoul               324               108                95   236     138
+##   Ulsan                47               203               250    76     198
+##                    dest
+## orig                Gangwon-do Gwangju Gyeonggi-do Gyeongsangbuk-do
+##   Busan                    286     202         312              107
+##   Chungcheongbuk-do        122     184          96              125
+##   Chungcheongnam-do        159     170          83              176
+##   Daegu                    203     175         225               32
+##   Daejeon                  166     139         125              128
+##   Gangwon-do                 0     305         114              179
+##   Gwangju                  305       0         252              202
+##   Gyeonggi-do              114     252           0              215
+##   Gyeongsangbuk-do         179     202         215                0
+##   Gyeongsangnam-do         275     159         285              101
+##   Incheon                  137     253          24              234
+##   Jeju                     500     199         451              365
+##   Jeollabuk-do             232      75         178              161
+##   Jeollanam-do             325      31         279              207
+##   Sejong                   155     155         104              143
+##   Seoul                    113     265          13              226
+##   Ulsan                    255     229         296               81
+##                    dest
+## orig                Gyeongsangnam-do Incheon Jeju Jeollabuk-do Jeollanam-do
+##   Busan                           43     328  306          201          190
+##   Chungcheongbuk-do              190     111  381          111          205
+##   Chungcheongnam-do              222      85  368           96          197
+##   Daegu                           72     242  333          143          177
+##   Daejeon                        168     134  337           66          162
+##   Gangwon-do                     275     137  500          232          325
+##   Gwangju                        159     253  199           75           31
+##   Gyeonggi-do                    285      24  451          178          279
+##   Gyeongsangbuk-do               101     234  365          161          207
+##   Gyeongsangnam-do                 0     299  277          160          148
+##   Incheon                        299       0  450          180          281
+##   Jeju                           277     450    0          275          176
+##   Jeollabuk-do                   160     180  275            0          101
+##   Jeollanam-do                   148     281  176          101            0
+##   Sejong                         190     112  353           79          179
+##   Seoul                          298      25  464          191          292
+##   Ulsan                           76     314  351          212          222
+##                    dest
+## orig                Sejong Seoul Ulsan
+##   Busan                222   324    47
+##   Chungcheongbuk-do     37   108   203
+##   Chungcheongnam-do     34    95   250
+##   Daegu                141   236    76
+##   Daejeon               22   138   198
+##   Gangwon-do           155   113   255
+##   Gwangju              155   265   229
+##   Gyeonggi-do          104    13   296
+##   Gyeongsangbuk-do     143   226    81
+##   Gyeongsangnam-do     190   298    76
+##   Incheon              112    25   314
+##   Jeju                 353   464   351
+##   Jeollabuk-do          79   191   212
+##   Jeollanam-do         179   292   222
+##   Sejong                 0   117   216
+##   Seoul                117     0   307
+##   Ulsan                216   307     0</code></pre>
+</div>
+<div id="migration-distance-2" class="section level3" number="7.1.5">
+<h3><span class="header-section-number">7.1.5</span> Migration distance</h3>
+<ul>
+<li>The <code>index_distance()</code> function in the <em>migest</em> package provides three summary distance measures given a set of migration and distance measures between each origin and destination.</li>
+<li>The origin-destination migration flows can be given as a matrix to <code>m</code> or as a data frame, where the column names are assumed to be <code>orig</code>, <code>dest</code> and <code>flow</code>.
+<ul>
+<li>Can change using <code>orig_col</code>, <code>dest_col</code> and <code>flow_col</code> arguments</li>
+</ul></li>
+<li>The distance values can also be given as a matrix to <code>d</code> or as a data frame, where the column names are assumed to be <code>orig</code>, <code>dest</code> and <code>dist</code>.</li>
+<li>Origin and destination names in <code>m</code> and <code>dist</code> must match</li>
+<li>Removes all within migration moves from calculations</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="distance.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single year</span></span>
+<span id="cb27-2"><a href="distance.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">index_distance</span>(<span class="at">m =</span> <span class="fu">filter</span>(korea_reg, year <span class="sc">==</span> <span class="dv">2020</span>),</span>
+<span id="cb27-3"><a href="distance.html#cb27-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">d =</span> korea_dist)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##   measure   value
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 mean    105.   
+## 2 median   68.7  
+## 3 decay    -0.852</code></pre>
+</div>
+<div id="migration-distance-3" class="section level3" number="7.1.6">
+<h3><span class="header-section-number">7.1.6</span> Migration distance</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="distance.html#cb29-1" aria-hidden="true" tabindex="-1"></a>korea_reg <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="distance.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">m =</span> <span class="fu">c</span>(orig, dest, flow)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="distance.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">list</span>(korea_dist)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="distance.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">i =</span> <span class="fu">map2</span>(<span class="at">.x =</span> m, <span class="at">.y =</span> d,</span>
+<span id="cb29-5"><a href="distance.html#cb29-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">.f =</span> <span class="sc">~</span><span class="fu">index_distance</span>(<span class="at">m =</span> .x, <span class="at">d =</span> .y, <span class="at">long =</span> <span class="cn">FALSE</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="distance.html#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(i)</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 6
+##    year m                  d                mean median  decay
+##   &lt;int&gt; &lt;list&gt;             &lt;list&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1  2012 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  108.   76   -0.784
+## 2  2013 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  107.   76   -0.795
+## 3  2014 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  108.   76   -0.816
+## 4  2015 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  108.   76   -0.828
+## 5  2016 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  107.   76   -0.820
+## 6  2017 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  108.   75.8 -0.839
+## 7  2018 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  107.   74.8 -0.839
+## 8  2019 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  107.   75.8 -0.836
+## 9  2020 &lt;tibble [289 x 3]&gt; &lt;dbl [17 x 17]&gt;  105.   68.7 -0.852</code></pre>
+</div>
+<div id="calculating-distances" class="section level3" number="7.1.7">
+<h3><span class="header-section-number">7.1.7</span> Calculating distances</h3>
+<ul>
+<li>There are a number of functions to a calculate distance matrices in R</li>
+<li>Require a set of longitude and latitudes</li>
+<li>If population weighted centriods are not available from national statistics offices, a number of research centers provide estimates
+<ul>
+<li>POPGRID Data Collaborative <code>https://www.popgrid.org/</code></li>
+</ul></li>
+<li>Example for Ghana using WorldPop 2020 population weighted centroids
+<ul>
+<li>CSV from <code>https://www.worldpop.org/doi/10.5258/SOTON/WP00703</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="distance.html#cb31-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/PWD_2020_sub_national_100m.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="distance.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ISO <span class="sc">==</span> <span class="st">&quot;GHA&quot;</span>)</span>
+<span id="cb31-3"><a href="distance.html#cb31-3" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div>
+<pre><code>## # A tibble: 10 x 25
+##     year ISO   ISO_No Country_N Adm_N GID_1 HASC  PWC_Lat PWC_Lon    Pop Density
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1  2020 GHA      288 Ghana     Asha~ GHA.~ GH.AH    6.69  -1.60  6.43e6   258. 
+##  2  2020 GHA      288 Ghana     Bron~ GHA.~ GH.BA    7.50  -2.04  2.73e6    70.6
+##  3  2020 GHA      288 Ghana     Cent~ GHA.~ GH.CP    5.47  -0.986 2.87e6   296. 
+##  4  2020 GHA      288 Ghana     East~ GHA.~ GH.EP    6.21  -0.517 3.12e6   188. 
+##  5  2020 GHA      288 Ghana     Grea~ GHA.~ GH.AA    5.64  -0.159 5.18e6  1414. 
+##  6  2020 GHA      288 Ghana     Nort~ GHA.~ GH.NP    9.48  -0.569 3.25e6    47  
+##  7  2020 GHA      288 Ghana     Uppe~ GHA.~ GH.UE   10.9   -0.680 1.11e6   129. 
+##  8  2020 GHA      288 Ghana     Uppe~ GHA.~ GH.UW   10.4   -2.44  8.02e5    42.2
+##  9  2020 GHA      288 Ghana     Volta GHA.~ GH.TV    6.90   0.504 2.66e6   144. 
+## 10  2020 GHA      288 Ghana     West~ GHA.~ GH.WP    5.45  -2.16  2.92e6   118. 
+## # ... with 14 more variables: Area &lt;dbl&gt;, PWD_A &lt;dbl&gt;, PWD_G &lt;dbl&gt;,
+## #   PWD_M &lt;dbl&gt;, PWD_D1 &lt;dbl&gt;, PWD_D2 &lt;dbl&gt;, PWD_D3 &lt;dbl&gt;, PWD_D4 &lt;dbl&gt;,
+## #   PWD_D5 &lt;dbl&gt;, PWD_D6 &lt;dbl&gt;, PWD_D7 &lt;dbl&gt;, PWD_D8 &lt;dbl&gt;, PWD_D9 &lt;dbl&gt;,
+## #   PWD_D10 &lt;dbl&gt;</code></pre>
+</div>
+<div id="calculating-distances-1" class="section level3" number="7.1.8">
+<h3><span class="header-section-number">7.1.8</span> Calculating distances</h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="distance.html#cb33-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> g <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="distance.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ISO <span class="sc">==</span> <span class="st">&quot;GHA&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="distance.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Adm_N, PWC_Lon, PWC_Lat)</span>
+<span id="cb33-4"><a href="distance.html#cb33-4" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div>
+<pre><code>## # A tibble: 10 x 3
+##    Adm_N         PWC_Lon PWC_Lat
+##    &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Ashanti        -1.60     6.69
+##  2 Brong Ahafo    -2.04     7.50
+##  3 Central        -0.986    5.47
+##  4 Eastern        -0.517    6.21
+##  5 Greater Accra  -0.159    5.64
+##  6 Northern       -0.569    9.48
+##  7 Upper East     -0.680   10.9 
+##  8 Upper West     -2.44    10.4 
+##  9 Volta           0.504    6.90
+## 10 Western        -2.16     5.45</code></pre>
+</div>
+<div id="calculating-distances-2" class="section level3" number="7.1.9">
+<h3><span class="header-section-number">7.1.9</span> Calculating distances</h3>
+<ul>
+<li>The <code>distm()</code> function in the <em>geosphere</em> package provides great circle distance estimates in meters between centroids</li>
+</ul>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="distance.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geosphere)</span>
+<span id="cb35-2"><a href="distance.html#cb35-2" aria-hidden="true" tabindex="-1"></a>ghana_dist <span class="ot">&lt;-</span> g <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="distance.html#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PWC_Lon, PWC_Lat) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="distance.html#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distm</span>()</span>
+<span id="cb35-5"><a href="distance.html#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="distance.html#cb35-6" aria-hidden="true" tabindex="-1"></a>ghana_dist</span></code></pre></div>
+<pre><code>##           [,1]     [,2]      [,3]      [,4]      [,5]     [,6]     [,7]
+##  [1,]      0.0 102992.7 151088.53 130977.06 197276.08 329699.1 471774.1
+##  [2,] 102992.7      0.0 254060.16 221397.05 293464.70 272448.3 399289.5
+##  [3,] 151088.5 254060.2      0.00  97220.64  93573.16 446740.6 596619.3
+##  [4,] 130977.1 221397.1  97220.64      0.00  74652.44 362233.8 513803.4
+##  [5,] 197276.1 293464.7  93573.16  74652.44      0.00 427847.5 579597.5
+##  [6,] 329699.1 272448.3 446740.58 362233.78 427847.51      0.0 151789.3
+##  [7,] 471774.1 399289.5 596619.34 513803.44 579597.52 151789.3      0.0
+##  [8,] 422969.2 325054.7 570615.97 511378.47 585433.81 229629.3 198393.6
+##  [9,] 233944.5 289137.3 229081.18 136579.93 158124.96 308917.8 455693.6
+## [10,] 149904.5 227534.2 130136.28 200358.81 222698.68 479309.9 619145.3
+##           [,8]     [,9]    [,10]
+##  [1,] 422969.2 233944.5 149904.5
+##  [2,] 325054.7 289137.3 227534.2
+##  [3,] 570616.0 229081.2 130136.3
+##  [4,] 511378.5 136579.9 200358.8
+##  [5,] 585433.8 158125.0 222698.7
+##  [6,] 229629.3 308917.8 479309.9
+##  [7,] 198393.6 455693.6 619145.3
+##  [8,]      0.0 505963.2 550152.0
+##  [9,] 505963.2      0.0 335790.5
+## [10,] 550152.0 335790.5      0.0</code></pre>
+</div>
+<div id="calculating-distances-3" class="section level3" number="7.1.10">
+<h3><span class="header-section-number">7.1.10</span> Calculating distances</h3>
+<ul>
+<li>Add the origin and destination names to the <code>matrix</code> row and columns using <code>dimnames()</code></li>
+<li>Allows to combine with migration data</li>
+<li>Divide by 1000 to get to kilometers</li>
+</ul>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="distance.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(ghana_dist) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> g<span class="sc">$</span>Adm_N, <span class="at">dest =</span> g<span class="sc">$</span>Adm_N)</span>
+<span id="cb37-2"><a href="distance.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(ghana_dist<span class="sc">/</span><span class="dv">1000</span>)</span></code></pre></div>
+<pre><code>##                dest
+## orig            Ashanti Brong Ahafo Central Eastern Greater Accra Northern
+##   Ashanti             0         103     151     131           197      330
+##   Brong Ahafo       103           0     254     221           293      272
+##   Central           151         254       0      97            94      447
+##   Eastern           131         221      97       0            75      362
+##   Greater Accra     197         293      94      75             0      428
+##   Northern          330         272     447     362           428        0
+##   Upper East        472         399     597     514           580      152
+##   Upper West        423         325     571     511           585      230
+##   Volta             234         289     229     137           158      309
+##   Western           150         228     130     200           223      479
+##                dest
+## orig            Upper East Upper West Volta Western
+##   Ashanti              472        423   234     150
+##   Brong Ahafo          399        325   289     228
+##   Central              597        571   229     130
+##   Eastern              514        511   137     200
+##   Greater Accra        580        585   158     223
+##   Northern             152        230   309     479
+##   Upper East             0        198   456     619
+##   Upper West           198          0   506     550
+##   Volta                456        506     0     336
+##   Western              619        550   336       0</code></pre>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bell2002" class="csl-entry">
+Bell, Martin, Marcus Blake, Paul Boyle, O. Duke-Williams, Philip H. Rees, John Stillwell, and Graeme John Hugo. 2002. <span>“<span class="nocase">Cross-national comparison of internal migration: issues and measures</span>.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 165 (3): 435–64. <a href="https://doi.org/10.1111/1467-985X.00247">https://doi.org/10.1111/1467-985X.00247</a>.
+</div>
+<div id="ref-Edwards2021" class="csl-entry">
+Edwards, Robin, Maksym Bondarenko, Alessandro Sorichetta, and Andrew J. Tatem. 2021. <span>“<span class="nocase">Unconstrained subnational Population Weighted Density in 2000, 2005, 2010, 2015 and 2020 ( 100m resolution )</span>.”</span> Southampton, UK: WorldPop, University of Southampton, UK. <a href="https://doi.org/10.5258/SOTON/WP00703">https://doi.org/10.5258/SOTON/WP00703</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intensity.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="connectivity.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-indices.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

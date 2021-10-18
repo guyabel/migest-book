@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Sankey Plots for Visualising Bilateral Migration | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 11 Sankey Plots for Visualising Bilateral Migration | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Sankey Plots for Visualising Bilateral Migration | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="guyabel/migest-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Sankey Plots for Visualising Bilateral Migration | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="chord-diagrams-for-visualising-bilateral-migration.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> .</a></li>
+<li class="chapter" data-level="2" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>2</b> Outline</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>2.1</b> Workshop on Migration Estimation</a></li>
+<li class="chapter" data-level="2.2" data-path="outline.html"><a href="outline.html#general-points"><i class="fa fa-check"></i><b>2.2</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#spatial"><i class="fa fa-check"></i><b>3.1</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence"><i class="fa fa-check"></i><b>3.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.2" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-1"><i class="fa fa-check"></i><b>3.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.3" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-2"><i class="fa fa-check"></i><b>3.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.4" data-path="migration-concepts.html"><a href="migration-concepts.html#courgeau-1979"><i class="fa fa-check"></i><b>3.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.5" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-origin"><i class="fa fa-check"></i><b>3.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="3.1.6" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data"><i class="fa fa-check"></i><b>3.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="3.1.7" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>3.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="3.1.8" data-path="migration-concepts.html"><a href="migration-concepts.html#migrants-and-migration"><i class="fa fa-check"></i><b>3.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="3.1.9" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data"><i class="fa fa-check"></i><b>3.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.10" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-1"><i class="fa fa-check"></i><b>3.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.11" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>3.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.12" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-2"><i class="fa fa-check"></i><b>3.1.12</b> Migration Event Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#temporal"><i class="fa fa-check"></i><b>3.2</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval"><i class="fa fa-check"></i><b>3.2.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="3.2.2" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>3.2.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>3.2.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="3.2.4" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>3.2.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.5" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>3.2.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.6" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>3.2.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#measures"><i class="fa fa-check"></i><b>3.3</b> Measures</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-measures"><i class="fa fa-check"></i><b>3.3.1</b> Migration measures</a></li>
+<li class="chapter" data-level="3.3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures"><i class="fa fa-check"></i><b>3.3.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>3.3.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.4" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals"><i class="fa fa-check"></i><b>3.3.4</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.5" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-1"><i class="fa fa-check"></i><b>3.3.5</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.6" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-2"><i class="fa fa-check"></i><b>3.3.6</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.7" data-path="migration-concepts.html"><a href="migration-concepts.html#rate-measures"><i class="fa fa-check"></i><b>3.3.7</b> Rate measures</a></li>
+<li class="chapter" data-level="3.3.8" data-path="migration-concepts.html"><a href="migration-concepts.html#rates"><i class="fa fa-check"></i><b>3.3.8</b> Rates</a></li>
+<li class="chapter" data-level="3.3.9" data-path="migration-concepts.html"><a href="migration-concepts.html#rates-1"><i class="fa fa-check"></i><b>3.3.9</b> Rates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html"><i class="fa fa-check"></i><b>4</b> Handling Migration Data in R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table"><i class="fa fa-check"></i><b>4.1</b> Contingency Table</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-1"><i class="fa fa-check"></i><b>4.1.1</b> Contingency Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-2"><i class="fa fa-check"></i><b>4.1.2</b> Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-manipulation"><i class="fa fa-check"></i><b>4.2</b> Data Manipulation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array"><i class="fa fa-check"></i><b>4.2.1</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array-1"><i class="fa fa-check"></i><b>4.2.2</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#show-totals"><i class="fa fa-check"></i><b>4.2.3</b> Show totals</a></li>
+<li class="chapter" data-level="4.2.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix"><i class="fa fa-check"></i><b>4.2.4</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-1"><i class="fa fa-check"></i><b>4.2.5</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-2"><i class="fa fa-check"></i><b>4.2.6</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame"><i class="fa fa-check"></i><b>4.2.7</b> Convert to data frame</a></li>
+<li class="chapter" data-level="4.2.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame-1"><i class="fa fa-check"></i><b>4.2.8</b> Convert to data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#matrix-operations"><i class="fa fa-check"></i><b>4.3</b> Matrix Operations</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics"><i class="fa fa-check"></i><b>4.3.1</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics-1"><i class="fa fa-check"></i><b>4.3.2</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names"><i class="fa fa-check"></i><b>4.3.3</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-1"><i class="fa fa-check"></i><b>4.3.4</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-2"><i class="fa fa-check"></i><b>4.3.5</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-scaling"><i class="fa fa-check"></i><b>4.3.6</b> Data scaling</a></li>
+<li class="chapter" data-level="4.3.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#diagonal-elements"><i class="fa fa-check"></i><b>4.3.7</b> Diagonal elements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#summaries"><i class="fa fa-check"></i><b>4.4</b> Summaries</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows"><i class="fa fa-check"></i><b>4.4.1</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows-1"><i class="fa fa-check"></i><b>4.4.2</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals"><i class="fa fa-check"></i><b>4.4.3</b> Totals</a></li>
+<li class="chapter" data-level="4.4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-1"><i class="fa fa-check"></i><b>4.4.4</b> Totals</a></li>
+<li class="chapter" data-level="4.4.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-2"><i class="fa fa-check"></i><b>4.4.5</b> Totals</a></li>
+<li class="chapter" data-level="4.4.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-3"><i class="fa fa-check"></i><b>4.4.6</b> Totals</a></li>
+<li class="chapter" data-level="4.4.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-4"><i class="fa fa-check"></i><b>4.4.7</b> Totals</a></li>
+<li class="chapter" data-level="4.4.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies"><i class="fa fa-check"></i><b>4.4.8</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.9" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-1"><i class="fa fa-check"></i><b>4.4.9</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.10" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-2"><i class="fa fa-check"></i><b>4.4.10</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.11" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-3"><i class="fa fa-check"></i><b>4.4.11</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.12" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#exercise-ex2.r"><i class="fa fa-check"></i><b>4.4.12</b> Exercise (ex2.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html"><i class="fa fa-check"></i><b>5</b> Summary Migration Indices</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-1"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-2"><i class="fa fa-check"></i><b>5.1.2</b> Background</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#intensity"><i class="fa fa-check"></i><b>5.2</b> Intensity</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity"><i class="fa fa-check"></i><b>5.2.1</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#crude-migration-probability"><i class="fa fa-check"></i><b>5.2.2</b> Crude migration probability</a></li>
+<li class="chapter" data-level="5.2.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-1"><i class="fa fa-check"></i><b>5.2.3</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-2"><i class="fa fa-check"></i><b>5.2.4</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-3"><i class="fa fa-check"></i><b>5.2.5</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-4"><i class="fa fa-check"></i><b>5.2.6</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-5"><i class="fa fa-check"></i><b>5.2.7</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-6"><i class="fa fa-check"></i><b>5.2.8</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-7"><i class="fa fa-check"></i><b>5.2.9</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-8"><i class="fa fa-check"></i><b>5.2.10</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.11" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-9"><i class="fa fa-check"></i><b>5.2.11</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.12" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-10"><i class="fa fa-check"></i><b>5.2.12</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.13" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-11"><i class="fa fa-check"></i><b>5.2.13</b> Migration intensity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance"><i class="fa fa-check"></i><b>5.3</b> Distance</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance"><i class="fa fa-check"></i><b>5.3.1</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#average-migration-distance"><i class="fa fa-check"></i><b>5.3.2</b> Average migration distance</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance-decay"><i class="fa fa-check"></i><b>5.3.3</b> Distance decay</a></li>
+<li class="chapter" data-level="5.3.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-1"><i class="fa fa-check"></i><b>5.3.4</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-2"><i class="fa fa-check"></i><b>5.3.5</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-3"><i class="fa fa-check"></i><b>5.3.6</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances"><i class="fa fa-check"></i><b>5.3.7</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-1"><i class="fa fa-check"></i><b>5.3.8</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-2"><i class="fa fa-check"></i><b>5.3.9</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-3"><i class="fa fa-check"></i><b>5.3.10</b> Calculating distances</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity"><i class="fa fa-check"></i><b>5.4</b> Connectivity</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity"><i class="fa fa-check"></i><b>5.4.1</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity-1"><i class="fa fa-check"></i><b>5.4.2</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity-and-inequality"><i class="fa fa-check"></i><b>5.4.3</b> Connectivity and Inequality</a></li>
+<li class="chapter" data-level="5.4.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#gini-measures"><i class="fa fa-check"></i><b>5.4.4</b> Gini measures</a></li>
+<li class="chapter" data-level="5.4.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-totals-gini-and-coefficient-of-variation"><i class="fa fa-check"></i><b>5.4.5</b> Migration totals Gini and Coefficient of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#impact"><i class="fa fa-check"></i><b>5.5</b> Impact</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact"><i class="fa fa-check"></i><b>5.5.1</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-effectiveness-index"><i class="fa fa-check"></i><b>5.5.2</b> Migration effectiveness index</a></li>
+<li class="chapter" data-level="5.5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#aggregate-net-migration-rate"><i class="fa fa-check"></i><b>5.5.3</b> Aggregate net migration rate</a></li>
+<li class="chapter" data-level="5.5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#preference-and-velocity"><i class="fa fa-check"></i><b>5.5.4</b> Preference and velocity</a></li>
+<li class="chapter" data-level="5.5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-1"><i class="fa fa-check"></i><b>5.5.5</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-2"><i class="fa fa-check"></i><b>5.5.6</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-3"><i class="fa fa-check"></i><b>5.5.7</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#exercise-ex3.r"><i class="fa fa-check"></i><b>5.5.8</b> Exercise (ex3.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html"><i class="fa fa-check"></i><b>6</b> Estimating Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration"><i class="fa fa-check"></i><b>6.1</b> Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-1"><i class="fa fa-check"></i><b>6.1.1</b> Net migration</a></li>
+<li class="chapter" data-level="6.1.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-estimation"><i class="fa fa-check"></i><b>6.1.2</b> Net migration estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statstics"><i class="fa fa-check"></i><b>6.2</b> Vital Statstics</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics"><i class="fa fa-check"></i><b>6.2.1</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-1"><i class="fa fa-check"></i><b>6.2.2</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-2"><i class="fa fa-check"></i><b>6.2.3</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-3"><i class="fa fa-check"></i><b>6.2.4</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties"><i class="fa fa-check"></i><b>6.2.5</b> Difficulties</a></li>
+<li class="chapter" data-level="6.2.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties-1"><i class="fa fa-check"></i><b>6.2.6</b> Difficulties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods"><i class="fa fa-check"></i><b>6.3</b> Survival Methods</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-1"><i class="fa fa-check"></i><b>6.3.1</b> Survival methods</a></li>
+<li class="chapter" data-level="6.3.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#forward-survival-ratios"><i class="fa fa-check"></i><b>6.3.2</b> Forward survival ratios</a></li>
+<li class="chapter" data-level="6.3.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#reverse-survival-ratios"><i class="fa fa-check"></i><b>6.3.3</b> Reverse survival ratios</a></li>
+<li class="chapter" data-level="6.3.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#average-survival-ratios"><i class="fa fa-check"></i><b>6.3.4</b> Average survival ratios</a></li>
+<li class="chapter" data-level="6.3.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r"><i class="fa fa-check"></i><b>6.3.5</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-1"><i class="fa fa-check"></i><b>6.3.6</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-2"><i class="fa fa-check"></i><b>6.3.7</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-3"><i class="fa fa-check"></i><b>6.3.8</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-4"><i class="fa fa-check"></i><b>6.3.9</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-ratios"><i class="fa fa-check"></i><b>6.3.10</b> Survival ratios</a></li>
+<li class="chapter" data-level="6.3.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#life-table-survival-ratios"><i class="fa fa-check"></i><b>6.3.11</b> Life table survival ratios</a></li>
+<li class="chapter" data-level="6.3.12" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios"><i class="fa fa-check"></i><b>6.3.12</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.13" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data"><i class="fa fa-check"></i><b>6.3.13</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.14" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-1"><i class="fa fa-check"></i><b>6.3.14</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.15" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios-1"><i class="fa fa-check"></i><b>6.3.15</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.16" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#limitations-of-census-survival-ratios"><i class="fa fa-check"></i><b>6.3.16</b> Limitations of census survival ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace"><i class="fa fa-check"></i><b>6.4</b> Birthplace</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-1"><i class="fa fa-check"></i><b>6.4.1</b> Birthplace</a></li>
+<li class="chapter" data-level="6.4.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals"><i class="fa fa-check"></i><b>6.4.2</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-1"><i class="fa fa-check"></i><b>6.4.3</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-2"><i class="fa fa-check"></i><b>6.4.4</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-3"><i class="fa fa-check"></i><b>6.4.5</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-4"><i class="fa fa-check"></i><b>6.4.6</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-5"><i class="fa fa-check"></i><b>6.4.7</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-2"><i class="fa fa-check"></i><b>6.4.8</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-3"><i class="fa fa-check"></i><b>6.4.9</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-4"><i class="fa fa-check"></i><b>6.4.10</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#exercise-ex4.r"><i class="fa fa-check"></i><b>6.4.11</b> Exercise (ex4.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html"><i class="fa fa-check"></i><b>7</b> Describing and Estimating Migration Age Structures</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro"><i class="fa fa-check"></i><b>7.1</b> Rogers Castro</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.1.1</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.1.2</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.1.3</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.1.4</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.1.5</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.1.6</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.1.7</b> Rogers Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-schedules"><i class="fa fa-check"></i><b>7.2</b> Model schedules</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules"><i class="fa fa-check"></i><b>7.2.1</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.2.2</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.2.3</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.2.4</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.2.5</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.2.6</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.2.7</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-7"><i class="fa fa-check"></i><b>7.2.8</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-8"><i class="fa fa-check"></i><b>7.2.9</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-9"><i class="fa fa-check"></i><b>7.2.10</b> Model migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-schedules"><i class="fa fa-check"></i><b>7.3</b> Fitting schedules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.3.1</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.3.2</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.3.3</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.3.4</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.3.5</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.3.6</b> Fitting Roger Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices"><i class="fa fa-check"></i><b>7.4</b> Age Indices</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-1"><i class="fa fa-check"></i><b>7.4.1</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-2"><i class="fa fa-check"></i><b>7.4.2</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-3"><i class="fa fa-check"></i><b>7.4.3</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-4"><i class="fa fa-check"></i><b>7.4.4</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-5"><i class="fa fa-check"></i><b>7.4.5</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-6"><i class="fa fa-check"></i><b>7.4.6</b> Age Indices</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#smoothing"><i class="fa fa-check"></i><b>7.5</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions"><i class="fa fa-check"></i><b>7.5.1</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-1"><i class="fa fa-check"></i><b>7.5.2</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-2"><i class="fa fa-check"></i><b>7.5.3</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-3"><i class="fa fa-check"></i><b>7.5.4</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing"><i class="fa fa-check"></i><b>7.5.5</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing-1"><i class="fa fa-check"></i><b>7.5.6</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing"><i class="fa fa-check"></i><b>7.5.7</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing-1"><i class="fa fa-check"></i><b>7.5.8</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing"><i class="fa fa-check"></i><b>7.5.9</b> Cubic spline smoothing</a></li>
+<li class="chapter" data-level="7.5.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing-1"><i class="fa fa-check"></i><b>7.5.10</b> Cubic spline smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating"><i class="fa fa-check"></i><b>7.6</b> Graduating</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-1"><i class="fa fa-check"></i><b>7.6.1</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-2"><i class="fa fa-check"></i><b>7.6.2</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-3"><i class="fa fa-check"></i><b>7.6.3</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-4"><i class="fa fa-check"></i><b>7.6.4</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#exercise-5-ex5.r"><i class="fa fa-check"></i><b>7.6.5</b> Exercise 5 (ex5.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html"><i class="fa fa-check"></i><b>8</b> Describing Bilteral Migration Data</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#components"><i class="fa fa-check"></i><b>8.1</b> Components</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model"><i class="fa fa-check"></i><b>8.1.1</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-1"><i class="fa fa-check"></i><b>8.1.2</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-2"><i class="fa fa-check"></i><b>8.1.3</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-3"><i class="fa fa-check"></i><b>8.1.4</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-4"><i class="fa fa-check"></i><b>8.1.5</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-5"><i class="fa fa-check"></i><b>8.1.6</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-6"><i class="fa fa-check"></i><b>8.1.7</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-7"><i class="fa fa-check"></i><b>8.1.8</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.9" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-8"><i class="fa fa-check"></i><b>8.1.9</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.10" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-9"><i class="fa fa-check"></i><b>8.1.10</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.11" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-10"><i class="fa fa-check"></i><b>8.1.11</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.12" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-11"><i class="fa fa-check"></i><b>8.1.12</b> Multiplicative Component Model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models"><i class="fa fa-check"></i><b>8.2</b> Log-Linear Models</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-1"><i class="fa fa-check"></i><b>8.2.1</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-2"><i class="fa fa-check"></i><b>8.2.2</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-3"><i class="fa fa-check"></i><b>8.2.3</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-4"><i class="fa fa-check"></i><b>8.2.4</b> Log-Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#dimensions"><i class="fa fa-check"></i><b>8.3</b> Dimensions</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis"><i class="fa fa-check"></i><b>8.3.1</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-1"><i class="fa fa-check"></i><b>8.3.2</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-2"><i class="fa fa-check"></i><b>8.3.3</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-3"><i class="fa fa-check"></i><b>8.3.4</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-4"><i class="fa fa-check"></i><b>8.3.5</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-5"><i class="fa fa-check"></i><b>8.3.6</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-6"><i class="fa fa-check"></i><b>8.3.7</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#exercise-ex6.r"><i class="fa fa-check"></i><b>8.3.8</b> Exercise (ex6.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html"><i class="fa fa-check"></i><b>9</b> Estimating Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp"><i class="fa fa-check"></i><b>9.1</b> IPFP</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-1"><i class="fa fa-check"></i><b>9.1.1</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-2"><i class="fa fa-check"></i><b>9.1.2</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-3"><i class="fa fa-check"></i><b>9.1.3</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-4"><i class="fa fa-check"></i><b>9.1.4</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-5"><i class="fa fa-check"></i><b>9.1.5</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp"><i class="fa fa-check"></i><b>9.1.6</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.7" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-1"><i class="fa fa-check"></i><b>9.1.7</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.8" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-2"><i class="fa fa-check"></i><b>9.1.8</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-3"><i class="fa fa-check"></i><b>9.1.9</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.10" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-4"><i class="fa fa-check"></i><b>9.1.10</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.11" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#three-dimensions"><i class="fa fa-check"></i><b>9.1.11</b> Three dimensions</a></li>
+<li class="chapter" data-level="9.1.12" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-more-complicated-data-situations"><i class="fa fa-check"></i><b>9.1.12</b> IPFP More Complicated Data Situations</a></li>
+<li class="chapter" data-level="9.1.13" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#estimating-detailed-bilateral-migration"><i class="fa fa-check"></i><b>9.1.13</b> Estimating Detailed Bilateral Migration</a></li>
+<li class="chapter" data-level="9.1.14" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-5"><i class="fa fa-check"></i><b>9.1.14</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.15" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-6"><i class="fa fa-check"></i><b>9.1.15</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.16" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-7"><i class="fa fa-check"></i><b>9.1.16</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.17" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-8"><i class="fa fa-check"></i><b>9.1.17</b> mipfp</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constraints"><i class="fa fa-check"></i><b>9.2</b> Net Constraints</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows"><i class="fa fa-check"></i><b>9.2.1</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-1"><i class="fa fa-check"></i><b>9.2.2</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-2"><i class="fa fa-check"></i><b>9.2.3</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-3"><i class="fa fa-check"></i><b>9.2.4</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-4"><i class="fa fa-check"></i><b>9.2.5</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#exercise-ex7.r"><i class="fa fa-check"></i><b>9.2.6</b> Exercise (ex7.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>10</b> Chord Diagrams for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#section-1"><i class="fa fa-check"></i><b>10.1</b> .</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#background-3"><i class="fa fa-check"></i><b>10.1.1</b> Background</a></li>
+<li class="chapter" data-level="10.1.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#map-based---the-emigrants-of-the-world-minard-1858."><i class="fa fa-check"></i><b>10.1.2</b> Map Based - The Emigrants of the World, Minard 1858.</a></li>
+<li class="chapter" data-level="10.1.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#flowline-maps"><i class="fa fa-check"></i><b>10.1.3</b> Flowline Maps</a></li>
+<li class="chapter" data-level="10.1.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#criticised-new-york-times-refugee-flow-map"><i class="fa fa-check"></i><b>10.1.4</b> Criticised New York Times refugee flow map</a></li>
+<li class="chapter" data-level="10.1.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#martin-grandjeans-attempt-to-rectify"><i class="fa fa-check"></i><b>10.1.5</b> Martin Grandjean’s attempt to rectify</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagram"><i class="fa fa-check"></i><b>10.2</b> Chord Diagram</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams"><i class="fa fa-check"></i><b>10.2.1</b> Chord Diagrams</a></li>
+<li class="chapter" data-level="10.2.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#new-york-times-2007"><i class="fa fa-check"></i><b>10.2.2</b> New York Times 2007</a></li>
+<li class="chapter" data-level="10.2.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data"><i class="fa fa-check"></i><b>10.2.3</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-1"><i class="fa fa-check"></i><b>10.2.4</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-2"><i class="fa fa-check"></i><b>10.2.5</b> Chord Diagrams with Migration Data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#circlize"><i class="fa fa-check"></i><b>10.3</b> circlize</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-in-r"><i class="fa fa-check"></i><b>10.3.1</b> Chord Diagrams in R</a></li>
+<li class="chapter" data-level="10.3.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020"><i class="fa fa-check"></i><b>10.3.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-1"><i class="fa fa-check"></i><b>10.3.3</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-2"><i class="fa fa-check"></i><b>10.3.4</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram"><i class="fa fa-check"></i><b>10.3.5</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-1"><i class="fa fa-check"></i><b>10.3.6</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-2"><i class="fa fa-check"></i><b>10.3.7</b> Default <code>chordDiagram()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sectors"><i class="fa fa-check"></i><b>10.4</b> Sectors</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-axis"><i class="fa fa-check"></i><b>10.4.1</b> Sector Axis</a></li>
+<li class="chapter" data-level="10.4.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering"><i class="fa fa-check"></i><b>10.4.2</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering-1"><i class="fa fa-check"></i><b>10.4.3</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#orientation-and-gaps"><i class="fa fa-check"></i><b>10.4.4</b> Orientation and gaps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#colour"><i class="fa fa-check"></i><b>10.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colours"><i class="fa fa-check"></i><b>10.5.1</b> Sector colours</a></li>
+<li class="chapter" data-level="10.5.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colour"><i class="fa fa-check"></i><b>10.5.2</b> Sector colour</a></li>
+<li class="chapter" data-level="10.5.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours"><i class="fa fa-check"></i><b>10.5.3</b> Chord colours</a></li>
+<li class="chapter" data-level="10.5.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours-1"><i class="fa fa-check"></i><b>10.5.4</b> Chord colours</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chords"><i class="fa fa-check"></i><b>10.6</b> Chords</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction"><i class="fa fa-check"></i><b>10.6.1</b> Direction</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-1"><i class="fa fa-check"></i><b>10.7</b> Direction</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-2"><i class="fa fa-check"></i><b>10.7.1</b> Direction</a></li>
+<li class="chapter" data-level="10.7.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-ordering"><i class="fa fa-check"></i><b>10.7.2</b> Chord ordering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels"><i class="fa fa-check"></i><b>10.8</b> Labels</a>
+<ul>
+<li class="chapter" data-level="10.8.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-1"><i class="fa fa-check"></i><b>10.8.1</b> Labels</a></li>
+<li class="chapter" data-level="10.8.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-2"><i class="fa fa-check"></i><b>10.8.2</b> Labels</a></li>
+<li class="chapter" data-level="10.8.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-3"><i class="fa fa-check"></i><b>10.8.3</b> Labels</a></li>
+<li class="chapter" data-level="10.8.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-4"><i class="fa fa-check"></i><b>10.8.4</b> Labels</a></li>
+<li class="chapter" data-level="10.8.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-5"><i class="fa fa-check"></i><b>10.8.5</b> Labels</a></li>
+<li class="chapter" data-level="10.8.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving"><i class="fa fa-check"></i><b>10.8.6</b> Saving</a></li>
+<li class="chapter" data-level="10.8.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving-1"><i class="fa fa-check"></i><b>10.8.7</b> Saving</a></li>
+<li class="chapter" data-level="10.8.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#exercise-ex8.r"><i class="fa fa-check"></i><b>10.8.8</b> Exercise (ex8.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>11</b> Sankey Plots for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-4"><i class="fa fa-check"></i><b>11.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-5"><i class="fa fa-check"></i><b>11.1.1</b> Background</a></li>
+<li class="chapter" data-level="11.1.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#men-in-napoleons-1812-russian-campaign"><i class="fa fa-check"></i><b>11.1.2</b> Men in Napoleon’s 1812 Russian Campaign</a></li>
+<li class="chapter" data-level="11.1.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plot-of-migration-in-nature-by-butler2017"><i class="fa fa-check"></i><b>11.1.3</b> Sankey plot of migration in Nature by <span class="citation"><span>Butler</span> (<span>2017</span>)</span></a></li>
+<li class="chapter" data-level="11.1.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r"><i class="fa fa-check"></i><b>11.1.4</b> Sankey plots in R</a></li>
+<li class="chapter" data-level="11.1.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r-1"><i class="fa fa-check"></i><b>11.1.5</b> Sankey plots in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format"><i class="fa fa-check"></i><b>11.2</b> Data Format</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-3"><i class="fa fa-check"></i><b>11.2.1</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-4"><i class="fa fa-check"></i><b>11.2.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-1"><i class="fa fa-check"></i><b>11.2.3</b> Data format</a></li>
+<li class="chapter" data-level="11.2.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-2"><i class="fa fa-check"></i><b>11.2.4</b> Data format</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#parrellel-sets"><i class="fa fa-check"></i><b>11.3</b> Parrellel Sets</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot"><i class="fa fa-check"></i><b>11.3.1</b> Default Plot</a></li>
+<li class="chapter" data-level="11.3.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot-1"><i class="fa fa-check"></i><b>11.3.2</b> Default Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes"><i class="fa fa-check"></i><b>11.4</b> Set Axes</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes-1"><i class="fa fa-check"></i><b>11.4.1</b> Set Axes</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-1"><i class="fa fa-check"></i><b>11.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-2"><i class="fa fa-check"></i><b>11.5.1</b> Colour</a></li>
+<li class="chapter" data-level="11.5.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-colour---failed-axis-colour"><i class="fa fa-check"></i><b>11.5.2</b> Ribbon colour - failed axis colour</a></li>
+<li class="chapter" data-level="11.5.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-transparency"><i class="fa fa-check"></i><b>11.5.3</b> Ribbon transparency</a></li>
+<li class="chapter" data-level="11.5.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour"><i class="fa fa-check"></i><b>11.5.4</b> Axis colour</a></li>
+<li class="chapter" data-level="11.5.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour-1"><i class="fa fa-check"></i><b>11.5.5</b> Axis colour</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-6"><i class="fa fa-check"></i><b>11.6</b> Labels</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-7"><i class="fa fa-check"></i><b>11.6.1</b> Labels</a></li>
+<li class="chapter" data-level="11.6.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-8"><i class="fa fa-check"></i><b>11.6.2</b> Labels</a></li>
+<li class="chapter" data-level="11.6.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-9"><i class="fa fa-check"></i><b>11.6.3</b> Labels</a></li>
+<li class="chapter" data-level="11.6.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-10"><i class="fa fa-check"></i><b>11.6.4</b> Labels</a></li>
+<li class="chapter" data-level="11.6.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-11"><i class="fa fa-check"></i><b>11.6.5</b> Labels</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing"><i class="fa fa-check"></i><b>11.7</b> Spacing</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing-1"><i class="fa fa-check"></i><b>11.7.1</b> Spacing</a></li>
+<li class="chapter" data-level="11.7.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#exercise-ex9.r"><i class="fa fa-check"></i><b>11.7.2</b> Exercise (ex9.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sankey-plots-for-visualising-bilateral-migration" class="section level1" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Sankey Plots for Visualising Bilateral Migration</h1>
+<div id="background-4" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Background</h2>
+<div id="background-5" class="section level3" number="11.1.1">
+<h3><span class="header-section-number">11.1.1</span> Background</h3>
+<ul>
+<li>An alternative approach to visualize bilateral migration are Sankey or alluvial plots.</li>
+<li>Sankey plots feature arrows with width proportional to the flow quantity.</li>
+<li>Named after Irish Captain Sankey, who used to show the energy efficiency of a steam engine in 1898.</li>
+<li>Minard’s plot of Napoleon’s Russian Campaign of 1812 was made in 1869 - before Sankey</li>
+<li>Alluvial plots are a form of Sankey plot
+<ul>
+<li>Contain blocks at nodes (e.g. origin and destination of migraiton flows)</li>
+<li>No space between blocks, implying a meaningful axis, unlike Sankey plots that do have spaces</li>
+</ul></li>
+</ul>
+</div>
+<div id="men-in-napoleons-1812-russian-campaign" class="section level3" number="11.1.2">
+<h3><span class="header-section-number">11.1.2</span> Men in Napoleon’s 1812 Russian Campaign</h3>
+<p><img src="img/Minard-napolean.png" width="1002" /></p>
+</div>
+<div id="sankey-plot-of-migration-in-nature-by-butler2017" class="section level3" number="11.1.3">
+<h3><span class="header-section-number">11.1.3</span> Sankey plot of migration in Nature by <span class="citation"><a href="#ref-Butler2017" role="doc-biblioref">Butler</a> (<a href="#ref-Butler2017" role="doc-biblioref">2017</a>)</span></h3>
+<p><embed src="img/Migration_Graphic.pdf" /><!-- --></p>
+</div>
+<div id="sankey-plots-in-r" class="section level3" number="11.1.4">
+<h3><span class="header-section-number">11.1.4</span> Sankey plots in R</h3>
+<ul>
+<li>As the number of regions or countries increases the plot become more cumbersome
+<ul>
+<li>Labels for the smaller areas get too small and the plotting area becomes a very long rectangle making it awkward to fit on paper or view on the screen.</li>
+<li>In such cases I prefer chord diagrams</li>
+</ul></li>
+<li>There are a few packages in R that have functions for Sankey plots, such as <em>sankey</em>, <em>PantaRhei</em>, <em>networkD3</em>, <em>sankeywheel</em>, <em>plotly</em>, <em>ggsankey</em>.
+<ul>
+<li>Also <em>ggalluvial</em> which produces an allivual plot, but without any spaces between each sectors.</li>
+</ul></li>
+<li>I am going to use <em>ggforce</em> which I think is the most flexible
+<ul>
+<li>At the cost of a new layout for the data set</li>
+<li>Good labels need a some work - as in <em>circlize</em> -
+because Sankey plots tend to have many set axis</li>
+<li>Migration data tend to have only two set axis (origin and destinations)</li>
+</ul></li>
+</ul>
+</div>
+<div id="sankey-plots-in-r-1" class="section level3" number="11.1.5">
+<h3><span class="header-section-number">11.1.5</span> Sankey plots in R</h3>
+<ul>
+<li>For Sankey plots with <em>ggforce</em> the <code>gather_set_data()</code> function formats the data so that every migration corridor has two rows for the size of the migration at the origin and destination</li>
+<li>Can then use standard <code>ggplot()</code> function to set up the plot format. The mapping argument includes
+<ul>
+<li><code>id</code> the id of the ribbons</li>
+<li><code>value</code> the size of the ribbons</li>
+<li><code>split</code> categories for splitting of the ribbons</li>
+</ul></li>
+<li>Add on layers for the ribbons themselves using <code>geom_parallel_sets()</code></li>
+<li>Add blocks at the end of the ribbons to allow for clear identification of origin and destinations using <code>geom_parallel_sets_axes()</code></li>
+<li>Add labels at the start and end of the ribbons using <code>geom_parallel_sets_axes()</code></li>
+</ul>
+</div>
+</div>
+<div id="data-format" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Data Format</h2>
+<div id="un-international-migrant-stock-data-2020-3" class="section level3" number="11.2.1">
+<h3><span class="header-section-number">11.2.1</span> UN international migrant stock data 2020</h3>
+<ul>
+<li><span class="citation"><a href="#ref-UNPD2020" role="doc-biblioref">United Nations Department of Economic and Social Affairs Population Division</a> (<a href="#ref-UNPD2020" role="doc-biblioref">2020</a>)</span> stock data as before</li>
+</ul>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb350-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb350-2" aria-hidden="true" tabindex="-1"></a>un <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;data/un_desa_ims_tidy.csv&quot;</span>)</span>
+<span id="cb350-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb350-3" aria-hidden="true" tabindex="-1"></a>un</span></code></pre></div>
+<pre><code>## # A tibble: 259,357 x 6
+##     year     stock por_name por_code pob_name           pob_code
+##    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
+##  1  1990 152986157 WORLD         900 WORLD                   900
+##  2  1995 161289976 WORLD         900 WORLD                   900
+##  3  2000 173230585 WORLD         900 WORLD                   900
+##  4  2005 191446828 WORLD         900 WORLD                   900
+##  5  2010 220983187 WORLD         900 WORLD                   900
+##  6  2015 247958644 WORLD         900 WORLD                   900
+##  7  2020 280598105 WORLD         900 WORLD                   900
+##  8  1990  15334807 WORLD         900 Sub-Saharan Africa      947
+##  9  1995  16488973 WORLD         900 Sub-Saharan Africa      947
+## 10  2000  15638014 WORLD         900 Sub-Saharan Africa      947
+## # ... with 259,347 more rows</code></pre>
+</div>
+<div id="un-international-migrant-stock-data-2020-4" class="section level3" number="11.2.2">
+<h3><span class="header-section-number">11.2.2</span> UN international migrant stock data 2020</h3>
+<ul>
+<li>Plot between World Bank income groups</li>
+</ul>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="co"># codes for income groups</span></span>
+<span id="cb352-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-2" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1503</span><span class="sc">:</span><span class="dv">1500</span>, <span class="dv">2003</span>)</span>
+<span id="cb352-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> un <span class="sc">%&gt;%</span></span>
+<span id="cb352-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(por_code <span class="sc">%in%</span> cc, </span>
+<span id="cb352-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-5" aria-hidden="true" tabindex="-1"></a>         pob_code <span class="sc">%in%</span> cc,</span>
+<span id="cb352-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-6" aria-hidden="true" tabindex="-1"></a>         year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb352-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">orig =</span> pob_name, </span>
+<span id="cb352-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">dest =</span> por_name) <span class="sc">%&gt;%</span></span>
+<span id="cb352-9"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stock =</span> stock<span class="sc">/</span><span class="fl">1e6</span>)</span>
+<span id="cb352-10"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb352-10" aria-hidden="true" tabindex="-1"></a>d</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 6
+##     year  stock dest                          por_code orig             pob_code
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;
+##  1  2020 45.8   High-income countries             1503 High-income cou~     1503
+##  2  2020 59.9   High-income countries             1503 Upper-middle-in~     1502
+##  3  2020 58.0   High-income countries             1503 Lower-middle-in~     1501
+##  4  2020 10.5   High-income countries             1503 Low-income coun~     1500
+##  5  2020  5.66  Upper-middle-income countries     1502 High-income cou~     1503
+##  6  2020 20.6   Upper-middle-income countries     1502 Upper-middle-in~     1502
+##  7  2020 18.3   Upper-middle-income countries     1502 Lower-middle-in~     1501
+##  8  2020 10.8   Upper-middle-income countries     1502 Low-income coun~     1500
+##  9  2020  0.961 Lower-middle-income countries     1501 High-income cou~     1503
+## 10  2020  6.45  Lower-middle-income countries     1501 Upper-middle-in~     1502
+## 11  2020 10.5   Lower-middle-income countries     1501 Lower-middle-in~     1501
+## 12  2020  7.93  Lower-middle-income countries     1501 Low-income coun~     1500
+## 13  2020  0.102 Low-income countries              1500 High-income cou~     1503
+## 14  2020  0.579 Low-income countries              1500 Upper-middle-in~     1502
+## 15  2020  2.90  Low-income countries              1500 Lower-middle-in~     1501
+## 16  2020  8.12  Low-income countries              1500 Low-income coun~     1500</code></pre>
+</div>
+<div id="data-format-1" class="section level3" number="11.2.3">
+<h3><span class="header-section-number">11.2.3</span> Data format</h3>
+<ul>
+<li>Format data for Sankey plot using <code>gather_set_data()</code> function in <em>ggforce</em></li>
+</ul>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span>
+<span id="cb354-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb354-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb354-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(orig, dest, stock) <span class="sc">%&gt;%</span></span>
+<span id="cb354-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_set_data</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb354-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb354-6" aria-hidden="true" tabindex="-1"></a>s</span></code></pre></div>
+<pre><code>## # A tibble: 32 x 6
+##    orig                          dest            stock    id x     y            
+##    &lt;chr&gt;                         &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;        
+##  1 High-income countries         High-income c~ 45.8       1 orig  High-income ~
+##  2 Upper-middle-income countries High-income c~ 59.9       2 orig  Upper-middle~
+##  3 Lower-middle-income countries High-income c~ 58.0       3 orig  Lower-middle~
+##  4 Low-income countries          High-income c~ 10.5       4 orig  Low-income c~
+##  5 High-income countries         Upper-middle-~  5.66      5 orig  High-income ~
+##  6 Upper-middle-income countries Upper-middle-~ 20.6       6 orig  Upper-middle~
+##  7 Lower-middle-income countries Upper-middle-~ 18.3       7 orig  Lower-middle~
+##  8 Low-income countries          Upper-middle-~ 10.8       8 orig  Low-income c~
+##  9 High-income countries         Lower-middle-~  0.961     9 orig  High-income ~
+## 10 Upper-middle-income countries Lower-middle-~  6.45     10 orig  Upper-middle~
+## # ... with 22 more rows</code></pre>
+</div>
+<div id="data-format-2" class="section level3" number="11.2.4">
+<h3><span class="header-section-number">11.2.4</span> Data format</h3>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(s)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 6
+##   orig                          dest            stock    id x     y             
+##   &lt;chr&gt;                         &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         
+## 1 Lower-middle-income countries Lower-middle-~ 10.5      11 dest  Lower-middle-~
+## 2 Low-income countries          Lower-middle-~  7.93     12 dest  Lower-middle-~
+## 3 High-income countries         Low-income co~  0.102    13 dest  Low-income co~
+## 4 Upper-middle-income countries Low-income co~  0.579    14 dest  Low-income co~
+## 5 Lower-middle-income countries Low-income co~  2.90     15 dest  Low-income co~
+## 6 Low-income countries          Low-income co~  8.12     16 dest  Low-income co~</code></pre>
+</div>
+</div>
+<div id="parrellel-sets" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> Parrellel Sets</h2>
+<div id="default-plot" class="section level3" number="11.3.1">
+<h3><span class="header-section-number">11.3.1</span> Default Plot</h3>
+<ul>
+<li>Pass the different columns to <code>ggplot()</code> mappings</li>
+<li>The <code>geom_parallel_sets()</code> plots the ribbons</li>
+</ul>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb358-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb358-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb358-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb358-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb358-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-default-1.png" width="576" /></p>
+</div>
+<div id="default-plot-1" class="section level3" number="11.3.2">
+<h3><span class="header-section-number">11.3.2</span> Default Plot</h3>
+<ul>
+<li>By default the x-axis goes in alphabetical order
+<ul>
+<li>Use factors to set ordering of categorical variable</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb359-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(s<span class="sc">$</span>x)</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb361-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">mutate</span>(s, <span class="at">x =</span> <span class="fu">fct_rev</span>(x))</span>
+<span id="cb361-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb361-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(s<span class="sc">$</span>x)</span></code></pre></div>
+<pre><code>## [1] &quot;orig&quot; &quot;dest&quot;</code></pre>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb363-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb363-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb363-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb363-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-x-axis-1.png" width="576" /></p>
+</div>
+</div>
+<div id="set-axes" class="section level2" number="11.4">
+<h2><span class="header-section-number">11.4</span> Set Axes</h2>
+<div id="set-axes-1" class="section level3" number="11.4.1">
+<h3><span class="header-section-number">11.4.1</span> Set Axes</h3>
+<ul>
+<li>The <code>geom_parallel_sets_axes()</code> function adds blocks besides the start and end of the ribbons
+<ul>
+<li>Set the width (as a proportion) using <code>axis.width</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb364-1" aria-hidden="true" tabindex="-1"></a><span class="co"># default axis.width</span></span>
+<span id="cb364-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb364-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb364-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb364-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb364-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb364-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>() <span class="sc">+</span></span>
+<span id="cb364-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb364-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-set-axis-1.png" width="576" /></p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wider axis.width</span></span>
+<span id="cb365-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb365-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb365-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb365-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb365-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb365-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>() <span class="sc">+</span></span>
+<span id="cb365-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb365-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">axis.width =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-set-axis-2.png" width="576" /></p>
+</div>
+</div>
+<div id="colour-1" class="section level2" number="11.5">
+<h2><span class="header-section-number">11.5</span> Colour</h2>
+<div id="colour-2" class="section level3" number="11.5.1">
+<h3><span class="header-section-number">11.5.1</span> Colour</h3>
+<ul>
+<li>Use <code>mapping</code> in <code>geom_parallel_sets()</code> to set the colours
+<ul>
+<li>Fill the colours following the origin regions, as was the case in the chord diagrams</li>
+</ul></li>
+<li>The <code>geom_parallel_sets_axes()</code> cannot take a fill colour from the data frame</li>
+</ul>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb366-1" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_parallel_sets_axes cannot take fill colours from data</span></span>
+<span id="cb366-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb366-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y, <span class="at">fill =</span> orig)) <span class="sc">+</span></span>
+<span id="cb366-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb366-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>() <span class="sc">+</span></span>
+<span id="cb366-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb366-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>()</span></code></pre></div>
+<pre><code>## Warning: Computation failed in `stat_parallel_sets_axes()`:
+## Axis aesthetics must be constant in each split</code></pre>
+<p><img src="_main_files/figure-html/sankey-col-1.png" width="576" /></p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set fill colour for parallel_sets only</span></span>
+<span id="cb368-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb368-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb368-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb368-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig)) <span class="sc">+</span></span>
+<span id="cb368-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb368-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-col-2.png" width="576" /></p>
+</div>
+<div id="ribbon-colour---failed-axis-colour" class="section level3" number="11.5.2">
+<h3><span class="header-section-number">11.5.2</span> Ribbon colour - failed axis colour</h3>
+</div>
+<div id="ribbon-transparency" class="section level3" number="11.5.3">
+<h3><span class="header-section-number">11.5.3</span> Ribbon transparency</h3>
+<ul>
+<li>Add some transparency in the ribbons using the <code>alpha</code> argument in <code>geom_parallel_sets()</code></li>
+</ul>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb369-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transparency of 0.8</span></span>
+<span id="cb369-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb369-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb369-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb369-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb369-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb369-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-col-tran-1.png" width="576" /></p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transparency of 0.2</span></span>
+<span id="cb370-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb370-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb370-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb370-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb370-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb370-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-col-tran-2.png" width="576" /></p>
+</div>
+<div id="axis-colour" class="section level3" number="11.5.4">
+<h3><span class="header-section-number">11.5.4</span> Axis colour</h3>
+<ul>
+<li>To see the set axis colours we can draw an outline using the <code>colour</code> argument.
+<ul>
+<li>Also set <code>fill = "transparent"</code> in order to view the underlying ribbons</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb371-1" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_parallel_sets_axes is an axis, can provide outline colour only</span></span>
+<span id="cb371-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb371-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb371-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb371-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb371-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb371-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-axis-col-1.png" width="576" /></p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_parallel_sets_axes is an axis, can provide outline colour only</span></span>
+<span id="cb372-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb372-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb372-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig)) <span class="sc">+</span></span>
+<span id="cb372-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb372-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb372-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb372-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">axis.width =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-axis-col-2.png" width="576" /></p>
+</div>
+<div id="axis-colour-1" class="section level3" number="11.5.5">
+<h3><span class="header-section-number">11.5.5</span> Axis colour</h3>
+<ul>
+<li>Tweak the width in <code>geom_parallel_sets()</code> so that it fills into the axis box
+<ul>
+<li>Need to set <code>fill = "transparent"</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb373-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb373-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb373-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb373-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb373-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb373-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb373-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-axis-fill-1.png" width="576" /></p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="co"># narrower set axes</span></span>
+<span id="cb374-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb374-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb374-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb374-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb374-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb374-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb374-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb374-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-axis-fill-2.png" width="576" /></p>
+</div>
+</div>
+<div id="labels-6" class="section level2" number="11.6">
+<h2><span class="header-section-number">11.6</span> Labels</h2>
+<div id="labels-7" class="section level3" number="11.6.1">
+<h3><span class="header-section-number">11.6.1</span> Labels</h3>
+<ul>
+<li>Add labels on the x-axis using <code>scale_x_discrete()</code> from <em>ggplot2</em></li>
+<li>Add labels to the sets using <code>geom_parallel_sets_labels()</code> from <em>ggforce</em>
+<ul>
+<li>Terrible default positions and angles if labels are not very short.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb375-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb375-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb375-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb375-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb375-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>() <span class="sc">+</span></span>
+<span id="cb375-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb375-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb375-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-default-lab-1.png" width="576" /></p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb376-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb376-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb376-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb376-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb376-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>(<span class="at">angle =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb376-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb376-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb376-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-default-lab-2.png" width="576" /></p>
+</div>
+<div id="labels-8" class="section level3" number="11.6.2">
+<h3><span class="header-section-number">11.6.2</span> Labels</h3>
+<ul>
+<li>Change order of origin and destinations by modifying the levels of the factors
+<ul>
+<li>Set levels to order they appear in the <code>y</code> column using <code>fct_inorder()</code> in the <em>forcats</em> package</li>
+<li>Remove unnecessary parts in the label</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb377-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(s<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb379-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> s <span class="sc">%&gt;%</span></span>
+<span id="cb379-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb379-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">str_remove</span>(<span class="at">string =</span> y, <span class="at">pattern =</span> <span class="st">&quot;-income countries&quot;</span>),</span>
+<span id="cb379-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb379-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">fct_inorder</span>(y))</span>
+<span id="cb379-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb379-4" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(s<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] &quot;High&quot;         &quot;Upper-middle&quot; &quot;Lower-middle&quot; &quot;Low&quot;</code></pre>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb381-1" aria-hidden="true" tabindex="-1"></a>s</span></code></pre></div>
+<pre><code>## # A tibble: 32 x 6
+##    orig                          dest                 stock    id x     y       
+##    &lt;chr&gt;                         &lt;chr&gt;                &lt;dbl&gt; &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   
+##  1 High-income countries         High-income countr~ 45.8       1 orig  High    
+##  2 Upper-middle-income countries High-income countr~ 59.9       2 orig  Upper-m~
+##  3 Lower-middle-income countries High-income countr~ 58.0       3 orig  Lower-m~
+##  4 Low-income countries          High-income countr~ 10.5       4 orig  Low     
+##  5 High-income countries         Upper-middle-incom~  5.66      5 orig  High    
+##  6 Upper-middle-income countries Upper-middle-incom~ 20.6       6 orig  Upper-m~
+##  7 Lower-middle-income countries Upper-middle-incom~ 18.3       7 orig  Lower-m~
+##  8 Low-income countries          Upper-middle-incom~ 10.8       8 orig  Low     
+##  9 High-income countries         Lower-middle-incom~  0.961     9 orig  High    
+## 10 Upper-middle-income countries Lower-middle-incom~  6.45     10 orig  Upper-m~
+## # ... with 22 more rows</code></pre>
+</div>
+<div id="labels-9" class="section level3" number="11.6.3">
+<h3><span class="header-section-number">11.6.3</span> Labels</h3>
+<ul>
+<li>Run same code as before, with updates <code>s</code>,…</li>
+</ul>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb383-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb383-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb383-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb383-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb383-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb383-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>(<span class="at">angle =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb383-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb383-9"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb383-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-fct-1.png" width="576" /></p>
+</div>
+<div id="labels-10" class="section level3" number="11.6.4">
+<h3><span class="header-section-number">11.6.4</span> Labels</h3>
+<ul>
+<li>Set up a label data frame to adjust position and alignment</li>
+</ul>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb384-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> s <span class="sc">%&gt;%</span></span>
+<span id="cb384-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb384-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(x, y) <span class="sc">%&gt;%</span></span>
+<span id="cb384-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb384-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">h =</span> <span class="fu">as.numeric</span>(x <span class="sc">==</span> <span class="st">&quot;orig&quot;</span>), </span>
+<span id="cb384-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb384-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">n =</span> h <span class="sc">*</span> <span class="sc">-</span><span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.05</span>)</span>
+<span id="cb384-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb384-5" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 4
+##   x     y                h     n
+##   &lt;fct&gt; &lt;fct&gt;        &lt;dbl&gt; &lt;dbl&gt;
+## 1 orig  High             1 -0.05
+## 2 orig  Upper-middle     1 -0.05
+## 3 orig  Lower-middle     1 -0.05
+## 4 orig  Low              1 -0.05
+## 5 dest  High             0  0.05
+## 6 dest  Upper-middle     0  0.05
+## 7 dest  Lower-middle     0  0.05
+## 8 dest  Low              0  0.05</code></pre>
+</div>
+<div id="labels-11" class="section level3" number="11.6.5">
+<h3><span class="header-section-number">11.6.5</span> Labels</h3>
+<ul>
+<li>Pass the position coordinates to the ggplot code</li>
+</ul>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb386-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb386-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, </span>
+<span id="cb386-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb386-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb386-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb386-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb386-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> p<span class="sc">$</span>h, </span>
+<span id="cb386-9"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> p<span class="sc">$</span>n)) <span class="sc">+</span></span>
+<span id="cb386-10"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb386-11"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb386-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-lab-1.png" width="576" /></p>
+</div>
+</div>
+<div id="spacing" class="section level2" number="11.7">
+<h2><span class="header-section-number">11.7</span> Spacing</h2>
+<div id="spacing-1" class="section level3" number="11.7.1">
+<h3><span class="header-section-number">11.7.1</span> Spacing</h3>
+<ul>
+<li>We convert the Sankey plot to an alluvial plot by reducing the space separating the parallel sets to zero via the <code>sep</code> argument
+<ul>
+<li>Need to set <code>sep</code> in all the geom functions for alignment.</li>
+<li>Default is <code>sep = 0.05</code> (5%)</li>
+<li>Might need to reduce when have many regions</li>
+</ul></li>
+<li>In alluvial plots the y-axis are more meaningful
+<ul>
+<li>Add y-axis labels via <code>labs()</code> function</li>
+</ul></li>
+<li>Set background to white using <code>theme_bw()</code> function</li>
+</ul>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s,</span>
+<span id="cb387-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> stock, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb387-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, </span>
+<span id="cb387-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>, <span class="at">sep =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb387-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb387-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="fl">0.05</span>, <span class="at">sep =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb387-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb387-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> p<span class="sc">$</span>h, </span>
+<span id="cb387-9"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> p<span class="sc">$</span>n, ), <span class="at">sep =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb387-10"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb387-11"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb387-12"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Migrants (millions)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb387-13"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb387-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/sankey-spacing-1.png" width="576" /></p>
+</div>
+<div id="exercise-ex9.r" class="section level3" number="11.7.2">
+<h3><span class="header-section-number">11.7.2</span> Exercise (ex9.R)</h3>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.  a) Load the KOSTAT2021.Rproj file. </span></span>
+<span id="cb388-2"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     Run the getwd() below. It should print the directory where the </span></span>
+<span id="cb388-3"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     KOSTAT2021.Rproj file is located.</span></span>
+<span id="cb388-4"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-4" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb388-5"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     b) Load the packages used in this exercise</span></span>
+<span id="cb388-6"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb388-7"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span>
+<span id="cb388-8"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-8" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb388-9"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-9" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb388-10"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-10" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb388-11"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-11" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb388-12"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run the code below to read in the migrant stock data from Gabon taken</span></span>
+<span id="cb388-13"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-13" aria-hidden="true" tabindex="-1"></a><span class="co">#    from Table 21-6 in Shryock &amp; Siegel (1979)</span></span>
+<span id="cb388-14"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-14" aria-hidden="true" tabindex="-1"></a>ga <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./data/gabon_1961_tidy.csv&quot;</span>) </span>
+<span id="cb388-15"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-15" aria-hidden="true" tabindex="-1"></a>ga</span>
+<span id="cb388-16"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run the code below to remove the totals groups and migrants from abroad</span></span>
+<span id="cb388-17"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-17" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> ga <span class="sc">%&gt;%</span></span>
+<span id="cb388-18"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">orig =</span> place_of_birth, </span>
+<span id="cb388-19"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">dest =</span> place_of_enumeration) <span class="sc">%&gt;%</span></span>
+<span id="cb388-20"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">&quot;total&quot;</span>, </span>
+<span id="cb388-21"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-21" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span>orig <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Grand total&quot;</span>, <span class="st">&quot;Abroad&quot;</span>, <span class="st">&quot;Total Gabon&quot;</span>), </span>
+<span id="cb388-22"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-22" aria-hidden="true" tabindex="-1"></a>         dest <span class="sc">!=</span> <span class="st">&quot;Total&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb388-23"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sex)</span>
+<span id="cb388-24"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-24" aria-hidden="true" tabindex="-1"></a>d</span>
+<span id="cb388-25"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create a data frame s1 using the gather_set_data() function to organise the</span></span>
+<span id="cb388-26"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-26" aria-hidden="true" tabindex="-1"></a><span class="co">#    Gabon data in d ready for a Sankey plot using geom_parallel_sets</span></span>
+<span id="cb388-27"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-27" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb388-28"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(orig, dest, <span class="do">#####) %&gt;%</span></span>
+<span id="cb388-29"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-29" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####(x = 1:#####)</span></span>
+<span id="cb388-30"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-30" aria-hidden="true" tabindex="-1"></a>s1</span>
+<span id="cb388-31"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Run an initial plot on s1 to inspect for potential changes required to the</span></span>
+<span id="cb388-32"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-32" aria-hidden="true" tabindex="-1"></a><span class="co">#    the data frame</span></span>
+<span id="cb388-33"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s1,</span>
+<span id="cb388-34"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> migrants, <span class="at">split =</span> y)) <span class="sc">+</span></span>
+<span id="cb388-35"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig)) </span>
+<span id="cb388-36"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-36" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Create a new data s2, based on d, that </span></span>
+<span id="cb388-37"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-37" aria-hidden="true" tabindex="-1"></a><span class="co">#    a. Sets migrant counts to zero for the migrant corridors for native born</span></span>
+<span id="cb388-38"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-38" aria-hidden="true" tabindex="-1"></a><span class="co">#       persons, where the place of enumeration is the same as the place of </span></span>
+<span id="cb388-39"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-39" aria-hidden="true" tabindex="-1"></a><span class="co">#       birth (orig == dest)</span></span>
+<span id="cb388-40"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-40" aria-hidden="true" tabindex="-1"></a><span class="co">#    b. Divide the migrant counts by one thousand</span></span>
+<span id="cb388-41"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-41" aria-hidden="true" tabindex="-1"></a><span class="co">#    c. Re-organises the data using the gather_set_data() function</span></span>
+<span id="cb388-42"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-42" aria-hidden="true" tabindex="-1"></a><span class="co">#    d. Sets both x and y to factors based on order of appearance using the </span></span>
+<span id="cb388-43"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-43" aria-hidden="true" tabindex="-1"></a><span class="co">#       fct_inorder() function (which broadly follows a north to south order)</span></span>
+<span id="cb388-44"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-44" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span>  d <span class="sc">%&gt;%</span></span>
+<span id="cb388-45"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">migrants =</span> <span class="fu">ifelse</span>(<span class="at">test =</span> orig <span class="sc">==</span> <span class="do">#####, yes = #####, no = migrants),</span></span>
+<span id="cb388-46"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-46" aria-hidden="true" tabindex="-1"></a>         <span class="at">migrants =</span> migrants<span class="sc">/</span><span class="do">#####) %&gt;%</span></span>
+<span id="cb388-47"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(orig, dest, migrants) <span class="sc">%&gt;%</span></span>
+<span id="cb388-48"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-48" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####(x = 1:2) %&gt;%</span></span>
+<span id="cb388-49"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(x),</span>
+<span id="cb388-50"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-50" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="do">#####(y))</span></span>
+<span id="cb388-51"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-51" aria-hidden="true" tabindex="-1"></a>s2</span>
+<span id="cb388-52"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-52" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(s2<span class="sc">$</span>y)</span>
+<span id="cb388-53"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-53" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Create an object p that sets the horizontal positioning and nudge amount</span></span>
+<span id="cb388-54"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-54" aria-hidden="true" tabindex="-1"></a><span class="co">#    for each origin and destination label</span></span>
+<span id="cb388-55"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-55" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> s2 <span class="sc">%&gt;%</span></span>
+<span id="cb388-56"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-56" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####(x, y) %&gt;%</span></span>
+<span id="cb388-57"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">h =</span> <span class="fu">as.numeric</span>(x <span class="sc">==</span> <span class="st">&quot;orig&quot;</span>),</span>
+<span id="cb388-58"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-58" aria-hidden="true" tabindex="-1"></a>         <span class="at">n =</span> h <span class="sc">*</span> <span class="sc">-</span><span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.05</span>)</span>
+<span id="cb388-59"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-59" aria-hidden="true" tabindex="-1"></a>p</span>
+<span id="cb388-60"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-60" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Complete the code below for a plot of the intra-regional migrant </span></span>
+<span id="cb388-61"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-61" aria-hidden="true" tabindex="-1"></a><span class="co">#    distributions for Gabon</span></span>
+<span id="cb388-62"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-62" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> s2,</span>
+<span id="cb388-63"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">id =</span> id, <span class="at">value =</span> <span class="do">#####, split = y)) +</span></span>
+<span id="cb388-64"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> orig), <span class="at">alpha =</span> <span class="fl">0.8</span>, </span>
+<span id="cb388-65"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-65" aria-hidden="true" tabindex="-1"></a>                     <span class="at">axis.width =</span> <span class="sc">-</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb388-66"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_axes</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb388-67"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-67" aria-hidden="true" tabindex="-1"></a>                          <span class="at">axis.width =</span> <span class="do">#####) +</span></span>
+<span id="cb388-68"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="do">#####) +</span></span>
+<span id="cb388-69"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parallel_sets_labels</span>(<span class="at">angle =</span> <span class="do">#####, hjust = p$h, </span></span>
+<span id="cb388-70"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-70" aria-hidden="true" tabindex="-1"></a>                            <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> p<span class="sc">$</span>n, )) <span class="sc">+</span></span>
+<span id="cb388-71"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="at">orig =</span> <span class="st">&quot;Place of Birth&quot;</span>, </span>
+<span id="cb388-72"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-72" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dest =</span> <span class="st">&quot;Place of Residence&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb388-73"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Migrants (thousands)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb388-74"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb388-75"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-75" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. Run the code below to check the PDF (might not work on Mac - if so, </span></span>
+<span id="cb388-76"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-76" aria-hidden="true" tabindex="-1"></a><span class="co">#    manually open PDF file to view)</span></span>
+<span id="cb388-77"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-77" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;./exercise/gabon1961.pdf&quot;</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">width =</span> <span class="dv">8</span>)</span>
+<span id="cb388-78"><a href="sankey-plots-for-visualising-bilateral-migration.html#cb388-78" aria-hidden="true" tabindex="-1"></a><span class="fu">file.show</span>(<span class="st">&quot;./exercise/gabon1961.pdf&quot;</span>)</span></code></pre></div>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Abel, Guy J. 2013. <span>“<span class="nocase">Estimating global migration flow tables using place of birth data</span>.”</span> <em>Demographic Research</em> 28 (March): 505–46. <a href="https://doi.org/10.4054/DemRes.2013.28.18">https://doi.org/10.4054/DemRes.2013.28.18</a>.
+</div>
+<div class="csl-entry">
+Abel, Guy J., and Joel E. Cohen. 2019. <span>“<span class="nocase">Bilateral international migration flow estimates for 200 countries</span>.”</span> <em>Scientific Data</em> 6 (1): 82. <a href="https://doi.org/10.1038/s41597-019-0089-3">https://doi.org/10.1038/s41597-019-0089-3</a>.
+</div>
+<div class="csl-entry">
+Abel, Guy J., and Nikola Sander. 2014. <span>“<span>Quantifying Global International Migration Flows</span>.”</span> <em>Science</em> 343 (6178): 1520–22. <a href="https://doi.org/10.1126/science.1248676">https://doi.org/10.1126/science.1248676</a>.
+</div>
+<div class="csl-entry">
+Barthélemy, Johan, and Thomas Suesse. 2018. <span>“<span class="nocase"><span>&lt;</span>b<span>&gt;</span>mipfp<span>&lt;</span>/b<span>&gt;</span> : An <span>&lt;</span>i<span>&gt;</span>R<span>&lt;</span>/i<span>&gt;</span> Package for Multidimensional Array Fitting and Simulating Multivariate Bernoulli Distributions</span>.”</span> <em>Journal of Statistical Software</em> 86 (Code Snippet 2). <a href="https://doi.org/10.18637/jss.v086.c02">https://doi.org/10.18637/jss.v086.c02</a>.
+</div>
+<div class="csl-entry">
+Beer, Joop de, James Raymer, Rob van der Erf, and Leo van Wissen. 2010. <span>“<span class="nocase">Overcoming the Problems of Inconsistent International Migration data: A New Method Applied to Flows in Europe</span>.”</span> <em>European Journal of Population / Revue Europ<span>é</span>enne de D<span>é</span>mographie</em> 26 (4): 459–81. <a href="https://doi.org/10.1007/s10680-010-9220-z">https://doi.org/10.1007/s10680-010-9220-z</a>.
+</div>
+<div class="csl-entry">
+Bell, Martin, Marcus Blake, Paul Boyle, O. Duke-Williams, Philip H. Rees, John Stillwell, and Graeme John Hugo. 2002. <span>“<span class="nocase">Cross-national comparison of internal migration: issues and measures</span>.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 165 (3): 435–64. <a href="https://doi.org/10.1111/1467-985X.00247">https://doi.org/10.1111/1467-985X.00247</a>.
+</div>
+<div class="csl-entry">
+Bell, Martin, Elin Charles-Edwards, Dorota Kupiszewska, Marek Kupiszewski, John Stillwell, and Yu Zhu. 2015. <span>“<span class="nocase">Internal Migration Data Around the World: Assessing Contemporary Practice</span>.”</span> <em>Population, Space and Place</em> 21 (1): 1–17. <a href="https://doi.org/10.1002/psp.1848">https://doi.org/10.1002/psp.1848</a>.
+</div>
+<div class="csl-entry">
+Bell, Martin, Elin Charles-Edwards, Philipp Ueffing, John Stillwell, Marek Kupiszewski, and Dorota Kupiszewska. 2015. <span>“<span class="nocase">Internal Migration and Development: Comparing Migration Intensities Around the World</span>.”</span> <em>Population and Development Review</em> 41 (1): 33–58. <a href="https://doi.org/10.1111/j.1728-4457.2015.00025.x">https://doi.org/10.1111/j.1728-4457.2015.00025.x</a>.
+</div>
+<div class="csl-entry">
+Bell, Martin, and Salut Muhidin. 2009. <span>“<span class="nocase">Cross-National Comparisons of Internal Migration</span>.”</span> Human Development Reports. United Nations Development Programme.
+</div>
+<div class="csl-entry">
+Bernard, Aude, Martin Bell, and Elin Charles-Edwards. 2014. <span>“<span class="nocase">Improved measures for the cross-national comparison of age profiles of internal migration</span>.”</span> <em>Population Studies</em> 68 (2): 179–95. <a href="https://doi.org/10.1080/00324728.2014.890243">https://doi.org/10.1080/00324728.2014.890243</a>.
+</div>
+<div class="csl-entry">
+Bogue, Donald J, Kenneth Hinze, and Michael White. 1982. <em><span class="nocase">Techniques of Estimating Net Migration</span></em>. Chicago, USA: Community; Family Study Center. University of Chicago.
+</div>
+<div class="csl-entry">
+Butler, Declan. 2017. <span>“<span class="nocase">What the numbers say about refugees</span>.”</span> <em>Nature</em> 543 (7643): 22–23. <a href="https://doi.org/10.1038/543022a">https://doi.org/10.1038/543022a</a>.
+</div>
+<div class="csl-entry">
+Courgeau, Daniel. 1973. <span>“<span class="nocase">Migrations et d<span class="nocase">é</span>coupages du territoire</span>.”</span> <em>Population (French Edition)</em> 28 (3): 511. <a href="https://doi.org/10.2307/1530704">https://doi.org/10.2307/1530704</a>.
+</div>
+<div class="csl-entry">
+———. 1979. <span>“<span class="nocase">Migrants and migrations</span>.”</span> <em>Population (English Edition)</em> 3: 1—–35.
+</div>
+<div class="csl-entry">
+Deming, W. Edwards, and Frederick F Stephan. 1940. <span>“<span class="nocase">On a Least Squares Adjustment of a Sampled Frequency Table When the Expected Marginal Totals are Known</span>.”</span> <em>The Annals of Mathematical Statistics</em> 11 (4): 427–44. <a href="https://doi.org/10.1214/aoms/1177731829">https://doi.org/10.1214/aoms/1177731829</a>.
+</div>
+<div class="csl-entry">
+Edwards, Robin, Maksym Bondarenko, Alessandro Sorichetta, and Andrew J. Tatem. 2021. <span>“<span class="nocase">Unconstrained subnational Population Weighted Density in 2000, 2005, 2010, 2015 and 2020 ( 100m resolution )</span>.”</span> Southampton, UK: WorldPop, University of Southampton, UK. <a href="https://doi.org/10.5258/SOTON/WP00703">https://doi.org/10.5258/SOTON/WP00703</a>.
+</div>
+<div class="csl-entry">
+Gu, Z., Lei Gu, Roland Eils, Matthias Schlesner, and Benedikt Brors. 2014. <span>“<span class="nocase">circlize implements and enhances circular visualization in R</span>.”</span> <em>Bioinformatics</em> 30 (19): 2811–12. <a href="https://doi.org/10.1093/bioinformatics/btu393">https://doi.org/10.1093/bioinformatics/btu393</a>.
+</div>
+<div class="csl-entry">
+Imhoff, Evert van, Nicole van der Gaag, Leo van Wissen, and Philip H. Rees. 1997. <span>“<span class="nocase">The selection of internal migration models for European regions.</span>”</span> <em>International Journal of Population Geography IJPG</em> 3 (2): 137–59. <a href="https://doi.org/10.1002/(SICI)1099-1220(199706)3:2&lt;137::AID-IJPG63&gt;3.0.CO;2-R">https://doi.org/10.1002/(SICI)1099-1220(199706)3:2&lt;137::AID-IJPG63&gt;3.0.CO;2-R</a>.
+</div>
+<div class="csl-entry">
+Krzywinski, Martin, Jacqueline Schein, Inanç Birol, Joseph Connors, Randy Gascoyne, Doug Horsman, Steven J. Jones, and Marco A. Marra. 2009. <span>“<span class="nocase">Circos: An information aesthetic for comparative genomics</span>.”</span> <em>Genome Research</em> 19 (9): 1639–45. <a href="https://doi.org/10.1101/gr.092759.109">https://doi.org/10.1101/gr.092759.109</a>.
+</div>
+<div class="csl-entry">
+Lee, Everett S. 1966. <span>“<span class="nocase">A Theory of Migration</span>.”</span> <em>Demography</em> 3 (1): 47. <a href="https://doi.org/10.2307/2060063">https://doi.org/10.2307/2060063</a>.
+</div>
+<div class="csl-entry">
+Lomax, Nik, and Paul Norman. 2016. <span>“<span class="nocase">Estimating population attribute values in a table: <span>‘Get me started in’</span> iterative proportional fitting</span>.”</span> <em>Professional Geographer</em> 68 (3): 451–61. <a href="https://doi.org/10.1080/00330124.2015.1099449">https://doi.org/10.1080/00330124.2015.1099449</a>.
+</div>
+<div class="csl-entry">
+Lovelace, Robin, Mark Birkin, Dimitris Ballas, and Eveline van Leeuwen. 2015. <span>“<span class="nocase">Evaluating the Performance of Iterative Proportional Fitting for Spatial Microsimulation: New Tests for an Established Technique</span>.”</span> <em>Journal of Artificial Societies and Social Simulation</em> 18 (2): 1–15. <a href="https://doi.org/10.18564/jasss.2768">https://doi.org/10.18564/jasss.2768</a>.
+</div>
+<div class="csl-entry">
+Plane, David A. 1981. <span>“<span class="nocase">Estimation of Place-to-Place Migration Flows from Net Migration Totals: A Minimum Information Approach</span>.”</span> <em>International Regional Science Review</em> 6 (1): 33–51. <a href="https://doi.org/10.1177/016001768100600103">https://doi.org/10.1177/016001768100600103</a>.
+</div>
+<div class="csl-entry">
+Raymer, James. 2007. <span>“<span class="nocase">The estimation of international migration flows: a general technique focused on the origin–destination association structure</span>.”</span> <em>Environment and Planning A</em> 39 (4): 985–95. <a href="https://doi.org/10.1068/a38264">https://doi.org/10.1068/a38264</a>.
+</div>
+<div class="csl-entry">
+Raymer, James, Alberto Bonaguidi, and Alessandro Valentini. 2006. <span>“<span class="nocase">Describing and projecting the age and spatial structures of interregional migration in Italy</span>.”</span> <em>Population, Space and Place</em> 12 (5): 371–88. <a href="https://doi.org/10.1002/psp.414">https://doi.org/10.1002/psp.414</a>.
+</div>
+<div class="csl-entry">
+Rees, Philip H., Martin Bell, Marek Kupiszewski, Dorota Kupiszewska, Philipp Ueffing, Aude Bernard, Elin Charles-Edwards, and John Stillwell. 2016. <span>“<span class="nocase">The Impact of Internal Migration on Population Redistribution: an International Comparison</span>.”</span> <em>Population, Space and Place</em>, no. April. <a href="https://doi.org/10.1002/psp.2036">https://doi.org/10.1002/psp.2036</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei. 1975. <em><span class="nocase">Introduction to Multiregional Mathematical Demography</span></em>. New York, New York, USA: Wiley.
+</div>
+<div class="csl-entry">
+———. 1990. <span>“<span class="nocase">Requiem for the Net Migrant</span>.”</span> <em>Geographical Analysis</em> 22 (4): 283–300. <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1538-4632.1990.tb00212.x/abstract">http://onlinelibrary.wiley.com/doi/10.1111/j.1538-4632.1990.tb00212.x/abstract</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, and Luis J. Castro. 1981. <span>“<span>Model Migration Schedules</span>.”</span> RR-81-30. Vol. 81. Laxenburg, Austria: International Institute for Applied Systems Analysis. <a href="http://webarchive.iiasa.ac.at/Admin/PUB/Documents/RR-81-030.pdf">http://webarchive.iiasa.ac.at/Admin/PUB/Documents/RR-81-030.pdf</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, and Jani S Little. 1994. <span>“<span class="nocase">An International Journal of Parameterizing age patterns of demographic rates with the multiexponential model schedule</span>.”</span> <em>Mathematical Population Studies</em> 4 (3): 175–95. <a href="https://doi.org/10.1080/08898489409525372">https://doi.org/10.1080/08898489409525372</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, and James Raymer. 1998. <span>“<span class="nocase">The Spatial Focus of US Interstate Migration Flows</span>.”</span> <em>International Journal of Population Geography</em> 4 (1): 63–80. <a href="https://doi.org/10.1002/(SICI)1099-1220(199803)4%3A1&lt;63%3A%3AAID-IJPG87&gt;3.0.CO%3B2-U">https://doi.org/10.1002/(SICI)1099-1220(199803)4%3A1&lt;63%3A%3AAID-IJPG87&gt;3.0.CO%3B2-U</a>.
+</div>
+<div class="csl-entry">
+———. 1999. <span>“<span class="nocase">Estimating the regional migration patterns of the foreign-born population in the United States: 1950-1990.</span>”</span> <em>Mathematical Population Studies</em> 7 (3): 181–216, 307. <a href="https://doi.org/10.1080/08898489909525457">https://doi.org/10.1080/08898489909525457</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, James Raymer, and Jani Little. 2010. <em><span class="nocase">The Indirect Estimation of Migration</span></em>. Vol. 26. The Springer Series on Demographic Methods and Population Analysis. Dordrecht: Springer Netherlands. <a href="https://doi.org/10.1007/978-90-481-8915-1">https://doi.org/10.1007/978-90-481-8915-1</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, and John Watkins. 1987. <span>“<span class="nocase">General Versus Elderly Interstate Migration and Population Redistribution in the United States</span>.”</span> <em>Research on Aging</em> 9 (4): 483–529. <a href="https://doi.org/10.1177/0164027587094002">https://doi.org/10.1177/0164027587094002</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, Frans Willekens, Jani Little, and James Raymer. 2002. <span>“<span class="nocase">Describing migration spatial structure</span>.”</span> <em>Papers in Regional Science</em> 81 (1): 29–48. <a href="https://doi.org/10.1007/s101100100090">https://doi.org/10.1007/s101100100090</a>.
+</div>
+<div class="csl-entry">
+Rogers, Andrei, Frans Willekens, and James Raymer. 2003. <span>“<span class="nocase">Imposing Age and Spatial Structures on Inadequate Migration-Flow Datasets</span>.”</span> <em>The Professional Geographer</em> 55 (1): 56–69. <a href="https://doi.org/10.1111/0033-0124.01052">https://doi.org/10.1111/0033-0124.01052</a>.
+</div>
+<div class="csl-entry">
+Rogerson, Peter A. 1990. <span>“<span class="nocase">Migration analysis using data with time intervals of differing widths</span>.”</span> <em>Papers of the Regional Science Association</em> 68 (1981): 97–106. <a href="https://link.springer.com/article/10.1007/BF01933910">https://link.springer.com/article/10.1007/BF01933910</a>.
+</div>
+<div class="csl-entry">
+Shryock, Henry S., and Jacob S. Siegel. 1976. <em><span class="nocase">The Methods and Materials of Demography.</span></em> Edited by Edward G. Stockwell. Condensed. San Diego, California: Academic Press.
+</div>
+<div class="csl-entry">
+Siegel, Jacob S., and C. Horace Hamilton. 1952. <span>“<span class="nocase">Some Considerations in the Use of the Residual Method of Estimating Net Migration</span>.”</span> <em>Journal of the American Statistical Association</em> 47 (259): 475–500. <a href="https://doi.org/10.1080/01621459.1952.10501186">https://doi.org/10.1080/01621459.1952.10501186</a>.
+</div>
+<div class="csl-entry">
+Stillwell, John, Martin Bell, Philipp Ueffing, K. Daras, Elin Charles-Edwards, Marek Kupiszewski, and Dorota Kupiszewska. 2016. <span>“<span class="nocase">Internal migration around the world: comparing distance travelled and its frictional effect</span>.”</span> <em>Environment and Planning A</em> 48 (8): 1657–75. <a href="https://doi.org/10.1177/0308518X16643963">https://doi.org/10.1177/0308518X16643963</a>.
+</div>
+<div class="csl-entry">
+United Nations Department of Economic and Social Affairs Population Division. 1983. <em><span class="nocase">Methods of measuring internal migration.</span></em> New York, New York, USA: United Nations Publication. <a href="https://www.un.org/en/development/desa/population/publications/manual/migration/measuring-migration.asp">https://www.un.org/en/development/desa/population/publications/manual/migration/measuring-migration.asp</a>.
+</div>
+<div class="csl-entry">
+———. 1992. <em><span class="nocase">Preparing Migration Data for Subnational Population Projections</span></em>. <a href="http://www.un.org/esa/population/techcoop/IntMig/migdata{\_}popproj/migdata{\_}popproj.html">http://www.un.org/esa/population/techcoop/IntMig/migdata{\_}popproj/migdata{\_}popproj.html</a>.
+</div>
+<div class="csl-entry">
+———. 2020. <span>“<span class="nocase">International Migrant Stock 2020 (United Nations database, POP/DB/MIG/Stock/Rev.2020)</span>.”</span> New York, New York, USA: United Nations Department of Economic; Social Affairs/Population Division. <a href="https://doi.org/10.18356/b4899381-en">https://doi.org/10.18356/b4899381-en</a>.
+</div>
+<div class="csl-entry">
+Willekens, Frans. 1999. <span>“<span class="nocase">Modeling approaches to the indirect estimation of migration flows: from entropy to EM.</span>”</span> <em>Mathematical Population Studies</em> 7 (3): 239–78, 308. <a href="https://doi.org/10.1080/08898489909525459">https://doi.org/10.1080/08898489909525459</a>.
+</div>
+<div class="csl-entry">
+Wilson, Tom. 2010. <span>“<span class="nocase">Model migration schedules incorporating student migration peaks</span>.”</span> <em>Demographic Research</em> 23 (8): 191–222. <a href="https://doi.org/10.4054/DemRes.2010.23.8">https://doi.org/10.4054/DemRes.2010.23.8</a>.
+</div>
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Butler2017" class="csl-entry">
+Butler, Declan. 2017. <span>“<span class="nocase">What the numbers say about refugees</span>.”</span> <em>Nature</em> 543 (7643): 22–23. <a href="https://doi.org/10.1038/543022a">https://doi.org/10.1038/543022a</a>.
+</div>
+<div id="ref-UNPD2020" class="csl-entry">
+———. 2020. <span>“<span class="nocase">International Migrant Stock 2020 (United Nations database, POP/DB/MIG/Stock/Rev.2020)</span>.”</span> New York, New York, USA: United Nations Department of Economic; Social Affairs/Population Division. <a href="https://doi.org/10.18356/b4899381-en">https://doi.org/10.18356/b4899381-en</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chord-diagrams-for-visualising-bilateral-migration.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/09-visual2.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

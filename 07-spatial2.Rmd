@@ -1,0 +1,734 @@
+# Estimating Bilateral Migration
+
+
+## IPFP
+
+### IPFP
+
+- A common problem with bilateral migration data is that it is unavailable or outdated.
+    - Often collected in censuses
+- In some cases there are other data sources available that provide information on the in- and out-migration totals
+    - Population registers
+
+<!-- A. Auxiliary Data -->
+
+<!-- B. Primary Data: Marginal Totals -->
+
+<table>
+    <tr>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+        <td>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+    </tr>
+    <tr style="border-bottom:2px solid black">
+    <tr>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+        <td></td>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+    </tr>
+    <tr>
+        <td>A</td>
+        <td></td>
+        <td>100</td>
+        <td>30</td>
+        <td>70</td>
+        <td>200</td>
+        <td></td>
+        <td>A</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>250</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td>50</td>
+        <td></td>
+        <td>45</td>
+        <td>5</td>
+        <td>100</td>
+        <td></td>
+        <td>B</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>75</td>
+    </tr>
+    <tr>
+        <td>C</td>
+        <td>60</td>
+        <td>35</td>
+        <td></td>
+        <td>40</td>
+        <td>135</td>
+        <td></td>
+        <td>C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>125</td>
+    </tr>
+    <tr>
+        <td>D</td>
+        <td>20</td>
+        <td>25</td>
+        <td>20</td>
+        <td></td>
+        <td>65</td>
+        <td></td>
+        <td>D</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>150</td>
+    </tr>
+    <tr>
+        <td>Sum</td>
+        <td>130</td>
+        <td>160</td>
+        <td>95</td>
+        <td>115</td>
+        <td>500</td>
+        <td></td>
+        <td>Sum</td>
+        <td>150</td>
+        <td>200</td>
+        <td>50</td>
+        <td>200</td>
+        <td>600</td>
+    </tr>
+</table>																												
+
+### IPFP
+    
+- This provides a data estimation challenge, where the marginal tables totals are known but the cell values are known.
+- Similar data estimation challenges exist for more detailed migration flow tables, for example:
+    - In- and out-migration totals by age in each region are known, but the origin-destination migration flow table for each age group is missing.
+    - Required by multi-regional cohort-component models
+    - Estimating international migration flows from stocks (see for example @Abel2013 )
+
+
+### IPFP
+
+- A popular approach to estimate values in a contingency table based on known marginal tables and an initial contingency table is the Iterative Proportional Fitting Procedure (IPFP). 
+- First described by @Deming1940, the IPFP has since been widely studied  in a number of different disciplines and under a number of synonyms such as raking, matrix scaling or the RAS algorithm
+    - @Lovelace2015 gives a good overview of the application of IPFP in social sciences. 
+    - @Lomax2016 for another overview more specific to demography.
+- Mathematical approach to iteratively adjust a *seed* contingency table $\mu_{ij}^{(0)} = m_{ij}$ to known row and column totals ($n_{i+}$ and $n_{+j}$)
+$$
+\mu_{ij}^{(t+1)} = \frac{\mu_{ij}^{(t)}}{\mu_{i+}^{(t)}}n_{i+} \qquad \mu_{ij}^{(t+2)} = \frac{\mu_{ij}^{(t+1)}}{\mu_{+j}^{(t+1)}}n_{+j}
+$$
+
+
+### IPFP
+
+
+<table>
+    <tr>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+        <td>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+    </tr>
+    <tr style="border-bottom:2px solid black">
+    <tr>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+        <td></td>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+    </tr>
+    <tr>
+        <td>A</td>
+        <td></td>
+        <td>100</td>
+        <td>30</td>
+        <td>70</td>
+        <td>200</td>
+        <td></td>
+        <td>A</td>
+        <td></td>
+        <td>102.87</td>
+        <td>11.67</td>
+        <td>135.46</td>
+        <td>250</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td>50</td>
+        <td></td>
+        <td>45</td>
+        <td>5</td>
+        <td>100</td>
+        <td></td>
+        <td>B</td>
+        <td>49.03</td>
+        <td></td>
+        <td>16.73</td>
+        <td>9.25</td>
+        <td>75</td>
+    </tr>
+    <tr>
+        <td>C</td>
+        <td>60</td>
+        <td>35</td>
+        <td></td>
+        <td>40</td>
+        <td>135</td>
+        <td></td>
+        <td>C</td>
+        <td>43.98</td>
+        <td>25.72</td>
+        <td></td>
+        <td>55.30</td>
+        <td>125</td>
+    </tr>
+    <tr>
+        <td>D</td>
+        <td>20</td>
+        <td>25</td>
+        <td>20</td>
+        <td></td>
+        <td>65</td>
+        <td></td>
+        <td>D</td>
+        <td>56.99</td>
+        <td>71.41</td>
+        <td>21.60</td>
+        <td></td>
+        <td>150</td>
+    </tr>
+    <tr>
+        <td>Sum</td>
+        <td>130</td>
+        <td>160</td>
+        <td>95</td>
+        <td>115</td>
+        <td>500</td>
+        <td></td>
+        <td>Sum</td>
+        <td>150</td>
+        <td>200</td>
+        <td>50</td>
+        <td>200</td>
+        <td>600</td>
+    </tr>
+</table>										
+
+<!-- \begin{small} -->
+<!-- \begin{table} -->
+<!-- \renewcommand\arraystretch{0.9} -->
+<!-- \renewcommand\tabcolsep{0.9mm} -->
+<!-- \begin{tabular}{lrrrrrcrrcrrr}																											 -->
+<!-- 	\toprule																											 -->
+<!-- 	\multicolumn{6}{l}{\textit{A. Auxiliary Data}} 											&		&		&		&		&		&		&				\\ -->
+<!-- 	\cmidrule{1-6}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	\textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 									&		&		&		&		&	 \multicolumn{3}{c}{\textit{Totals}} 							\\ -->
+<!-- 	\cmidrule{2-6}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	\textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 	&		&		&		&		& \onslide<2->	In	& \onslide<3->	Out	& \onslide<4->	Net		\onslide<1->	\\ -->
+<!-- 	\cmidrule{1-6}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	A 	&		&	100	&	30	&	70	&	200	&		&		&		&		& \onslide<2->	130	& \onslide<3->	200	& \onslide<4->	-70		\onslide<1->	\\ -->
+<!-- 	B 	&	50	&		&	45	&	5	&	100	&		&		&		&		& \onslide<2->	160	& \onslide<3->	100	& \onslide<4->	60		\onslide<1->	\\ -->
+<!-- 	C 	&	60	&	35	&		&	40	&	135	&		&		&		&		& \onslide<2->	95	& \onslide<3->	135	& \onslide<4->	-40		\onslide<1->	\\ -->
+<!-- 	D 	&	20	&	25	&	20	&		&	65	&		&		&		&		& \onslide<2->	115	& \onslide<3->	65	& \onslide<4->	50		\onslide<1->	\\ -->
+<!-- 	Sum	&	130	&	160	&	95	&	115	&	500	&		&		&		&		& \onslide<2->	500	& \onslide<3->	500	& \onslide<4->	0		\onslide<1->	\\ -->
+<!-- 	\textcolor{white}{Sum}	&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&		&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&		&	\textcolor{white}{888.88}	&	\textcolor{white}{888.88}	&	\textcolor{white}{-888.88}		\onslide<1->	\\ -->
+<!-- 	\onslide<5->																											 -->
+<!-- 	\\																											 -->
+<!-- 	\multicolumn{6}{l}{\textit{B. Constrained Estimates}} 											&		&		&		&		&		&		&				\\ -->
+<!-- 	\cmidrule{1-6}																											 -->
+<!-- 	\cmidrule{8-9}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	\textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 									&		&	 \multicolumn{2}{c}{\textit{Target}} 			&		&	 \multicolumn{3}{c}{\textit{Totals}} 							\\ -->
+<!-- 	\cmidrule{2-6}																											 -->
+<!-- 	\cmidrule{8-9}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	\textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 	&		& \onslide<5->	In	&	Out	&		& \onslide<5->	In	&	Out	&	Net		\onslide<5->	\\ -->
+<!-- 	\cmidrule{1-6}																											 -->
+<!-- 	\cmidrule{8-9}																											 -->
+<!-- 	\cmidrule{11-13}																											 -->
+<!-- 	A 	&	\only<7>{    }\only<8>{    }\only<9>{    }\only<10>{    }\only<11>{    }\only<12>{    }\only<13>{    }\only<14>{    }\only<15>{    }\only<16>{    }\only<17>{    }\only<18>{    }\only<19>{    }\only<20>{    }\only<21>{    }\only<22>{    }\only<23>{    }\only<24>{    }\only<25>{    }\only<26>{    }\only<27>{    }\only<28>{    }\only<29>{    }\only<30>{    }\only<31>{    }	&	\only<7>{100}\only<8>{125.00}\only<9>{116.23}\only<10>{108.17}\only<11>{108.68}\only<12>{104.29}\only<13>{105.09}\only<14>{103.35}\only<15>{103.72}\only<16>{103.05}\only<17>{103.20}\only<18>{102.94}\only<19>{103.00}\only<20>{102.90}\only<21>{102.92}\only<22>{102.88}\only<23>{102.89}\only<24>{102.87}\only<25>{102.88}\only<26>{102.87}\only<27>{102.87}\only<28>{102.87}\only<29>{102.87}\only<30>{102.87}\only<31>{102.87}	&	\only<7>{30}\only<8>{ 37.50}\only<9>{ 15.97}\only<10>{ 14.86}\only<11>{ 13.13}\only<12>{ 12.60}\only<13>{ 12.22}\only<14>{ 12.01}\only<15>{ 11.88}\only<16>{ 11.80}\only<17>{ 11.75}\only<18>{ 11.72}\only<19>{ 11.70}\only<20>{ 11.69}\only<21>{ 11.68}\only<22>{ 11.68}\only<23>{ 11.67}\only<24>{ 11.67}\only<25>{ 11.67}\only<26>{ 11.67}\only<27>{ 11.67}\only<28>{ 11.67}\only<29>{ 11.67}\only<30>{ 11.67}\only<31>{ 11.67}	&	\only<7>{70}\only<8>{ 87.50}\only<9>{136.41}\only<10>{126.96}\only<11>{138.72}\only<12>{133.11}\only<13>{136.89}\only<14>{134.63}\only<15>{136.02}\only<16>{135.15}\only<17>{135.67}\only<18>{135.34}\only<19>{135.54}\only<20>{135.41}\only<21>{135.49}\only<22>{135.44}\only<23>{135.47}\only<24>{135.45}\only<25>{135.46}\only<26>{135.46}\only<27>{135.46}\only<28>{135.46}\only<29>{135.46}\only<30>{135.46}\only<31>{135.46}	&	\only<7>{200}\only<8>{\textcolor{red}{250.00}}\only<9>{268.61}\only<10>{\textcolor{red}{250.00}}\only<11>{260.53}\only<12>{\textcolor{red}{250.00}}\only<13>{254.20}\only<14>{\textcolor{red}{250.00}}\only<15>{251.62}\only<16>{\textcolor{red}{250.00}}\only<17>{250.62}\only<18>{\textcolor{red}{250.00}}\only<19>{250.24}\only<20>{\textcolor{red}{250.00}}\only<21>{250.09}\only<22>{\textcolor{red}{250.00}}\only<23>{250.04}\only<24>{\textcolor{red}{250.00}}\only<25>{250.01}\only<26>{\textcolor{red}{250.00}}\only<27>{250.01}\only<28>{\textcolor{red}{250.00}}\only<29>{\textcolor{red}{250.00}}\only<30>{\textcolor{red}{250.00}}\only<31>{\textcolor{red}{250.00}}	&		& \onslide<6->	\textcolor{red}{150}	&	\textcolor{red}{250}	&		&	\only<7>{130}\only<8>{139.21}\only<9>{\textcolor{red}{150.00}}\only<10>{161.27}\only<11>{\textcolor{red}{150.00}}\only<12>{155.49}\only<13>{\textcolor{red}{150.00}}\only<14>{152.17}\only<15>{\textcolor{red}{150.00}}\only<16>{150.84}\only<17>{\textcolor{red}{150.00}}\only<18>{150.32}\only<19>{\textcolor{red}{150.00}}\only<20>{150.12}\only<21>{\textcolor{red}{150.00}}\only<22>{150.05}\only<23>{\textcolor{red}{150.00}}\only<24>{150.02}\only<25>{\textcolor{red}{150.00}}\only<26>{150.01}\only<27>{\textcolor{red}{150.00}}\only<28>{\textcolor{red}{150.00}}\only<29>{\textcolor{red}{150.00}}\only<30>{\textcolor{red}{150.00}}\only<31>{\textcolor{red}{150.00}}	&	\only<7>{200}\only<8>{\textcolor{red}{250.00}}\only<9>{268.61}\only<10>{\textcolor{red}{250.00}}\only<11>{260.53}\only<12>{\textcolor{red}{250.00}}\only<13>{254.20}\only<14>{\textcolor{red}{250.00}}\only<15>{251.62}\only<16>{\textcolor{red}{250.00}}\only<17>{250.62}\only<18>{\textcolor{red}{250.00}}\only<19>{250.24}\only<20>{\textcolor{red}{250.00}}\only<21>{250.09}\only<22>{\textcolor{red}{250.00}}\only<23>{250.04}\only<24>{\textcolor{red}{250.00}}\only<25>{250.01}\only<26>{\textcolor{red}{250.00}}\only<27>{250.01}\only<28>{\textcolor{red}{250.00}}\only<29>{\textcolor{red}{250.00}}\only<30>{\textcolor{red}{250.00}}\only<31>{\textcolor{red}{250.00}}	&	\only<7>{-70}\only<8>{-110.79}\only<9>{-118.61}\only<10>{ -88.73}\only<11>{-110.53}\only<12>{ -94.51}\only<13>{-104.20}\only<14>{ -97.83}\only<15>{-101.62}\only<16>{ -99.16}\only<17>{-100.62}\only<18>{ -99.68}\only<19>{-100.24}\only<20>{ -99.88}\only<21>{-100.09}\only<22>{ -99.95}\only<23>{-100.04}\only<24>{ -99.98}\only<25>{-100.01}\only<26>{ -99.99}\only<27>{-100.01}\only<28>{-100.00}\only<29>{-100.00}\only<30>{-100.00}\only<31>{-100.00}		\onslide<5->	\\ -->
+<!-- 	B 	&	\only<7>{50}\only<8>{ 37.50}\only<9>{ 40.41}\only<10>{ 49.99}\only<11>{ 46.49}\only<12>{ 49.74}\only<13>{ 47.99}\only<14>{ 49.32}\only<15>{ 48.62}\only<16>{ 49.14}\only<17>{ 48.87}\only<18>{ 49.07}\only<19>{ 48.97}\only<20>{ 49.04}\only<21>{ 49.00}\only<22>{ 49.03}\only<23>{ 49.02}\only<24>{ 49.03}\only<25>{ 49.02}\only<26>{ 49.03}\only<27>{ 49.03}\only<28>{ 49.03}\only<29>{ 49.03}\only<30>{ 49.03}\only<31>{ 49.03}	&	\only<7>{    }\only<8>{    }\only<9>{    }\only<10>{    }\only<11>{    }\only<12>{    }\only<13>{    }\only<14>{    }\only<15>{    }\only<16>{    }\only<17>{    }\only<18>{    }\only<19>{    }\only<20>{    }\only<21>{    }\only<22>{    }\only<23>{    }\only<24>{    }\only<25>{    }\only<26>{    }\only<27>{    }\only<28>{    }\only<29>{    }\only<30>{    }\only<31>{    }	&	\only<7>{45}\only<8>{ 33.75}\only<9>{ 14.37}\only<10>{ 17.78}\only<11>{ 15.70}\only<12>{ 16.80}\only<13>{ 16.29}\only<14>{ 16.75}\only<15>{ 16.56}\only<16>{ 16.73}\only<17>{ 16.66}\only<18>{ 16.73}\only<19>{ 16.70}\only<20>{ 16.73}\only<21>{ 16.72}\only<22>{ 16.73}\only<23>{ 16.72}\only<24>{ 16.73}\only<25>{ 16.73}\only<26>{ 16.73}\only<27>{ 16.73}\only<28>{ 16.73}\only<29>{ 16.73}\only<30>{ 16.73}\only<31>{ 16.73}	&	\only<7>{5}\only<8>{  3.75}\only<9>{  5.85}\only<10>{  7.23}\only<11>{  7.90}\only<12>{  8.45}\only<13>{  8.69}\only<14>{  8.94}\only<15>{  9.03}\only<16>{  9.13}\only<17>{  9.16}\only<18>{  9.20}\only<19>{  9.21}\only<20>{  9.23}\only<21>{  9.23}\only<22>{  9.24}\only<23>{  9.24}\only<24>{  9.24}\only<25>{  9.24}\only<26>{  9.24}\only<27>{  9.24}\only<28>{  9.24}\only<29>{  9.25}\only<30>{  9.25}\only<31>{  9.25}	&	\only<7>{100}\only<8>{\textcolor{red}{ 75.00}}\only<9>{ 60.63}\only<10>{\textcolor{red}{ 75.00}}\only<11>{ 70.10}\only<12>{\textcolor{red}{ 75.00}}\only<13>{ 72.98}\only<14>{\textcolor{red}{ 75.00}}\only<15>{ 74.20}\only<16>{\textcolor{red}{ 75.00}}\only<17>{ 74.69}\only<18>{\textcolor{red}{ 75.00}}\only<19>{ 74.88}\only<20>{\textcolor{red}{ 75.00}}\only<21>{ 74.95}\only<22>{\textcolor{red}{ 75.00}}\only<23>{ 74.98}\only<24>{\textcolor{red}{ 75.00}}\only<25>{ 74.99}\only<26>{\textcolor{red}{ 75.00}}\only<27>{\textcolor{red}{ 75.00}}\only<28>{\textcolor{red}{ 75.00}}\only<29>{\textcolor{red}{ 75.00}}\only<30>{\textcolor{red}{ 75.00}}\only<31>{\textcolor{red}{ 75.00}}	&		& \onslide<6->	\textcolor{red}{200}	&	\textcolor{red}{75}	&		&	\only<7>{160}\only<8>{215.10}\only<9>{\textcolor{red}{200.00}}\only<10>{199.07}\only<11>{\textcolor{red}{200.00}}\only<12>{198.47}\only<13>{\textcolor{red}{200.00}}\only<14>{199.30}\only<15>{\textcolor{red}{200.00}}\only<16>{199.72}\only<17>{\textcolor{red}{200.00}}\only<18>{199.89}\only<19>{\textcolor{red}{200.00}}\only<20>{199.96}\only<21>{\textcolor{red}{200.00}}\only<22>{199.98}\only<23>{\textcolor{red}{200.00}}\only<24>{199.99}\only<25>{\textcolor{red}{200.00}}\only<26>{\textcolor{red}{200.00}}\only<27>{\textcolor{red}{200.00}}\only<28>{\textcolor{red}{200.00}}\only<29>{\textcolor{red}{200.00}}\only<30>{\textcolor{red}{200.00}}\only<31>{\textcolor{red}{200.00}}	&	\only<7>{100}\only<8>{\textcolor{red}{ 75.00}}\only<9>{ 60.63}\only<10>{\textcolor{red}{ 75.00}}\only<11>{ 70.10}\only<12>{\textcolor{red}{ 75.00}}\only<13>{ 72.98}\only<14>{\textcolor{red}{ 75.00}}\only<15>{ 74.20}\only<16>{\textcolor{red}{ 75.00}}\only<17>{ 74.69}\only<18>{\textcolor{red}{ 75.00}}\only<19>{ 74.88}\only<20>{\textcolor{red}{ 75.00}}\only<21>{ 74.95}\only<22>{\textcolor{red}{ 75.00}}\only<23>{ 74.98}\only<24>{\textcolor{red}{ 75.00}}\only<25>{ 74.99}\only<26>{\textcolor{red}{ 75.00}}\only<27>{\textcolor{red}{ 75.00}}\only<28>{\textcolor{red}{ 75.00}}\only<29>{\textcolor{red}{ 75.00}}\only<30>{\textcolor{red}{ 75.00}}\only<31>{\textcolor{red}{ 75.00}}	&	\only<7>{60}\only<8>{ 140.10}\only<9>{ 139.37}\only<10>{ 124.07}\only<11>{ 129.90}\only<12>{ 123.47}\only<13>{ 127.02}\only<14>{ 124.30}\only<15>{ 125.80}\only<16>{ 124.72}\only<17>{ 125.31}\only<18>{ 124.89}\only<19>{ 125.12}\only<20>{ 124.96}\only<21>{ 125.05}\only<22>{ 124.98}\only<23>{ 125.02}\only<24>{ 124.99}\only<25>{ 125.01}\only<26>{ 125.00}\only<27>{ 125.00}\only<28>{ 125.00}\only<29>{ 125.00}\only<30>{ 125.00}\only<31>{ 125.00}		\onslide<5->	\\ -->
+<!-- 	C 	&	\only<7>{60}\only<8>{ 55.56}\only<9>{ 59.86}\only<10>{ 50.65}\only<11>{ 47.11}\only<12>{ 46.70}\only<13>{ 45.05}\only<14>{ 45.03}\only<15>{ 44.39}\only<16>{ 44.39}\only<17>{ 44.14}\only<18>{ 44.14}\only<19>{ 44.04}\only<20>{ 44.04}\only<21>{ 44.01}\only<22>{ 44.01}\only<23>{ 43.99}\only<24>{ 43.99}\only<25>{ 43.99}\only<26>{ 43.99}\only<27>{ 43.99}\only<28>{ 43.99}\only<29>{ 43.98}\only<30>{ 43.98}\only<31>{ 43.98}	&	\only<7>{35}\only<8>{ 32.41}\only<9>{ 30.13}\only<10>{ 25.50}\only<11>{ 25.61}\only<12>{ 25.39}\only<13>{ 25.59}\only<14>{ 25.58}\only<15>{ 25.67}\only<16>{ 25.66}\only<17>{ 25.70}\only<18>{ 25.70}\only<19>{ 25.71}\only<20>{ 25.71}\only<21>{ 25.72}\only<22>{ 25.72}\only<23>{ 25.72}\only<24>{ 25.72}\only<25>{ 25.72}\only<26>{ 25.72}\only<27>{ 25.72}\only<28>{ 25.72}\only<29>{ 25.72}\only<30>{ 25.72}\only<31>{ 25.72}	&	\only<7>{    }\only<8>{    }\only<9>{    }\only<10>{    }\only<11>{    }\only<12>{    }\only<13>{    }\only<14>{    }\only<15>{    }\only<16>{    }\only<17>{    }\only<18>{    }\only<19>{    }\only<20>{    }\only<21>{    }\only<22>{    }\only<23>{    }\only<24>{    }\only<25>{    }\only<26>{    }\only<27>{    }\only<28>{    }\only<29>{    }\only<30>{    }\only<31>{    }	&	\only<7>{40}\only<8>{ 37.04}\only<9>{ 57.74}\only<10>{ 48.86}\only<11>{ 53.38}\only<12>{ 52.91}\only<13>{ 54.41}\only<14>{ 54.39}\only<15>{ 54.95}\only<16>{ 54.95}\only<17>{ 55.16}\only<18>{ 55.16}\only<19>{ 55.25}\only<20>{ 55.24}\only<21>{ 55.28}\only<22>{ 55.28}\only<23>{ 55.29}\only<24>{ 55.29}\only<25>{ 55.29}\only<26>{ 55.29}\only<27>{ 55.29}\only<28>{ 55.29}\only<29>{ 55.29}\only<30>{ 55.29}\only<31>{ 55.30}	&	\only<7>{135}\only<8>{\textcolor{red}{125.00}}\only<9>{147.74}\only<10>{\textcolor{red}{125.00}}\only<11>{126.10}\only<12>{\textcolor{red}{125.00}}\only<13>{125.05}\only<14>{\textcolor{red}{125.00}}\only<15>{125.01}\only<16>{\textcolor{red}{125.00}}\only<17>{\textcolor{red}{125.00}}\only<18>{\textcolor{red}{125.00}}\only<19>{\textcolor{red}{125.00}}\only<20>{\textcolor{red}{125.00}}\only<21>{\textcolor{red}{125.00}}\only<22>{\textcolor{red}{125.00}}\only<23>{\textcolor{red}{125.00}}\only<24>{\textcolor{red}{125.00}}\only<25>{\textcolor{red}{125.00}}\only<26>{\textcolor{red}{125.00}}\only<27>{\textcolor{red}{125.00}}\only<28>{\textcolor{red}{125.00}}\only<29>{\textcolor{red}{125.00}}\only<30>{\textcolor{red}{125.00}}\only<31>{\textcolor{red}{125.00}}	&		& \onslide<6->	\textcolor{red}{50}	&	\textcolor{red}{125}	&		&	\only<7>{95}\only<8>{117.40}\only<9>{\textcolor{red}{ 50.00}}\only<10>{ 56.61}\only<11>{\textcolor{red}{ 50.00}}\only<12>{ 51.56}\only<13>{\textcolor{red}{ 50.00}}\only<14>{ 50.57}\only<15>{\textcolor{red}{ 50.00}}\only<16>{ 50.22}\only<17>{\textcolor{red}{ 50.00}}\only<18>{ 50.09}\only<19>{\textcolor{red}{ 50.00}}\only<20>{ 50.03}\only<21>{\textcolor{red}{ 50.00}}\only<22>{ 50.01}\only<23>{\textcolor{red}{ 50.00}}\only<24>{\textcolor{red}{ 50.00}}\only<25>{\textcolor{red}{ 50.00}}\only<26>{\textcolor{red}{ 50.00}}\only<27>{\textcolor{red}{ 50.00}}\only<28>{\textcolor{red}{ 50.00}}\only<29>{\textcolor{red}{ 50.00}}\only<30>{\textcolor{red}{ 50.00}}\only<31>{\textcolor{red}{ 50.00}}	&	\only<7>{135}\only<8>{\textcolor{red}{125.00}}\only<9>{147.74}\only<10>{\textcolor{red}{125.00}}\only<11>{126.10}\only<12>{\textcolor{red}{125.00}}\only<13>{125.05}\only<14>{\textcolor{red}{125.00}}\only<15>{125.01}\only<16>{\textcolor{red}{125.00}}\only<17>{\textcolor{red}{125.00}}\only<18>{\textcolor{red}{125.00}}\only<19>{\textcolor{red}{125.00}}\only<20>{\textcolor{red}{125.00}}\only<21>{\textcolor{red}{125.00}}\only<22>{\textcolor{red}{125.00}}\only<23>{\textcolor{red}{125.00}}\only<24>{\textcolor{red}{125.00}}\only<25>{\textcolor{red}{125.00}}\only<26>{\textcolor{red}{125.00}}\only<27>{\textcolor{red}{125.00}}\only<28>{\textcolor{red}{125.00}}\only<29>{\textcolor{red}{125.00}}\only<30>{\textcolor{red}{125.00}}\only<31>{\textcolor{red}{125.00}}	&	\only<7>{-40}\only<8>{  -7.60}\only<9>{ -97.74}\only<10>{ -68.39}\only<11>{ -76.10}\only<12>{ -73.44}\only<13>{ -75.05}\only<14>{ -74.43}\only<15>{ -75.01}\only<16>{ -74.78}\only<17>{ -75.00}\only<18>{ -74.91}\only<19>{ -75.00}\only<20>{ -74.97}\only<21>{ -75.00}\only<22>{ -74.99}\only<23>{ -75.00}\only<24>{ -75.00}\only<25>{ -75.00}\only<26>{ -75.00}\only<27>{ -75.00}\only<28>{ -75.00}\only<29>{ -75.00}\only<30>{ -75.00}\only<31>{ -75.00}		\onslide<5->	\\ -->
+<!-- 	D 	&	\only<7>{20}\only<8>{ 46.15}\only<9>{ 49.73}\only<10>{ 60.63}\only<11>{ 56.40}\only<12>{ 59.05}\only<13>{ 56.96}\only<14>{ 57.82}\only<15>{ 56.99}\only<16>{ 57.31}\only<17>{ 56.99}\only<18>{ 57.11}\only<19>{ 56.99}\only<20>{ 57.04}\only<21>{ 56.99}\only<22>{ 57.01}\only<23>{ 56.99}\only<24>{ 56.99}\only<25>{ 56.99}\only<26>{ 56.99}\only<27>{ 56.99}\only<28>{ 56.99}\only<29>{ 56.99}\only<30>{ 56.99}\only<31>{ 56.99}	&	\only<7>{25}\only<8>{ 57.69}\only<9>{ 53.64}\only<10>{ 65.40}\only<11>{ 65.71}\only<12>{ 68.79}\only<13>{ 69.32}\only<14>{ 70.37}\only<15>{ 70.62}\only<16>{ 71.01}\only<17>{ 71.10}\only<18>{ 71.25}\only<19>{ 71.29}\only<20>{ 71.35}\only<21>{ 71.36}\only<22>{ 71.39}\only<23>{ 71.39}\only<24>{ 71.40}\only<25>{ 71.40}\only<26>{ 71.41}\only<27>{ 71.41}\only<28>{ 71.41}\only<29>{ 71.41}\only<30>{ 71.41}\only<31>{ 71.41}	&	\only<7>{20}\only<8>{ 46.15}\only<9>{ 19.66}\only<10>{ 23.96}\only<11>{ 21.17}\only<12>{ 22.16}\only<13>{ 21.49}\only<14>{ 21.81}\only<15>{ 21.57}\only<16>{ 21.69}\only<17>{ 21.59}\only<18>{ 21.63}\only<19>{ 21.60}\only<20>{ 21.62}\only<21>{ 21.60}\only<22>{ 21.61}\only<23>{ 21.60}\only<24>{ 21.60}\only<25>{ 21.60}\only<26>{ 21.60}\only<27>{ 21.60}\only<28>{ 21.60}\only<29>{ 21.60}\only<30>{ 21.60}\only<31>{ 21.60}	&	\only<7>{    }\only<8>{    }\only<9>{    }\only<10>{    }\only<11>{    }\only<12>{    }\only<13>{    }\only<14>{    }\only<15>{    }\only<16>{    }\only<17>{    }\only<18>{    }\only<19>{    }\only<20>{    }\only<21>{    }\only<22>{    }\only<23>{    }\only<24>{    }\only<25>{    }\only<26>{    }\only<27>{    }\only<28>{    }\only<29>{    }\only<30>{    }\only<31>{    }	&	\only<7>{65}\only<8>{\textcolor{red}{150.00}}\only<9>{123.03}\only<10>{\textcolor{red}{150.00}}\only<11>{143.27}\only<12>{\textcolor{red}{150.00}}\only<13>{147.78}\only<14>{\textcolor{red}{150.00}}\only<15>{149.18}\only<16>{\textcolor{red}{150.00}}\only<17>{149.69}\only<18>{\textcolor{red}{150.00}}\only<19>{149.88}\only<20>{\textcolor{red}{150.00}}\only<21>{149.95}\only<22>{\textcolor{red}{150.00}}\only<23>{149.98}\only<24>{\textcolor{red}{150.00}}\only<25>{149.99}\only<26>{\textcolor{red}{150.00}}\only<27>{\textcolor{red}{150.00}}\only<28>{\textcolor{red}{150.00}}\only<29>{\textcolor{red}{150.00}}\only<30>{\textcolor{red}{150.00}}\only<31>{\textcolor{red}{150.00}}	&		& \onslide<6->	\textcolor{red}{200}	&	\textcolor{red}{150}	&		&	\only<7>{115}\only<8>{128.29}\only<9>{\textcolor{red}{200.00}}\only<10>{183.05}\only<11>{\textcolor{red}{200.00}}\only<12>{194.48}\only<13>{\textcolor{red}{200.00}}\only<14>{197.96}\only<15>{\textcolor{red}{200.00}}\only<16>{199.22}\only<17>{\textcolor{red}{200.00}}\only<18>{199.70}\only<19>{\textcolor{red}{200.00}}\only<20>{199.88}\only<21>{\textcolor{red}{200.00}}\only<22>{199.96}\only<23>{\textcolor{red}{200.00}}\only<24>{199.98}\only<25>{\textcolor{red}{200.00}}\only<26>{199.99}\only<27>{\textcolor{red}{200.00}}\only<28>{\textcolor{red}{200.00}}\only<29>{\textcolor{red}{200.00}}\only<30>{\textcolor{red}{200.00}}\only<31>{\textcolor{red}{200.00}}	&	\only<7>{65}\only<8>{\textcolor{red}{150.00}}\only<9>{123.03}\only<10>{\textcolor{red}{150.00}}\only<11>{143.27}\only<12>{\textcolor{red}{150.00}}\only<13>{147.78}\only<14>{\textcolor{red}{150.00}}\only<15>{149.18}\only<16>{\textcolor{red}{150.00}}\only<17>{149.69}\only<18>{\textcolor{red}{150.00}}\only<19>{149.88}\only<20>{\textcolor{red}{150.00}}\only<21>{149.95}\only<22>{\textcolor{red}{150.00}}\only<23>{149.98}\only<24>{\textcolor{red}{150.00}}\only<25>{149.99}\only<26>{\textcolor{red}{150.00}}\only<27>{\textcolor{red}{150.00}}\only<28>{\textcolor{red}{150.00}}\only<29>{\textcolor{red}{150.00}}\only<30>{\textcolor{red}{150.00}}\only<31>{\textcolor{red}{150.00}}	&	\only<7>{50}\only<8>{ -21.71}\only<9>{  76.97}\only<10>{  33.05}\only<11>{  56.73}\only<12>{  44.48}\only<13>{  52.22}\only<14>{  47.96}\only<15>{  50.82}\only<16>{  49.22}\only<17>{  50.31}\only<18>{  49.70}\only<19>{  50.12}\only<20>{  49.88}\only<21>{  50.05}\only<22>{  49.96}\only<23>{  50.02}\only<24>{  49.98}\only<25>{  50.01}\only<26>{  49.99}\only<27>{  50.00}\only<28>{  50.00}\only<29>{  50.00}\only<30>{  50.00}\only<31>{  50.00}		\onslide<5->	\\ -->
+<!-- 	Sum 	&	\only<7>{130}\only<8>{139.21}\only<9>{\textcolor{red}{150.00}}\only<10>{161.27}\only<11>{\textcolor{red}{150.00}}\only<12>{155.49}\only<13>{\textcolor{red}{150.00}}\only<14>{152.17}\only<15>{\textcolor{red}{150.00}}\only<16>{150.84}\only<17>{\textcolor{red}{150.00}}\only<18>{150.32}\only<19>{\textcolor{red}{150.00}}\only<20>{150.12}\only<21>{\textcolor{red}{150.00}}\only<22>{150.05}\only<23>{\textcolor{red}{150.00}}\only<24>{150.02}\only<25>{\textcolor{red}{150.00}}\only<26>{150.01}\only<27>{\textcolor{red}{150.00}}\only<28>{\textcolor{red}{150.00}}\only<29>{\textcolor{red}{150.00}}\only<30>{\textcolor{red}{150.00}}\only<31>{\textcolor{red}{150.00}}	&	\only<7>{160}\only<8>{215.10}\only<9>{\textcolor{red}{200.00}}\only<10>{199.07}\only<11>{\textcolor{red}{200.00}}\only<12>{198.47}\only<13>{\textcolor{red}{200.00}}\only<14>{199.30}\only<15>{\textcolor{red}{200.00}}\only<16>{199.72}\only<17>{\textcolor{red}{200.00}}\only<18>{199.89}\only<19>{\textcolor{red}{200.00}}\only<20>{199.96}\only<21>{\textcolor{red}{200.00}}\only<22>{199.98}\only<23>{\textcolor{red}{200.00}}\only<24>{199.99}\only<25>{\textcolor{red}{200.00}}\only<26>{\textcolor{red}{200.00}}\only<27>{\textcolor{red}{200.00}}\only<28>{\textcolor{red}{200.00}}\only<29>{\textcolor{red}{200.00}}\only<30>{\textcolor{red}{200.00}}\only<31>{\textcolor{red}{200.00}}	&	\only<7>{95}\only<8>{117.40}\only<9>{\textcolor{red}{ 50.00}}\only<10>{ 56.61}\only<11>{\textcolor{red}{ 50.00}}\only<12>{ 51.56}\only<13>{\textcolor{red}{ 50.00}}\only<14>{ 50.57}\only<15>{\textcolor{red}{ 50.00}}\only<16>{ 50.22}\only<17>{\textcolor{red}{ 50.00}}\only<18>{ 50.09}\only<19>{\textcolor{red}{ 50.00}}\only<20>{ 50.03}\only<21>{\textcolor{red}{ 50.00}}\only<22>{ 50.01}\only<23>{\textcolor{red}{ 50.00}}\only<24>{\textcolor{red}{ 50.00}}\only<25>{\textcolor{red}{ 50.00}}\only<26>{\textcolor{red}{ 50.00}}\only<27>{\textcolor{red}{ 50.00}}\only<28>{\textcolor{red}{ 50.00}}\only<29>{\textcolor{red}{ 50.00}}\only<30>{\textcolor{red}{ 50.00}}\only<31>{\textcolor{red}{ 50.00}}	&	\only<7>{115}\only<8>{128.29}\only<9>{\textcolor{red}{200.00}}\only<10>{183.05}\only<11>{\textcolor{red}{200.00}}\only<12>{194.48}\only<13>{\textcolor{red}{200.00}}\only<14>{197.96}\only<15>{\textcolor{red}{200.00}}\only<16>{199.22}\only<17>{\textcolor{red}{200.00}}\only<18>{199.70}\only<19>{\textcolor{red}{200.00}}\only<20>{199.88}\only<21>{\textcolor{red}{200.00}}\only<22>{199.96}\only<23>{\textcolor{red}{200.00}}\only<24>{199.98}\only<25>{\textcolor{red}{200.00}}\only<26>{199.99}\only<27>{\textcolor{red}{200.00}}\only<28>{\textcolor{red}{200.00}}\only<29>{\textcolor{red}{200.00}}\only<30>{\textcolor{red}{200.00}}\only<31>{\textcolor{red}{200.00}}	&	\only<7>{500}\only<8>{600.00}\only<9>{600.00}\only<10>{600.00}\only<11>{600.00}\only<12>{600.00}\only<13>{600.00}\only<14>{600.00}\only<15>{600.00}\only<16>{600.00}\only<17>{600.00}\only<18>{600.00}\only<19>{600.00}\only<20>{600.00}\only<21>{600.00}\only<22>{600.00}\only<23>{600.00}\only<24>{600.00}\only<25>{600.00}\only<26>{600.00}\only<27>{600.00}\only<28>{600.00}\only<29>{600.00}\only<30>{600.00}\only<31>{600.00}	&		& \onslide<6->	600	&	600	&		&	\only<7>{500}\only<8>{600.00}\only<9>{600.00}\only<10>{600.00}\only<11>{600.00}\only<12>{600.00}\only<13>{600.00}\only<14>{600.00}\only<15>{600.00}\only<16>{600.00}\only<17>{600.00}\only<18>{600.00}\only<19>{600.00}\only<20>{600.00}\only<21>{600.00}\only<22>{600.00}\only<23>{600.00}\only<24>{600.00}\only<25>{600.00}\only<26>{600.00}\only<27>{600.00}\only<28>{600.00}\only<29>{600.00}\only<30>{600.00}\only<31>{600.00}	&	\only<7>{500}\only<8>{600.00}\only<9>{600.00}\only<10>{600.00}\only<11>{600.00}\only<12>{600.00}\only<13>{600.00}\only<14>{600.00}\only<15>{600.00}\only<16>{600.00}\only<17>{600.00}\only<18>{600.00}\only<19>{600.00}\only<20>{600.00}\only<21>{600.00}\only<22>{600.00}\only<23>{600.00}\only<24>{600.00}\only<25>{600.00}\only<26>{600.00}\only<27>{600.00}\only<28>{600.00}\only<29>{600.00}\only<30>{600.00}\only<31>{600.00}	&	\only<7>{0}\only<8>{   0.00}\only<9>{   0.00}\only<10>{   0.00}\only<11>{   0.00}\only<12>{   0.00}\only<13>{   0.00}\only<14>{   0.00}\only<15>{   0.00}\only<16>{   0.00}\only<17>{   0.00}\only<18>{   0.00}\only<19>{   0.00}\only<20>{   0.00}\only<21>{   0.00}\only<22>{   0.00}\only<23>{   0.00}\only<24>{   0.00}\only<25>{   0.00}\only<26>{   0.00}\only<27>{   0.00}\only<28>{   0.00}\only<29>{   0.00}\only<30>{   0.00}\only<31>{   0.00}		\onslide<5->	\\ -->
+<!-- 	\bottomrule																											 -->
+<!-- \end{tabular}																											 -->
+<!-- \end{table} -->
+<!-- \end{small} -->
+
+
+### IPFP
+
+- @Willekens1999 calls the seed data an *auxiliary* table and notes that it should be information on a variables related to migration. 
+    - Typically past migration flow data
+    - Distances or travel costs between the origin-destination pairs have been used where no past data exists
+    - Limited testing to see which seeds work best for estimating migration
+- The marginal data is then known as *primary* data. 
+    - Partial observations on the number of migrations 
+
+### mipfp
+
+- The *mipfp* package by @Barthelemy2018 implements IPFP in R using the `Ipfp()` function
+- Can be used for multi-dimensional marginal constraint problems.
+- Three inputs
+    - `seed` a matrix of auxiliary data to aid estimation
+    - `target.list` a list of dimensions that are being targeted (see next point)
+    - `target.data` a list of targets related to `target.list`
+- R numbers dimension of arrays with 
+    - `1` row
+    - `2` column
+    - `3` table
+    - ...
+- The `target.list` might involve 
+    - a single target, e.g. column totals `target.list = list(2)`
+    - multiple targets, e.g. row and column totals `target.list = list(1, 2)`
+    - sums over cells rather than margins of array, e.g. cells summed over tables `target.list = list(c(1, 2))`
+
+### mipfp
+
+
+```{r, message=FALSE}
+r <- LETTERS[1:4]
+m0 <- matrix(data = c(0, 100, 30, 70, 
+                      50, 0, 45, 5, 
+                      60, 35, 0, 40, 
+                      20, 25, 20, 0), 
+             nrow = 4, ncol = 4, byrow = TRUE, 
+             dimnames = list(orig = r, dest = r))
+addmargins(m0)
+```
+
+### mipfp
+
+```{r}
+orig_tot <- c(250, 75, 125, 150)
+dest_tot <- c(150, 200, 50, 200)
+names(orig_tot ) <- names(dest_tot) <- r
+
+orig_tot
+dest_tot
+
+# check sums are equal
+sum(orig_tot)
+sum(dest_tot)
+```
+
+### mipfp
+
+```{r, message=FALSE}
+library(mipfp)
+Ipfp(seed = m0, target.list = list(1, 2), 
+     target.data = list(orig_tot, dest_tot))
+```
+
+### mipfp
+
+```{r, message=FALSE}
+# save the result 
+y0 <- Ipfp(seed = m0, target.list = list(1, 2), 
+           target.data = list(orig_tot, dest_tot))
+
+# view with totals
+addmargins(y0$x.hat)
+```
+
+### Three dimensions
+
+Auxillary Data
+
+<table>
+    <tr>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+        <td>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+    </tr>
+    <tr style="border-bottom:2px solid black">
+    <tr>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+        <td></td>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+    </tr>
+    <tr>
+        <td>A</td>
+        <td></td>
+        <td>80</td>
+        <td>10</td>
+        <td>55</td>
+        <td>145</td>
+        <td></td>
+        <td>A</td>
+        <td></td>
+        <td>20</td>
+        <td>20</td>
+        <td>15</td>
+        <td>55</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td>30</td>
+        <td></td>
+        <td>20</td>
+        <td>0</td>
+        <td>50</td>
+        <td></td>
+        <td>B</td>
+        <td>20</td>
+        <td></td>
+        <td>25</td>
+        <td>5</td>
+        <td>50</td>
+    </tr>
+    <tr>
+        <td>C</td>
+        <td>50</td>
+        <td>15</td>
+        <td></td>
+        <td>10</td>
+        <td>75</td>
+        <td></td>
+        <td>C</td>
+        <td>10</td>
+        <td>20</td>
+        <td></td>
+        <td>30</td>
+        <td>60</td>
+    </tr>
+    <tr>
+        <td>D</td>
+        <td>5</td>
+        <td>20</td>
+        <td>10</td>
+        <td></td>
+        <td>35</td>
+        <td></td>
+        <td>D</td>
+        <td>15</td>
+        <td>5</td>
+        <td>10</td>
+        <td></td>
+        <td>30</td>
+    </tr>
+    <tr>
+        <td>Sum</td>
+        <td>85</td>
+        <td>115</td>
+        <td>40</td>
+        <td>65</td>
+        <td>305</td>
+        <td></td>
+        <td>Sum</td>
+        <td>45</td>
+        <td>45</td>
+        <td>55</td>
+        <td>50</td>
+        <td>195</td>
+    </tr>
+</table>
+
+
+Primary Data
+
+<table>
+    <tr>
+        <td colspan=1>*Origin*</td>
+        <td colspan=5 style="text-align:center">*Destination*</td>
+        <td colspan=7></td>
+    </tr>
+    <tr style="border-bottom:2px solid black">
+    <tr>
+        <td></td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>Sum</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>A</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>250</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>75</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>125</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>D</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>150</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Sum</td>
+        <td>150</td>
+        <td>200</td>
+        <td>50</td>
+        <td>200</td>
+        <td>600</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+
+
+
+<!-- \begin{small} -->
+<!-- \begin{table} -->
+<!-- %\renewcommand\arraystretch{0.9} -->
+<!-- %\renewcommand\tabcolsep{0.9mm} -->
+<!-- \begin{tabular}{lrrrrrllrrrrr}																											 -->
+<!-- \toprule																											 -->
+<!-- \multicolumn{6}{l}{\textit{Auxiliary Data - Low Skill}} 											&		&	\multicolumn{6}{l}{\textit{Primary Data}} 													\\ -->
+<!-- \cmidrule{1-6}																											 -->
+<!-- \cmidrule{7-13}																											 -->
+<!-- \textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 									&		&	\textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 											\\ -->
+<!-- \cmidrule{2-6}																											 -->
+<!-- \cmidrule{8-13}																											 -->
+<!-- \textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 	&		&	\textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 			\\ -->
+<!-- \cmidrule{1-6}																											 -->
+<!-- \cmidrule{8-13}																											 -->
+<!-- A 	&		&	80	&	10	&	55	&	145	&		&	A 	&		&		&		&		&	250			\\ -->
+<!-- B 	&	30	&		&	20	&	0	&	50	&		&	B 	&		&		&		&		&	75			\\ -->
+<!-- C 	&	50	&	15	&		&	10	&	75	&		&	C 	&		&		&		&		&	125			\\ -->
+<!-- D 	&	5	&	20	&	10	&		&	35	&		&	D 	&		&		&		&		&	150			\\ -->
+<!-- Sum	&	85	&	115	&	40	&	65	&	305	&		&	Sum	&	150	&	200	&	50	&	200	&	600			\\ -->
+<!-- 	&		&		&		&		&		&		&		&		&		&		&		&				\\ -->
+<!-- \multicolumn{6}{l}{\textit{Auxiliary Data -  High Skill}} 											&		&		&		&		&		&		&				\\ -->
+<!-- \cmidrule{1-6}																											 -->
+<!-- \textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 									&		&		&		&		&		&		&				\\ -->
+<!-- \cmidrule{2-6}																											 -->
+<!-- \textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 	&		&		&		&		&		&		&				\\ -->
+<!-- \cmidrule{1-6}																											 -->
+<!-- A 	&		&	20	&	20	&	15	&	55	&		&		&		&		&		&		&				\\ -->
+<!-- B 	&	20	&		&	25	&	5	&	50	&		&		&		&		&		&		&				\\ -->
+<!-- C 	&	10	&	20	&		&	30	&	60	&		&		&		&		&		&		&				\\ -->
+<!-- D 	&	15	&	5	&	10	&		&	30	&		&		&		&		&		&		&				\\ -->
+<!-- Sum 	&	45	&	45	&	55	&	50	&	195	&		&		&		&		&		&		&				\\ -->
+<!-- \bottomrule																											 -->
+<!-- \end{tabular}																											 -->
+<!-- \end{table} -->
+<!-- \end{small} -->
+
+
+### IPFP More Complicated Data Situations
+
+- The IPFP can be used for more complex data situations with more than two dimensions.
+- Key to using the `mipfp()` function is setting the inputs for `target.data`.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+d <- expand_grid(orig = r, dest = r, sex = c("Female", "Male")) %>%
+  mutate(flow = c(0, 0, 80, 20, 10, 20, 55, 15, 30, 20, 0, 0, 20, 25, 0, 5, 50, 10, 15, 20, 0, 0, 10, 30, 5, 15, 20, 5, 10, 10, 0, 0))
+
+d
+```
+
+### Estimating Detailed Bilateral Migration
+
+```{r, message=FALSE}
+m1 <- xtabs(formula = flow ~ orig + dest + sex, data = d)
+m1
+```
+
+
+### mipfp
+
+```{r, message=FALSE}
+addmargins(m1)
+```
+
+### mipfp
+
+```{r, message=FALSE}
+addmargins(m1)[,,sex = "Sum"]
+```
+
+### mipfp
+
+```{r, message=FALSE}
+y1 <- Ipfp(seed = m1, target.list = list(1, 2), 
+           target.data = list(orig_tot, dest_tot))
+addmargins(y1$x.hat)
+```
+
+
+
+<!-- ### mipfp -->
+
+<!-- ```{r, message=FALSE} -->
+<!-- addmargins(y1$x.hat)[,,sex = "Sum"] -->
+<!-- ``` -->
+
+
+### mipfp
+
+```{r, message=FALSE, warning=FALSE}
+y1$x.hat %>% 
+  as.data.frame.table(responseName = "est") %>%
+  as_tibble()
+```
+
+
+## Net Constraints
+
+### Net constrained origin-destination flows
+
+- @Plane1981 developed a proportional adjustment algorithm for estimating bilateral migration flows to match both
+    - Constraints on the net migration of each region
+    - Total sum of the bilateral migration flows
+- Requires knowledge of 
+    - Past bilateral migration flows
+    - Current (target) total migration flows (over whole
+    system)
+    - Current (target) net migration flows
+    - Distance matrix to correspond
+- No application of this method in R, although in *migest* package the `cm_net_tot()` function provides a similar set of estimates
+    - Unable to incorporate distance matrix
+
+### Net constrained origin-destination flows
+
+```{r}
+addmargins(m0)
+
+# observed net
+library(migest)
+sum_turnover(m0)
+```
+
+### Net constrained origin-destination flows
+  
+- Estimate migration flows to match new net migration and grand total.
+```{r}
+y1 <- cm_net_tot(net_tot = c(-100, 125, -75, 50), tot = 600, 
+                 m = m0, verbose = FALSE)
+addmargins(y1$n)
+sum_turnover(y1$n)
+```
+  
+### Net constrained origin-destination flows  
+
+- The requirement on the total sum of the bilateral flow for the algorithm is not realistic. 
+    -@Plane1981 method not widely adpoted
+    - In many countries the overall number of migrant flows, that is demographically consistent with natural population change, is typically not known. 
+    - If the overall number of migrant flows is known, it is typically obtained from a comprehensive population register, and thus bilateral migration or total in- and out-migration flows already exist. If it is the later, can use IPFP approaches.
+- In recent years I have been working on a method that constrains only to the net migration totals.
+    - Unpublished, work in progress, use at own risk
+    - Method is available in the `cm_net()` function in the *migest* package
+- Potential uses
+    - Update bilateral migration flows from surveys or administrative data to match known demographic consistent net migration totals
+    - Estimate bilateral migration flows from known net migration totals using non-migration data as a seed (if no migration flow data available)
+    
+### Net constrained origin-destination flows
+
+```{r}
+y2 <- cm_net(net_tot = c(-100, 125, -75, 50), m = m0, verbose = FALSE)
+addmargins(y2$n)
+sum_turnover(y2$n)
+```
+
+
+### Exercise (ex7.R)
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('exercise/ex7.R') }
+```
+
+

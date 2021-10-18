@@ -1,0 +1,537 @@
+# Chord Diagrams for Visualising Bilateral Migration 
+
+
+## .
+
+###  Background
+
+- Visualizing bilateral migration is not straightforward
+    - Difficult to represent the geographic and temporal aspect at the same time
+- Many different approaches
+    - Difficult to satisfy everyone's tastes
+- In this class will illustrate two non-map based approaches
+    - Chord Diagrams
+    - Alluvial or Sankey Plots
+- Non-map based approaches
+    - Provide clearer visual guide for geographically small areas that can be overwhelmed on a map
+    - Include more bilateral connections
+
+###  Map Based - The Emigrants of the World, Minard 1858.
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/minard.png")
+```
+
+
+###  Flowline Maps
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/lambert.png")
+```
+
+
+###  Criticised New York Times refugee flow map
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/refugee_flow_map-africa.jpg")
+```
+
+
+### Martin Grandjean's attempt to rectify
+
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/Refugees-world-930x523.png")
+```
+
+
+## Chord Diagram
+
+###  Chord Diagrams
+
+- First chord diagrams introduced by Martin Krzywinski in 2007.
+    - `https://www.nytimes.com/imagepages/2007/01/22/science/20070123_SCI_ILLO.html`
+- Used to facilitate the identification and analysis of similarities and differences arising from comparisons of genomes
+- Displays relationships between pairs of positions by the use of ribbons, which encode the position, size, and orientation of related genomic elements
+- Developed into Circos software in Perl by @Krzywinski2009
+    - `http://circos.ca/`
+
+### New York Times 2007
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/nyt.jpg")
+```
+
+###  Chord Diagrams with Migration Data
+
+- Interactive chord diagram plots introduced into rr.js library by Bostock
+- First used to illustrate migration patterns by data journalist Chris Walker in 2013
+    - Mapping America’s Restless Interstate Migration Without a Map `https://www.wired.com/2013/11/mapping-migration-without-a-map/`
+- Does not show the direction of move until mouse-over.
+- Nikola Sander adapted Circos software to add directional indicators for flows
+    - First used in @Abel2014. *Quantifying Global International Migration Flows*. Science, 343 (6178).
+    - Interactive version at `http://download.gsb.bund.de/BIB/global_flow/`
+
+###  Chord Diagrams with Migration Data
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/walker.jpg")
+```
+
+###  Chord Diagrams with Migration Data
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics(path = "img/sander.jpg")
+```
+
+## circlize
+
+### Chord Diagrams in R
+
+- Some drawbacks to the Circos based plots
+    - Inflows plotted first on each sector
+    - Chords for smaller flows overlap larger flows
+    - Hides smallest flows
+    - Not easy to detect direction of flows
+    - Addition of direction arrows usually require some further touch using a second piece of software, e.g. Photoshop or Illustrator
+        - Problematic for replicability
+- In recent years a number of R packages that implement similar plots as the Circos software have appeared on CRAN
+- The *circlize* R package by @Gu2014 is perhaps the most complete and accessible for non-genomic data
+    - Built on base R graphics package
+- Includes a `chordDiagram()` function
+    - Extensive documentation of the `chordDiagram()` function in [Chapters 13-15](https://jokergoo.github.io/circlize_book/book/the-chorddiagram-function.html) of the circlize book.
+
+
+### UN international migrant stock data 2020
+
+```{r, message=FALSE}
+library(tidyverse)
+un <- read_csv(file = "data/un_desa_ims_tidy.csv")
+un
+```
+
+### UN international migrant stock data 2020
+
+- Use continent to continent flows in 2020
+```{r}
+# codes for contents
+cc <- c(903, 935, 908, 904, 905, 909)
+d <- un %>%
+  filter(por_code %in% cc, 
+         pob_code %in% cc,
+         year == 2020)
+d
+```
+
+### UN international migrant stock data 2020
+
+- Remove within continent stocks (will dominate the plot) and focus on inter-continent migrants
+```{r}
+d <- d %>%
+  rename(orig = pob_name,
+         dest = por_name) %>%
+  filter(orig != dest) %>%
+  select(-contains("code"))
+d
+
+```
+
+
+### Default `chordDiagram()`
+
+- The `chordDiagram()` function can take either a `matrix` or `data.frame` object as first argument `x` for the data.
+- I prefer the latter as they are much easier to create and manipulate (using *dplyr* and other *tidyverse* packages).
+    - When using a `data.frame`, the first three columns should correspond to the origin, destination and size of connection.
+    - Columns can take any name, but must be in that order.
+    - Will also work with `tbl_df` (tibble)
+- Many options in `chordDiagram()`, that by default are not ideal for displaying migration data
+
+```{r cd-default,  message=FALSE,  warning= TRUE,  }
+library(circlize)
+# first three columns not origin, destination, connection (in that order)
+chordDiagram(x = d)
+```
+
+### Default `chordDiagram()`
+
+- Move the `orig`, `dest` and `stock` columns to the left of the data frame using the `relocate()` function in the *dplyr* package
+```{r cd-col-order, message=TRUE,  warning= TRUE,  }
+d <- relocate(d, orig, dest, stock)
+d
+chordDiagram(x = d)
+```
+
+
+
+### Default `chordDiagram()`
+
+- Avoid chord link ends with unequal widths at each base by using only one numeric column in `d`
+```{r cd-column3, message=FALSE, message=FALSE,  warning= FALSE,  }
+d <- select(d, orig, dest, stock)
+d
+chordDiagram(x = d)
+```
+
+
+## Sectors
+
+### Sector Axis
+
+- Edit the bilateral counts to a sensible scale to ensure the axis labels are legible.
+
+```{r cd-axis, message=FALSE, message=FALSE,  warning= FALSE,  }
+d <- mutate(d, stock = stock/1e6)
+d
+chordDiagram(x = d)
+```
+
+### Sector ordering
+
+- Sector ordering is alphabetical by default
+- Can specify order using `order` argument and pass a vector
+- Try to order so that neighboring regions are next each other
+
+```{r}
+r <- tibble(reg = union(d$orig, d$dest))
+r
+```
+
+### Sector ordering
+
+```{r cd-sector, message=FALSE, message=FALSE,  warning= FALSE,  }
+r <- r %>%
+  mutate(reg_order = c(4, 3, 6, 1, 5, 2)) %>%
+  arrange(reg_order)
+r
+
+# order sectors
+chordDiagram(x = d, order = r$reg)
+```
+
+### Orientation and gaps
+
+- The `circos.par()` function controls the overall layout parameters of the graphic display
+- Use `circos.par()` to set
+    - `gap.degree` the degree of gaps between sectors are set - default `gap.degree = 1`
+    - `start.degree` the degree from three o'clock where the first sector appears - default `start.degree = 0`
+- Anything set via `circos.par()` will be fixed for all remaining pots
+- Reset to default graphic parameters using `circos.clear()` or overwrite with new `circos.par()`
+
+```{r cd-gap, message=FALSE, message=FALSE,  warning= FALSE,  }
+# increase gaps
+circos.par(gap.degree = 5)
+chordDiagram(x = d, order = r$reg)
+
+# rotate
+circos.par(start.degree = 90)
+chordDiagram(x = d, order = r$reg)
+```
+
+
+
+## Colour
+
+### Sector colours
+
+- Colours are randomly generated (will change every time you plot)
+- Can set to a choice using either:
+    - `grid.col` corresponding to sectors (regions/countries/areas)
+    - `transparency` set by default to 0.5
+
+```{r cd-col1, message=FALSE, message=FALSE,  warning= FALSE,  }
+r <- r %>%
+  mutate(col1 = c("black", "gold", "orange", "blue", "purple", "red"))
+r
+
+chordDiagram(x = d, order = r$reg, grid.col = r$col1)
+```
+
+
+### Sector colour
+
+- Can use the *RColourBrewer* package to generate palettes (maximum of 9 colours)
+    - Based on `https://colorbrewer2.org/`
+
+```{r cd-col2, message=FALSE, message=FALSE, warning= FALSE,  }
+library(RColorBrewer)
+r <- r %>%
+  mutate(col2 = brewer.pal(n = 6, name = "Set1"),
+         col3 = c("Red", rep("Grey", times = 5)))
+r
+
+chordDiagram(x = d, order = r$reg, grid.col = r$col2)
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25)
+chordDiagram(x = d, order = r$reg, grid.col = r$col3)
+```
+
+### Chord colours
+
+- Chord colours follow the origin sector. We can specify different colours using
+    - `col` corresponding to links (bilateral migration data)
+    - `link.visible` will hide particular chords
+```{r}
+d <- d %>%
+  # highlight Asia to Europe flows
+  mutate(link_col1 = ifelse(test = orig == "ASIA" & dest == "EUROPE",
+                            yes = "black", no = "grey"),
+         # show only flows out or into Asia
+         show_link = orig == "ASIA" | dest == "ASIA")
+d
+```
+
+
+### Chord colours
+
+- Pass the chord specific settings to `chordDiagram()`
+```{r cd-col3, message=FALSE, message=FALSE,  warning= FALSE,  }
+chordDiagram(x = d, order = r$reg,
+             grid.col = r$col2, col = d$link_col1)
+chordDiagram(x = d, order = r$reg,
+             grid.col = r$col2, link.visible = d$show_link)
+```
+
+
+## Chords
+
+### Direction
+
+- Distinguish direction of bilateral link using
+    - Different heights at the start and end of the chord links
+    - Arrows
+    - Combination of both
+- Set in `chordDiagram()` using
+    - `directional = 1` (from link goes from first to second column)
+    - `direction.type` arguments
+```{r cd-direction1, message=FALSE, message=FALSE,  warning= FALSE,  }
+# drop link_col column
+d$link_col1 <- NULL
+
+# as used by Sander, default of direction.type = "diffHeight"
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1)
+
+# default arrows are too much
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"))
+
+# getting there...
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow")
+```
+
+
+## Direction
+
+- Connect the base of the link to the sector through combination of
+    - Adjusting the difference in height between the beginning and end of chords
+    - Removing padding between the axis and the grid (the inner circle where the chords are)
+- Set the `diffHeight` argument to a negative number so that the start of the chord is longer than then end.
+   - Removes the destination sector bars (chart junk IMO).
+```{r cd-direction2, message=FALSE, message=FALSE,  warning= FALSE,  }
+# extreme height difference
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight  = -0.2)
+
+# height difference looks good
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight  = -0.05)
+```
+
+
+### Direction
+
+- Set in the `track.margin` option of `circos.par()` to remove the padding
+    - Default of `track.margin = c(0.01, 0.01)` for chord diagrams - one percent between label names and the axis, and one percent between the axis and the grid (the chords)
+
+```{r cd-direction3, message=FALSE, message=FALSE,  warning= FALSE,  }
+# set second margin to zero
+circos.par(track.margin = c(0.01, 0))
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05)
+
+# set second margin to -0.01 to get seamless overlap
+circos.par(track.margin = c(0.01, -0.01))
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05)
+
+
+```
+
+
+
+
+### Chord ordering
+
+- Number of options in `chordDiagram()` to control the chord link order
+    - `link.sort` sort the order the links from largest to smaller as the enter and exit the plot, by default `FALSE`
+    - `link.largest.ontop` sort the order of the plotting of the links so that the smallest are given less prominence. By default `FALSE`, so plots the links in the last sector last and they appear more predominant
+```{r cd-order, message=FALSE, message=FALSE,  warning= FALSE,  }
+# sort links on sectors
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE)
+
+# sort link plotting order
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE, link.largest.ontop = TRUE)
+```
+
+
+## Labels
+
+### Labels
+
+- Multiple options for the orientation of labels, set via
+    - `inside`, `outside`, `clockwise`, `reverse.clockwise`, `downward`, `bending.inside` and `bending.outside`
+    - Cannot pass to `chordDiagram()` so we have to first use `annotationTrack` option to only plot the `grid` (the chords) and `axis` (default for `annotationTrack = c("name", "grid", "axis")`)
+- To add the labels we use the `panel.fun` argument in `circos.track()`.
+    - Works like a for loop, cycling through each sector of the track (the circle)
+    - For each sector we use `circos.text()` to add labels at a specified `x` and `y` location
+    - Can also set the `facing` orientation of the labels as well as other options such as text size (`cex`) and colour (`col`)
+
+```{r cd-label1, message=FALSE, message=FALSE,  warning= FALSE,  }
+# drop the name labels
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE, link.largest.ontop = TRUE,
+             annotationTrack = c("grid", "axis"))
+```
+
+
+### Labels
+
+- No room for labels. We can create this using the `preAllocateTracks` argument.
+    - Requires a list of graphical parameters
+    - Set `track.height` as a percentage of plot area.
+
+```{r cd-label2, message=FALSE, message=FALSE,  warning= FALSE,  }
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE, link.largest.ontop = TRUE,
+             annotationTrack = c("grid", "axis"),
+             preAllocateTracks = list(track.height = 0.1))
+
+# add labels
+circos.track(track.index = 1, bg.border = NA, panel.fun = function(x, y) {
+  # create temporary objects for the sector name and x-limits
+  reg_lab <- get.cell.meta.data("sector.index")
+  xx <- get.cell.meta.data("xlim")
+  # use the temporary objects to add text in each sector of the track
+  circos.text(x = mean(xx), y = 1, labels = reg_lab, facing = "bending")
+})
+```
+
+
+### Labels
+
+- Still not enough room for longer labels.
+    - Increase the `track.height`
+    - Create two labels for some regions
+    - Reduce the font size using `cex` in `circos.text()` - default is `cex = 1`
+```{r}
+str_wrap(string = r$reg, width = 14)
+
+r <- r %>%
+  # title case for labels
+  mutate(lab = str_to_title(string = reg),
+         lab = str_replace(string = lab, pattern = "And The", replacement = "&"),
+  # use str_wrap to split longer labels into two
+         lab = str_wrap(string = lab, width = 14)) %>%
+  # separate based on \n
+  separate(col = lab, into = c("lab1", "lab2"), sep = "\n", fill = "right") %>%
+  # positioning for first lab1, needs to be further out if lab2 exists
+  mutate(y = ifelse(test = !is.na(lab2), yes = 1, no = 0.8))
+```
+
+### Labels
+
+- Still not enough room for longer labels.
+    - Increase the `track.height`
+    - Create two labels for some regions
+    - Reduce the font size using `cex` in `circos.text()` - default is `cex = 1`
+```{r}
+r
+```
+
+
+### Labels
+
+```{r cd-label4, message=FALSE, message=FALSE,  warning= FALSE,  }
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE, link.largest.ontop = TRUE,
+             annotationTrack = c("grid", "axis"),
+             # increase to 0.2 to fit two lines of labels
+             preAllocateTracks = list(track.height = 0.2))
+
+circos.track(track.index = 1, bg.border = NA, panel.fun = function(x, y) {
+  s <- get.cell.meta.data("sector.index")
+  # filter to row of r for the sector's region to create a temporary rr
+  rr <- filter(r, reg == s)
+  xx <- get.cell.meta.data("xlim")
+  # use temporary rr to add text
+  circos.text(x = mean(xx), y = rr$y, labels = rr$lab1, facing = "bending",
+              cex = 0.8)
+  circos.text(x = mean(xx), y = 0.6,  labels = rr$lab2, facing = "bending",
+              cex = 0.8)
+})
+```
+
+### Saving
+
+- Always save as PDF to give scalable image
+    - We can zoom in very closely and we will still see the chords
+    - If we save a vector graphic, e.g. PNG these details will disappear.
+- Use the `pdf()` function before the plot to open a PDF
+- Use `dev.off()` after the plot code to close the PDF
+
+```{r, message=FALSE, message=FALSE,  warning= FALSE, eval=FALSE}
+pdf(file = "./plot/un_stock_2019.pdf", width = 4, height = 4)
+
+circos.par(track.margin = c(0.01, -0.01), gap.degree = 5, start.degree = 90)
+chordDiagram(x = d, order = r$reg, grid.col = r$col2, transparency = 0.25,
+             directional = 1, direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "big.arrow", diffHeight = -0.05,
+             link.sort = TRUE, link.largest.ontop = TRUE,
+             annotationTrack = c("grid", "axis"),
+             preAllocateTracks = list(track.height = 0.2))
+circos.track(track.index = 1, bg.border = NA, panel.fun = function(x, y) {
+  s <- get.cell.meta.data("sector.index")
+  rr <- filter(r, reg == s)
+  xx <- get.cell.meta.data("xlim")
+  circos.text(x = mean(xx), y = rr$y, labels = rr$lab1, facing = "bending", cex = 0.8)
+  circos.text(x = mean(xx), y = 0.6,  labels = rr$lab2, facing = "bending", cex = 0.8)
+})
+
+dev.off()
+```
+
+### Saving
+
+- Left:  PNG with `width = 4, height = 4`
+- Right: PDF with `width = 4, height = 4`
+
+
+```{r echo=FALSE, out.width="45%"}
+knitr::include_graphics(path = "plot/un_stock_2019.png")
+knitr::include_graphics(path = "plot/un_stock_2019.pdf")
+```
+
+- Could increase resolution of PNG with larger dimensions but at the cost of very large file sizes
+
+
+### Exercise (ex8.R)
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('exercise/ex8.R') }
+```

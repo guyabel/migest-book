@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Describing and Estimating Migration Age Structures | Tools for Estimating, Measuring and Working with Migration Data in R</title>
+  <meta name="description" content="Chapter 7 Describing and Estimating Migration Age Structures | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Describing and Estimating Migration Age Structures | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="guyabel/migest-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Describing and Estimating Migration Age Structures | Tools for Estimating, Measuring and Working with Migration Data in R" />
+  
+  
+  
+
+<meta name="author" content="Guy J. Abel, James Raymer, Ellen Kraly" />
+
+
+<meta name="date" content="2021-10-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estimating-net-migration.html"/>
+<link rel="next" href="describing-bilteral-migration-data.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> .</a></li>
+<li class="chapter" data-level="2" data-path="outline.html"><a href="outline.html"><i class="fa fa-check"></i><b>2</b> Outline</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="outline.html"><a href="outline.html#workshop-on-migration-estimation"><i class="fa fa-check"></i><b>2.1</b> Workshop on Migration Estimation</a></li>
+<li class="chapter" data-level="2.2" data-path="outline.html"><a href="outline.html#general-points"><i class="fa fa-check"></i><b>2.2</b> General Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="migration-concepts.html"><a href="migration-concepts.html"><i class="fa fa-check"></i><b>3</b> Migration Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#spatial"><i class="fa fa-check"></i><b>3.1</b> Spatial</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence"><i class="fa fa-check"></i><b>3.1.1</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.2" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-1"><i class="fa fa-check"></i><b>3.1.2</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.3" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-residence-2"><i class="fa fa-check"></i><b>3.1.3</b> Place of Residence</a></li>
+<li class="chapter" data-level="3.1.4" data-path="migration-concepts.html"><a href="migration-concepts.html#courgeau-1979"><i class="fa fa-check"></i><b>3.1.4</b> Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.5" data-path="migration-concepts.html"><a href="migration-concepts.html#place-of-origin"><i class="fa fa-check"></i><b>3.1.5</b> Place of Origin</a></li>
+<li class="chapter" data-level="3.1.6" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data"><i class="fa fa-check"></i><b>3.1.6</b> Migrant Transition Data</a></li>
+<li class="chapter" data-level="3.1.7" data-path="migration-concepts.html"><a href="migration-concepts.html#migrant-transition-data---rees-1970"><i class="fa fa-check"></i><b>3.1.7</b> Migrant Transition Data - Rees 1970</a></li>
+<li class="chapter" data-level="3.1.8" data-path="migration-concepts.html"><a href="migration-concepts.html#migrants-and-migration"><i class="fa fa-check"></i><b>3.1.8</b> Migrants and Migration</a></li>
+<li class="chapter" data-level="3.1.9" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data"><i class="fa fa-check"></i><b>3.1.9</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.10" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-1"><i class="fa fa-check"></i><b>3.1.10</b> Migration Event Data</a></li>
+<li class="chapter" data-level="3.1.11" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data---courgeau-1979"><i class="fa fa-check"></i><b>3.1.11</b> Migration Event Data - Courgeau (1979)</a></li>
+<li class="chapter" data-level="3.1.12" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-event-data-2"><i class="fa fa-check"></i><b>3.1.12</b> Migration Event Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#temporal"><i class="fa fa-check"></i><b>3.2</b> Temporal</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval"><i class="fa fa-check"></i><b>3.2.1</b> Migration Interval</a></li>
+<li class="chapter" data-level="3.2.2" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-interval---rees-1977"><i class="fa fa-check"></i><b>3.2.2</b> Migration Interval - Rees (1977)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem"><i class="fa fa-check"></i><b>3.2.3</b> One-Year Five-Year Problem</a></li>
+<li class="chapter" data-level="3.2.4" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970"><i class="fa fa-check"></i><b>3.2.4</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.5" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-1"><i class="fa fa-check"></i><b>3.2.5</b> One-Year Five-Year Problem - Rees 1970</a></li>
+<li class="chapter" data-level="3.2.6" data-path="migration-concepts.html"><a href="migration-concepts.html#one-year-five-year-problem---rees-1970-2"><i class="fa fa-check"></i><b>3.2.6</b> One-Year Five-Year Problem - Rees 1970</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#measures"><i class="fa fa-check"></i><b>3.3</b> Measures</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="migration-concepts.html"><a href="migration-concepts.html#migration-measures"><i class="fa fa-check"></i><b>3.3.1</b> Migration measures</a></li>
+<li class="chapter" data-level="3.3.2" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures"><i class="fa fa-check"></i><b>3.3.2</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.3" data-path="migration-concepts.html"><a href="migration-concepts.html#region-to-region-measures-1"><i class="fa fa-check"></i><b>3.3.3</b> Region to region measures</a></li>
+<li class="chapter" data-level="3.3.4" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals"><i class="fa fa-check"></i><b>3.3.4</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.5" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-1"><i class="fa fa-check"></i><b>3.3.5</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.6" data-path="migration-concepts.html"><a href="migration-concepts.html#region-totals-2"><i class="fa fa-check"></i><b>3.3.6</b> Region totals</a></li>
+<li class="chapter" data-level="3.3.7" data-path="migration-concepts.html"><a href="migration-concepts.html#rate-measures"><i class="fa fa-check"></i><b>3.3.7</b> Rate measures</a></li>
+<li class="chapter" data-level="3.3.8" data-path="migration-concepts.html"><a href="migration-concepts.html#rates"><i class="fa fa-check"></i><b>3.3.8</b> Rates</a></li>
+<li class="chapter" data-level="3.3.9" data-path="migration-concepts.html"><a href="migration-concepts.html#rates-1"><i class="fa fa-check"></i><b>3.3.9</b> Rates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html"><i class="fa fa-check"></i><b>4</b> Handling Migration Data in R</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table"><i class="fa fa-check"></i><b>4.1</b> Contingency Table</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-1"><i class="fa fa-check"></i><b>4.1.1</b> Contingency Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#contingency-table-2"><i class="fa fa-check"></i><b>4.1.2</b> Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-manipulation"><i class="fa fa-check"></i><b>4.2</b> Data Manipulation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array"><i class="fa fa-check"></i><b>4.2.1</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#r-matrix-and-array-1"><i class="fa fa-check"></i><b>4.2.2</b> R <code>matrix</code> and <code>array</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#show-totals"><i class="fa fa-check"></i><b>4.2.3</b> Show totals</a></li>
+<li class="chapter" data-level="4.2.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix"><i class="fa fa-check"></i><b>4.2.4</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-1"><i class="fa fa-check"></i><b>4.2.5</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-matrix-2"><i class="fa fa-check"></i><b>4.2.6</b> Convert to matrix</a></li>
+<li class="chapter" data-level="4.2.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame"><i class="fa fa-check"></i><b>4.2.7</b> Convert to data frame</a></li>
+<li class="chapter" data-level="4.2.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#convert-to-data-frame-1"><i class="fa fa-check"></i><b>4.2.8</b> Convert to data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#matrix-operations"><i class="fa fa-check"></i><b>4.3</b> Matrix Operations</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics"><i class="fa fa-check"></i><b>4.3.1</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#displaying-migration-matrics-1"><i class="fa fa-check"></i><b>4.3.2</b> Displaying migration matrics</a></li>
+<li class="chapter" data-level="4.3.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names"><i class="fa fa-check"></i><b>4.3.3</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-1"><i class="fa fa-check"></i><b>4.3.4</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#abbriviate-names-2"><i class="fa fa-check"></i><b>4.3.5</b> Abbriviate names</a></li>
+<li class="chapter" data-level="4.3.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#data-scaling"><i class="fa fa-check"></i><b>4.3.6</b> Data scaling</a></li>
+<li class="chapter" data-level="4.3.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#diagonal-elements"><i class="fa fa-check"></i><b>4.3.7</b> Diagonal elements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#summaries"><i class="fa fa-check"></i><b>4.4</b> Summaries</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows"><i class="fa fa-check"></i><b>4.4.1</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.2" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#net-flows-and-counterflows-1"><i class="fa fa-check"></i><b>4.4.2</b> Net flows and counterflows</a></li>
+<li class="chapter" data-level="4.4.3" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals"><i class="fa fa-check"></i><b>4.4.3</b> Totals</a></li>
+<li class="chapter" data-level="4.4.4" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-1"><i class="fa fa-check"></i><b>4.4.4</b> Totals</a></li>
+<li class="chapter" data-level="4.4.5" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-2"><i class="fa fa-check"></i><b>4.4.5</b> Totals</a></li>
+<li class="chapter" data-level="4.4.6" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-3"><i class="fa fa-check"></i><b>4.4.6</b> Totals</a></li>
+<li class="chapter" data-level="4.4.7" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#totals-4"><i class="fa fa-check"></i><b>4.4.7</b> Totals</a></li>
+<li class="chapter" data-level="4.4.8" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies"><i class="fa fa-check"></i><b>4.4.8</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.9" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-1"><i class="fa fa-check"></i><b>4.4.9</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.10" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-2"><i class="fa fa-check"></i><b>4.4.10</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.11" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#rest-of-categroies-3"><i class="fa fa-check"></i><b>4.4.11</b> Rest of categroies</a></li>
+<li class="chapter" data-level="4.4.12" data-path="handling-migration-data-in-r.html"><a href="handling-migration-data-in-r.html#exercise-ex2.r"><i class="fa fa-check"></i><b>4.4.12</b> Exercise (ex2.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html"><i class="fa fa-check"></i><b>5</b> Summary Migration Indices</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-1"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#background-2"><i class="fa fa-check"></i><b>5.1.2</b> Background</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#intensity"><i class="fa fa-check"></i><b>5.2</b> Intensity</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity"><i class="fa fa-check"></i><b>5.2.1</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#crude-migration-probability"><i class="fa fa-check"></i><b>5.2.2</b> Crude migration probability</a></li>
+<li class="chapter" data-level="5.2.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-1"><i class="fa fa-check"></i><b>5.2.3</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-2"><i class="fa fa-check"></i><b>5.2.4</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-3"><i class="fa fa-check"></i><b>5.2.5</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-4"><i class="fa fa-check"></i><b>5.2.6</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-5"><i class="fa fa-check"></i><b>5.2.7</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-6"><i class="fa fa-check"></i><b>5.2.8</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-7"><i class="fa fa-check"></i><b>5.2.9</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-8"><i class="fa fa-check"></i><b>5.2.10</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.11" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-9"><i class="fa fa-check"></i><b>5.2.11</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.12" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-10"><i class="fa fa-check"></i><b>5.2.12</b> Migration intensity</a></li>
+<li class="chapter" data-level="5.2.13" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-intensity-11"><i class="fa fa-check"></i><b>5.2.13</b> Migration intensity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance"><i class="fa fa-check"></i><b>5.3</b> Distance</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance"><i class="fa fa-check"></i><b>5.3.1</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#average-migration-distance"><i class="fa fa-check"></i><b>5.3.2</b> Average migration distance</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#distance-decay"><i class="fa fa-check"></i><b>5.3.3</b> Distance decay</a></li>
+<li class="chapter" data-level="5.3.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-1"><i class="fa fa-check"></i><b>5.3.4</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-2"><i class="fa fa-check"></i><b>5.3.5</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-distance-3"><i class="fa fa-check"></i><b>5.3.6</b> Migration distance</a></li>
+<li class="chapter" data-level="5.3.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances"><i class="fa fa-check"></i><b>5.3.7</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-1"><i class="fa fa-check"></i><b>5.3.8</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.9" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-2"><i class="fa fa-check"></i><b>5.3.9</b> Calculating distances</a></li>
+<li class="chapter" data-level="5.3.10" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#calculating-distances-3"><i class="fa fa-check"></i><b>5.3.10</b> Calculating distances</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity"><i class="fa fa-check"></i><b>5.4</b> Connectivity</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity"><i class="fa fa-check"></i><b>5.4.1</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-connectivity-1"><i class="fa fa-check"></i><b>5.4.2</b> Migration connectivity</a></li>
+<li class="chapter" data-level="5.4.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#connectivity-and-inequality"><i class="fa fa-check"></i><b>5.4.3</b> Connectivity and Inequality</a></li>
+<li class="chapter" data-level="5.4.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#gini-measures"><i class="fa fa-check"></i><b>5.4.4</b> Gini measures</a></li>
+<li class="chapter" data-level="5.4.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-totals-gini-and-coefficient-of-variation"><i class="fa fa-check"></i><b>5.4.5</b> Migration totals Gini and Coefficient of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#impact"><i class="fa fa-check"></i><b>5.5</b> Impact</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact"><i class="fa fa-check"></i><b>5.5.1</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.2" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-effectiveness-index"><i class="fa fa-check"></i><b>5.5.2</b> Migration effectiveness index</a></li>
+<li class="chapter" data-level="5.5.3" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#aggregate-net-migration-rate"><i class="fa fa-check"></i><b>5.5.3</b> Aggregate net migration rate</a></li>
+<li class="chapter" data-level="5.5.4" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#preference-and-velocity"><i class="fa fa-check"></i><b>5.5.4</b> Preference and velocity</a></li>
+<li class="chapter" data-level="5.5.5" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-1"><i class="fa fa-check"></i><b>5.5.5</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.6" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-2"><i class="fa fa-check"></i><b>5.5.6</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.7" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#migration-impact-3"><i class="fa fa-check"></i><b>5.5.7</b> Migration impact</a></li>
+<li class="chapter" data-level="5.5.8" data-path="summary-migration-indices.html"><a href="summary-migration-indices.html#exercise-ex3.r"><i class="fa fa-check"></i><b>5.5.8</b> Exercise (ex3.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html"><i class="fa fa-check"></i><b>6</b> Estimating Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration"><i class="fa fa-check"></i><b>6.1</b> Net Migration</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-1"><i class="fa fa-check"></i><b>6.1.1</b> Net migration</a></li>
+<li class="chapter" data-level="6.1.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#net-migration-estimation"><i class="fa fa-check"></i><b>6.1.2</b> Net migration estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statstics"><i class="fa fa-check"></i><b>6.2</b> Vital Statstics</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics"><i class="fa fa-check"></i><b>6.2.1</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-1"><i class="fa fa-check"></i><b>6.2.2</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-2"><i class="fa fa-check"></i><b>6.2.3</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#vital-statsitics-3"><i class="fa fa-check"></i><b>6.2.4</b> Vital statsitics</a></li>
+<li class="chapter" data-level="6.2.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties"><i class="fa fa-check"></i><b>6.2.5</b> Difficulties</a></li>
+<li class="chapter" data-level="6.2.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#difficulties-1"><i class="fa fa-check"></i><b>6.2.6</b> Difficulties</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods"><i class="fa fa-check"></i><b>6.3</b> Survival Methods</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-1"><i class="fa fa-check"></i><b>6.3.1</b> Survival methods</a></li>
+<li class="chapter" data-level="6.3.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#forward-survival-ratios"><i class="fa fa-check"></i><b>6.3.2</b> Forward survival ratios</a></li>
+<li class="chapter" data-level="6.3.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#reverse-survival-ratios"><i class="fa fa-check"></i><b>6.3.3</b> Reverse survival ratios</a></li>
+<li class="chapter" data-level="6.3.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#average-survival-ratios"><i class="fa fa-check"></i><b>6.3.4</b> Average survival ratios</a></li>
+<li class="chapter" data-level="6.3.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r"><i class="fa fa-check"></i><b>6.3.5</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-1"><i class="fa fa-check"></i><b>6.3.6</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-2"><i class="fa fa-check"></i><b>6.3.7</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-3"><i class="fa fa-check"></i><b>6.3.8</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-methods-in-r-4"><i class="fa fa-check"></i><b>6.3.9</b> Survival methods in R</a></li>
+<li class="chapter" data-level="6.3.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#survival-ratios"><i class="fa fa-check"></i><b>6.3.10</b> Survival ratios</a></li>
+<li class="chapter" data-level="6.3.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#life-table-survival-ratios"><i class="fa fa-check"></i><b>6.3.11</b> Life table survival ratios</a></li>
+<li class="chapter" data-level="6.3.12" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios"><i class="fa fa-check"></i><b>6.3.12</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.13" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data"><i class="fa fa-check"></i><b>6.3.13</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.14" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-1"><i class="fa fa-check"></i><b>6.3.14</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.3.15" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#census-survival-ratios-1"><i class="fa fa-check"></i><b>6.3.15</b> Census survival ratios</a></li>
+<li class="chapter" data-level="6.3.16" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#limitations-of-census-survival-ratios"><i class="fa fa-check"></i><b>6.3.16</b> Limitations of census survival ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace"><i class="fa fa-check"></i><b>6.4</b> Birthplace</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-1"><i class="fa fa-check"></i><b>6.4.1</b> Birthplace</a></li>
+<li class="chapter" data-level="6.4.2" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals"><i class="fa fa-check"></i><b>6.4.2</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.3" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-1"><i class="fa fa-check"></i><b>6.4.3</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.4" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-2"><i class="fa fa-check"></i><b>6.4.4</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.5" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-3"><i class="fa fa-check"></i><b>6.4.5</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.6" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-4"><i class="fa fa-check"></i><b>6.4.6</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.7" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#birthplace-totals-5"><i class="fa fa-check"></i><b>6.4.7</b> Birthplace totals</a></li>
+<li class="chapter" data-level="6.4.8" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-2"><i class="fa fa-check"></i><b>6.4.8</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.9" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-3"><i class="fa fa-check"></i><b>6.4.9</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.10" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#age-specfic-birthplace-data-4"><i class="fa fa-check"></i><b>6.4.10</b> Age-specfic birthplace data</a></li>
+<li class="chapter" data-level="6.4.11" data-path="estimating-net-migration.html"><a href="estimating-net-migration.html#exercise-ex4.r"><i class="fa fa-check"></i><b>6.4.11</b> Exercise (ex4.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html"><i class="fa fa-check"></i><b>7</b> Describing and Estimating Migration Age Structures</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro"><i class="fa fa-check"></i><b>7.1</b> Rogers Castro</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.1.1</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.1.2</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.1.3</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.1.4</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.1.5</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.1.6</b> Rogers Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.1.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#rogers-castro-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.1.7</b> Rogers Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-schedules"><i class="fa fa-check"></i><b>7.2</b> Model schedules</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules"><i class="fa fa-check"></i><b>7.2.1</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.2.2</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.2.3</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.2.4</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.2.5</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.2.6</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-6"><i class="fa fa-check"></i><b>7.2.7</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-7"><i class="fa fa-check"></i><b>7.2.8</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-8"><i class="fa fa-check"></i><b>7.2.9</b> Model migration age schedules</a></li>
+<li class="chapter" data-level="7.2.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#model-migration-age-schedules-9"><i class="fa fa-check"></i><b>7.2.10</b> Model migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-schedules"><i class="fa fa-check"></i><b>7.3</b> Fitting schedules</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules"><i class="fa fa-check"></i><b>7.3.1</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-1"><i class="fa fa-check"></i><b>7.3.2</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-2"><i class="fa fa-check"></i><b>7.3.3</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-3"><i class="fa fa-check"></i><b>7.3.4</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-4"><i class="fa fa-check"></i><b>7.3.5</b> Fitting Roger Castro migration age schedules</a></li>
+<li class="chapter" data-level="7.3.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#fitting-roger-castro-migration-age-schedules-5"><i class="fa fa-check"></i><b>7.3.6</b> Fitting Roger Castro migration age schedules</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices"><i class="fa fa-check"></i><b>7.4</b> Age Indices</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-1"><i class="fa fa-check"></i><b>7.4.1</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-2"><i class="fa fa-check"></i><b>7.4.2</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-3"><i class="fa fa-check"></i><b>7.4.3</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-4"><i class="fa fa-check"></i><b>7.4.4</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-5"><i class="fa fa-check"></i><b>7.4.5</b> Age Indices</a></li>
+<li class="chapter" data-level="7.4.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#age-indices-6"><i class="fa fa-check"></i><b>7.4.6</b> Age Indices</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#smoothing"><i class="fa fa-check"></i><b>7.5</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions"><i class="fa fa-check"></i><b>7.5.1</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-1"><i class="fa fa-check"></i><b>7.5.2</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-2"><i class="fa fa-check"></i><b>7.5.3</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#general-purpose-smoothing-functions-3"><i class="fa fa-check"></i><b>7.5.4</b> General purpose smoothing functions</a></li>
+<li class="chapter" data-level="7.5.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing"><i class="fa fa-check"></i><b>7.5.5</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#kernal-smoothing-1"><i class="fa fa-check"></i><b>7.5.6</b> Kernal smoothing</a></li>
+<li class="chapter" data-level="7.5.7" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing"><i class="fa fa-check"></i><b>7.5.7</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.8" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#loess-smoothing-1"><i class="fa fa-check"></i><b>7.5.8</b> Loess smoothing</a></li>
+<li class="chapter" data-level="7.5.9" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing"><i class="fa fa-check"></i><b>7.5.9</b> Cubic spline smoothing</a></li>
+<li class="chapter" data-level="7.5.10" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#cubic-spline-smoothing-1"><i class="fa fa-check"></i><b>7.5.10</b> Cubic spline smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating"><i class="fa fa-check"></i><b>7.6</b> Graduating</a>
+<ul>
+<li class="chapter" data-level="7.6.1" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-1"><i class="fa fa-check"></i><b>7.6.1</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.2" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-2"><i class="fa fa-check"></i><b>7.6.2</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.3" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-3"><i class="fa fa-check"></i><b>7.6.3</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.4" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#graduating-4"><i class="fa fa-check"></i><b>7.6.4</b> Graduating</a></li>
+<li class="chapter" data-level="7.6.5" data-path="describing-and-estimating-migration-age-structures.html"><a href="describing-and-estimating-migration-age-structures.html#exercise-5-ex5.r"><i class="fa fa-check"></i><b>7.6.5</b> Exercise 5 (ex5.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html"><i class="fa fa-check"></i><b>8</b> Describing Bilteral Migration Data</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#components"><i class="fa fa-check"></i><b>8.1</b> Components</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model"><i class="fa fa-check"></i><b>8.1.1</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-1"><i class="fa fa-check"></i><b>8.1.2</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-2"><i class="fa fa-check"></i><b>8.1.3</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-3"><i class="fa fa-check"></i><b>8.1.4</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-4"><i class="fa fa-check"></i><b>8.1.5</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-5"><i class="fa fa-check"></i><b>8.1.6</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-6"><i class="fa fa-check"></i><b>8.1.7</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-7"><i class="fa fa-check"></i><b>8.1.8</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.9" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-8"><i class="fa fa-check"></i><b>8.1.9</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.10" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-9"><i class="fa fa-check"></i><b>8.1.10</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.11" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-10"><i class="fa fa-check"></i><b>8.1.11</b> Multiplicative Component Model</a></li>
+<li class="chapter" data-level="8.1.12" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#multiplicative-component-model-11"><i class="fa fa-check"></i><b>8.1.12</b> Multiplicative Component Model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models"><i class="fa fa-check"></i><b>8.2</b> Log-Linear Models</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-1"><i class="fa fa-check"></i><b>8.2.1</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-2"><i class="fa fa-check"></i><b>8.2.2</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-3"><i class="fa fa-check"></i><b>8.2.3</b> Log-Linear Models</a></li>
+<li class="chapter" data-level="8.2.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-models-4"><i class="fa fa-check"></i><b>8.2.4</b> Log-Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#dimensions"><i class="fa fa-check"></i><b>8.3</b> Dimensions</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis"><i class="fa fa-check"></i><b>8.3.1</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.2" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-1"><i class="fa fa-check"></i><b>8.3.2</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.3" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-2"><i class="fa fa-check"></i><b>8.3.3</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.4" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-3"><i class="fa fa-check"></i><b>8.3.4</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.5" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-4"><i class="fa fa-check"></i><b>8.3.5</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.6" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-5"><i class="fa fa-check"></i><b>8.3.6</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.7" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#log-linear-model-analysis-6"><i class="fa fa-check"></i><b>8.3.7</b> Log-Linear Model Analysis</a></li>
+<li class="chapter" data-level="8.3.8" data-path="describing-bilteral-migration-data.html"><a href="describing-bilteral-migration-data.html#exercise-ex6.r"><i class="fa fa-check"></i><b>8.3.8</b> Exercise (ex6.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html"><i class="fa fa-check"></i><b>9</b> Estimating Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp"><i class="fa fa-check"></i><b>9.1</b> IPFP</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-1"><i class="fa fa-check"></i><b>9.1.1</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-2"><i class="fa fa-check"></i><b>9.1.2</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-3"><i class="fa fa-check"></i><b>9.1.3</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-4"><i class="fa fa-check"></i><b>9.1.4</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-5"><i class="fa fa-check"></i><b>9.1.5</b> IPFP</a></li>
+<li class="chapter" data-level="9.1.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp"><i class="fa fa-check"></i><b>9.1.6</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.7" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-1"><i class="fa fa-check"></i><b>9.1.7</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.8" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-2"><i class="fa fa-check"></i><b>9.1.8</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.9" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-3"><i class="fa fa-check"></i><b>9.1.9</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.10" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-4"><i class="fa fa-check"></i><b>9.1.10</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.11" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#three-dimensions"><i class="fa fa-check"></i><b>9.1.11</b> Three dimensions</a></li>
+<li class="chapter" data-level="9.1.12" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#ipfp-more-complicated-data-situations"><i class="fa fa-check"></i><b>9.1.12</b> IPFP More Complicated Data Situations</a></li>
+<li class="chapter" data-level="9.1.13" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#estimating-detailed-bilateral-migration"><i class="fa fa-check"></i><b>9.1.13</b> Estimating Detailed Bilateral Migration</a></li>
+<li class="chapter" data-level="9.1.14" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-5"><i class="fa fa-check"></i><b>9.1.14</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.15" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-6"><i class="fa fa-check"></i><b>9.1.15</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.16" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-7"><i class="fa fa-check"></i><b>9.1.16</b> mipfp</a></li>
+<li class="chapter" data-level="9.1.17" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#mipfp-8"><i class="fa fa-check"></i><b>9.1.17</b> mipfp</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constraints"><i class="fa fa-check"></i><b>9.2</b> Net Constraints</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows"><i class="fa fa-check"></i><b>9.2.1</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.2" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-1"><i class="fa fa-check"></i><b>9.2.2</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.3" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-2"><i class="fa fa-check"></i><b>9.2.3</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.4" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-3"><i class="fa fa-check"></i><b>9.2.4</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.5" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#net-constrained-origin-destination-flows-4"><i class="fa fa-check"></i><b>9.2.5</b> Net constrained origin-destination flows</a></li>
+<li class="chapter" data-level="9.2.6" data-path="estimating-bilateral-migration.html"><a href="estimating-bilateral-migration.html#exercise-ex7.r"><i class="fa fa-check"></i><b>9.2.6</b> Exercise (ex7.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>10</b> Chord Diagrams for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#section-1"><i class="fa fa-check"></i><b>10.1</b> .</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#background-3"><i class="fa fa-check"></i><b>10.1.1</b> Background</a></li>
+<li class="chapter" data-level="10.1.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#map-based---the-emigrants-of-the-world-minard-1858."><i class="fa fa-check"></i><b>10.1.2</b> Map Based - The Emigrants of the World, Minard 1858.</a></li>
+<li class="chapter" data-level="10.1.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#flowline-maps"><i class="fa fa-check"></i><b>10.1.3</b> Flowline Maps</a></li>
+<li class="chapter" data-level="10.1.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#criticised-new-york-times-refugee-flow-map"><i class="fa fa-check"></i><b>10.1.4</b> Criticised New York Times refugee flow map</a></li>
+<li class="chapter" data-level="10.1.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#martin-grandjeans-attempt-to-rectify"><i class="fa fa-check"></i><b>10.1.5</b> Martin Grandjean’s attempt to rectify</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagram"><i class="fa fa-check"></i><b>10.2</b> Chord Diagram</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams"><i class="fa fa-check"></i><b>10.2.1</b> Chord Diagrams</a></li>
+<li class="chapter" data-level="10.2.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#new-york-times-2007"><i class="fa fa-check"></i><b>10.2.2</b> New York Times 2007</a></li>
+<li class="chapter" data-level="10.2.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data"><i class="fa fa-check"></i><b>10.2.3</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-1"><i class="fa fa-check"></i><b>10.2.4</b> Chord Diagrams with Migration Data</a></li>
+<li class="chapter" data-level="10.2.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-with-migration-data-2"><i class="fa fa-check"></i><b>10.2.5</b> Chord Diagrams with Migration Data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#circlize"><i class="fa fa-check"></i><b>10.3</b> circlize</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-diagrams-in-r"><i class="fa fa-check"></i><b>10.3.1</b> Chord Diagrams in R</a></li>
+<li class="chapter" data-level="10.3.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020"><i class="fa fa-check"></i><b>10.3.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-1"><i class="fa fa-check"></i><b>10.3.3</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-2"><i class="fa fa-check"></i><b>10.3.4</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="10.3.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram"><i class="fa fa-check"></i><b>10.3.5</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-1"><i class="fa fa-check"></i><b>10.3.6</b> Default <code>chordDiagram()</code></a></li>
+<li class="chapter" data-level="10.3.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#default-chorddiagram-2"><i class="fa fa-check"></i><b>10.3.7</b> Default <code>chordDiagram()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sectors"><i class="fa fa-check"></i><b>10.4</b> Sectors</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-axis"><i class="fa fa-check"></i><b>10.4.1</b> Sector Axis</a></li>
+<li class="chapter" data-level="10.4.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering"><i class="fa fa-check"></i><b>10.4.2</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-ordering-1"><i class="fa fa-check"></i><b>10.4.3</b> Sector ordering</a></li>
+<li class="chapter" data-level="10.4.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#orientation-and-gaps"><i class="fa fa-check"></i><b>10.4.4</b> Orientation and gaps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#colour"><i class="fa fa-check"></i><b>10.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colours"><i class="fa fa-check"></i><b>10.5.1</b> Sector colours</a></li>
+<li class="chapter" data-level="10.5.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#sector-colour"><i class="fa fa-check"></i><b>10.5.2</b> Sector colour</a></li>
+<li class="chapter" data-level="10.5.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours"><i class="fa fa-check"></i><b>10.5.3</b> Chord colours</a></li>
+<li class="chapter" data-level="10.5.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-colours-1"><i class="fa fa-check"></i><b>10.5.4</b> Chord colours</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chords"><i class="fa fa-check"></i><b>10.6</b> Chords</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction"><i class="fa fa-check"></i><b>10.6.1</b> Direction</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-1"><i class="fa fa-check"></i><b>10.7</b> Direction</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#direction-2"><i class="fa fa-check"></i><b>10.7.1</b> Direction</a></li>
+<li class="chapter" data-level="10.7.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#chord-ordering"><i class="fa fa-check"></i><b>10.7.2</b> Chord ordering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels"><i class="fa fa-check"></i><b>10.8</b> Labels</a>
+<ul>
+<li class="chapter" data-level="10.8.1" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-1"><i class="fa fa-check"></i><b>10.8.1</b> Labels</a></li>
+<li class="chapter" data-level="10.8.2" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-2"><i class="fa fa-check"></i><b>10.8.2</b> Labels</a></li>
+<li class="chapter" data-level="10.8.3" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-3"><i class="fa fa-check"></i><b>10.8.3</b> Labels</a></li>
+<li class="chapter" data-level="10.8.4" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-4"><i class="fa fa-check"></i><b>10.8.4</b> Labels</a></li>
+<li class="chapter" data-level="10.8.5" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#labels-5"><i class="fa fa-check"></i><b>10.8.5</b> Labels</a></li>
+<li class="chapter" data-level="10.8.6" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving"><i class="fa fa-check"></i><b>10.8.6</b> Saving</a></li>
+<li class="chapter" data-level="10.8.7" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#saving-1"><i class="fa fa-check"></i><b>10.8.7</b> Saving</a></li>
+<li class="chapter" data-level="10.8.8" data-path="chord-diagrams-for-visualising-bilateral-migration.html"><a href="chord-diagrams-for-visualising-bilateral-migration.html#exercise-ex8.r"><i class="fa fa-check"></i><b>10.8.8</b> Exercise (ex8.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html"><i class="fa fa-check"></i><b>11</b> Sankey Plots for Visualising Bilateral Migration</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-4"><i class="fa fa-check"></i><b>11.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#background-5"><i class="fa fa-check"></i><b>11.1.1</b> Background</a></li>
+<li class="chapter" data-level="11.1.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#men-in-napoleons-1812-russian-campaign"><i class="fa fa-check"></i><b>11.1.2</b> Men in Napoleon’s 1812 Russian Campaign</a></li>
+<li class="chapter" data-level="11.1.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plot-of-migration-in-nature-by-butler2017"><i class="fa fa-check"></i><b>11.1.3</b> Sankey plot of migration in Nature by <span class="citation"><span>Butler</span> (<span>2017</span>)</span></a></li>
+<li class="chapter" data-level="11.1.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r"><i class="fa fa-check"></i><b>11.1.4</b> Sankey plots in R</a></li>
+<li class="chapter" data-level="11.1.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#sankey-plots-in-r-1"><i class="fa fa-check"></i><b>11.1.5</b> Sankey plots in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format"><i class="fa fa-check"></i><b>11.2</b> Data Format</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-3"><i class="fa fa-check"></i><b>11.2.1</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#un-international-migrant-stock-data-2020-4"><i class="fa fa-check"></i><b>11.2.2</b> UN international migrant stock data 2020</a></li>
+<li class="chapter" data-level="11.2.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-1"><i class="fa fa-check"></i><b>11.2.3</b> Data format</a></li>
+<li class="chapter" data-level="11.2.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#data-format-2"><i class="fa fa-check"></i><b>11.2.4</b> Data format</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#parrellel-sets"><i class="fa fa-check"></i><b>11.3</b> Parrellel Sets</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot"><i class="fa fa-check"></i><b>11.3.1</b> Default Plot</a></li>
+<li class="chapter" data-level="11.3.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#default-plot-1"><i class="fa fa-check"></i><b>11.3.2</b> Default Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes"><i class="fa fa-check"></i><b>11.4</b> Set Axes</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#set-axes-1"><i class="fa fa-check"></i><b>11.4.1</b> Set Axes</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-1"><i class="fa fa-check"></i><b>11.5</b> Colour</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#colour-2"><i class="fa fa-check"></i><b>11.5.1</b> Colour</a></li>
+<li class="chapter" data-level="11.5.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-colour---failed-axis-colour"><i class="fa fa-check"></i><b>11.5.2</b> Ribbon colour - failed axis colour</a></li>
+<li class="chapter" data-level="11.5.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#ribbon-transparency"><i class="fa fa-check"></i><b>11.5.3</b> Ribbon transparency</a></li>
+<li class="chapter" data-level="11.5.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour"><i class="fa fa-check"></i><b>11.5.4</b> Axis colour</a></li>
+<li class="chapter" data-level="11.5.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#axis-colour-1"><i class="fa fa-check"></i><b>11.5.5</b> Axis colour</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-6"><i class="fa fa-check"></i><b>11.6</b> Labels</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-7"><i class="fa fa-check"></i><b>11.6.1</b> Labels</a></li>
+<li class="chapter" data-level="11.6.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-8"><i class="fa fa-check"></i><b>11.6.2</b> Labels</a></li>
+<li class="chapter" data-level="11.6.3" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-9"><i class="fa fa-check"></i><b>11.6.3</b> Labels</a></li>
+<li class="chapter" data-level="11.6.4" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-10"><i class="fa fa-check"></i><b>11.6.4</b> Labels</a></li>
+<li class="chapter" data-level="11.6.5" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#labels-11"><i class="fa fa-check"></i><b>11.6.5</b> Labels</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing"><i class="fa fa-check"></i><b>11.7</b> Spacing</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#spacing-1"><i class="fa fa-check"></i><b>11.7.1</b> Spacing</a></li>
+<li class="chapter" data-level="11.7.2" data-path="sankey-plots-for-visualising-bilateral-migration.html"><a href="sankey-plots-for-visualising-bilateral-migration.html#exercise-ex9.r"><i class="fa fa-check"></i><b>11.7.2</b> Exercise (ex9.R)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tools for Estimating, Measuring and Working with Migration Data in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="describing-and-estimating-migration-age-structures" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Describing and Estimating Migration Age Structures</h1>
+<div id="rogers-castro" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Rogers Castro</h2>
+<div id="rogers-castro-migration-age-schedules" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Rogers Castro migration age schedules</h3>
+<ul>
+<li>Populations tend to experience demographic events, such fertility, mortality and migration, with persistent regularities in the age-specific rates</li>
+<li>Demographers have summarsied regularities in rates using mathematical expressions called model schedules.</li>
+<li><span class="citation"><a href="#ref-Rogers1981" role="doc-biblioref">Rogers and Castro</a> (<a href="#ref-Rogers1981" role="doc-biblioref">1981</a>)</span> first proposed a migration model schedules via an analysis of over 500 age profiles of migration</li>
+</ul>
+</div>
+<div id="rogers-castro-migration-age-schedules-1" class="section level3" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Rogers Castro migration age schedules</h3>
+<p>Composed of curves based on migration of different life stages:</p>
+<ol style="list-style-type: decimal">
+<li>Pre-labor force</li>
+<li>Labor force</li>
+<li>Post-labor force</li>
+<li>Post-retirement</li>
+<li>A constant term</li>
+</ol>
+<p><span class="math display">\[
+\begin{aligned}
+m(x) =&amp; a_1 \exp(-\alpha_1 x)  \\
+&amp;+a_2 \exp(-\alpha_2(x - \mu_2) - \exp(\lambda_2(x - \mu_2)))  \\
+&amp;+a_3 \exp(-\alpha_3(x - \mu_3) - \exp(\lambda_3(x - \mu_3)))  \\
+&amp;+a_4 \exp(\lambda_4x)\\
+&amp;+ c
+\end{aligned}
+\]</span></p>
+</div>
+<div id="rogers-castro-migration-age-schedules-2" class="section level3" number="7.1.3">
+<h3><span class="header-section-number">7.1.3</span> Rogers Castro migration age schedules</h3>
+<p></p>
+</div>
+<div id="rogers-castro-migration-age-schedules-3" class="section level3" number="7.1.4">
+<h3><span class="header-section-number">7.1.4</span> Rogers Castro migration age schedules</h3>
+<ul>
+<li>Most migration age patterns have a pre-labor force downward slope and labor force peak (and a constant)
+<ul>
+<li>7-parameter model schedule</li>
+</ul></li>
+<li>In specific areas (in Western countries) migration age patterns have an additional retirement peak component
+<ul>
+<li>11-parameter model schedule</li>
+</ul></li>
+<li>In other areas, instead of a retirement peak, age profiles have an upward slope at the end of life
+<ul>
+<li>9-parameter model schedule</li>
+</ul></li>
+<li>In even fewer cases, some instances of both a retirement peak and a post-retirement upward slope <span class="citation"><a href="#ref-Rogers1987a" role="doc-biblioref">Rogers and Watkins</a> (<a href="#ref-Rogers1987a" role="doc-biblioref">1987</a>)</span>
+<ul>
+<li>13-parameter model schedule</li>
+</ul></li>
+<li><span class="citation"><a href="#ref-Wilson2010" role="doc-biblioref">Wilson</a> (<a href="#ref-Wilson2010" role="doc-biblioref">2010</a>)</span> introduced a 17-parameter model to incorporate a student peak before the labour force peak.</li>
+</ul>
+</div>
+<div id="rogers-castro-migration-age-schedules-4" class="section level3" number="7.1.5">
+<h3><span class="header-section-number">7.1.5</span> Rogers Castro migration age schedules</h3>
+<ul>
+<li>The <code>mig_calculate_rc()</code> function in either the <em>DemoTools</em> package by Tim Riffe et. al. or the <em>rcbayes</em> package by Monica Alexander et. al. provide a quick method to calculate migration age schedules for a given parameter set
+<ul>
+<li>Same functions by same authors. Both packages currently not on CRAN. Availability might change.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="describing-and-estimating-migration-age-structures.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install from github</span></span>
+<span id="cb150-2"><a href="describing-and-estimating-migration-age-structures.html#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb150-3"><a href="describing-and-estimating-migration-age-structures.html#cb150-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb150-4"><a href="describing-and-estimating-migration-age-structures.html#cb150-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-5"><a href="describing-and-estimating-migration-age-structures.html#cb150-5" aria-hidden="true" tabindex="-1"></a><span class="co"># might need to specify download.file.method</span></span>
+<span id="cb150-6"><a href="describing-and-estimating-migration-age-structures.html#cb150-6" aria-hidden="true" tabindex="-1"></a><span class="co"># options(download.file.method = &quot;libcurl&quot;)</span></span>
+<span id="cb150-7"><a href="describing-and-estimating-migration-age-structures.html#cb150-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-8"><a href="describing-and-estimating-migration-age-structures.html#cb150-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;timriffe/DemoTools&quot;</span>)</span>
+<span id="cb150-9"><a href="describing-and-estimating-migration-age-structures.html#cb150-9" aria-hidden="true" tabindex="-1"></a><span class="co"># and/or </span></span>
+<span id="cb150-10"><a href="describing-and-estimating-migration-age-structures.html#cb150-10" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;jessieyeung/rcbayes&quot;</span>)</span></code></pre></div>
+</div>
+<div id="rogers-castro-migration-age-schedules-5" class="section level3" number="7.1.6">
+<h3><span class="header-section-number">7.1.6</span> Rogers Castro migration age schedules</h3>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="describing-and-estimating-migration-age-structures.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DemoTools)</span></code></pre></div>
+<pre><code>## Loading required package: Rcpp</code></pre>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="describing-and-estimating-migration-age-structures.html#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define 11 parameters</span></span>
+<span id="cb153-2"><a href="describing-and-estimating-migration-age-structures.html#cb153-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a1 =</span> <span class="fl">0.1</span>, <span class="at">alpha1 =</span> <span class="fl">0.1</span>, </span>
+<span id="cb153-3"><a href="describing-and-estimating-migration-age-structures.html#cb153-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">a2 =</span> <span class="fl">0.2</span>, <span class="at">alpha2 =</span> <span class="fl">0.1</span>, <span class="at">mu2 =</span> <span class="dv">20</span>, <span class="at">lambda2 =</span> <span class="fl">0.5</span>, </span>
+<span id="cb153-4"><a href="describing-and-estimating-migration-age-structures.html#cb153-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">a3 =</span> <span class="fl">0.05</span>, <span class="at">alpha3 =</span> <span class="fl">0.2</span>, <span class="at">mu3 =</span> <span class="dv">60</span>, <span class="at">lambda3 =</span> <span class="fl">0.1</span>, </span>
+<span id="cb153-5"><a href="describing-and-estimating-migration-age-structures.html#cb153-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">c =</span> <span class="fl">0.01</span>)</span>
+<span id="cb153-6"><a href="describing-and-estimating-migration-age-structures.html#cb153-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb153-7"><a href="describing-and-estimating-migration-age-structures.html#cb153-7" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate model migration schedule with 11 parameters</span></span>
+<span id="cb153-8"><a href="describing-and-estimating-migration-age-structures.html#cb153-8" aria-hidden="true" tabindex="-1"></a>mx <span class="ot">&lt;-</span> <span class="fu">mig_calculate_rc</span>(<span class="at">ages =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">pars =</span> p)</span>
+<span id="cb153-9"><a href="describing-and-estimating-migration-age-structures.html#cb153-9" aria-hidden="true" tabindex="-1"></a>mx</span></code></pre></div>
+<pre><code>##   [1] 0.10048374 0.09187308 0.08408182 0.07703200 0.07065307 0.06488116
+##   [7] 0.05965853 0.05493290 0.05065697 0.04678794 0.04328711 0.04011942
+##  [13] 0.03725318 0.03465970 0.03231470 0.03037404 0.03132289 0.04264948
+##  [19] 0.06746077 0.09710942 0.12091621 0.13442550 0.13855839 0.13616639
+##  [25] 0.12995494 0.12185875 0.11308333 0.10431583 0.09591794 0.08806055
+##  [31] 0.08080783 0.07416691 0.06811661 0.06262465 0.05765908 0.05319728
+##  [37] 0.04923336 0.04578295 0.04288297 0.04058442 0.03893812 0.03797602
+##  [43] 0.03769285 0.03803360 0.03889051 0.04011081 0.04151310 0.04290860
+##  [49] 0.04412234 0.04501067 0.04547234 0.04545269 0.04494158 0.04396660
+##  [55] 0.04258384 0.04086761 0.03890096 0.03676762 0.03454596 0.03230498
+##  [61] 0.03010206 0.02798231 0.02597892 0.02411422 0.02240126 0.02084543
+##  [67] 0.01944616 0.01819839 0.01709398 0.01612274 0.01527339 0.01453424
+##  [73] 0.01389365 0.01334046 0.01286417 0.01245512 0.01210453 0.01180452
+##  [79] 0.01154811 0.01132916 0.01114229 0.01098283 0.01084676 0.01073060
+##  [85] 0.01063138 0.01054657 0.01047399 0.01041181 0.01035847 0.01031264
+##  [91] 0.01027319 0.01023918 0.01020981 0.01018438 0.01016234 0.01014319
+##  [97] 0.01012651 0.01011196 0.01009924 0.01008810</code></pre>
+</div>
+<div id="rogers-castro-migration-age-schedules-6" class="section level3" number="7.1.7">
+<h3><span class="header-section-number">7.1.7</span> Rogers Castro migration age schedules</h3>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="describing-and-estimating-migration-age-structures.html#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb155-2"><a href="describing-and-estimating-migration-age-structures.html#cb155-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, </span>
+<span id="cb155-3"><a href="describing-and-estimating-migration-age-structures.html#cb155-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mx =</span> mx) <span class="sc">%&gt;%</span></span>
+<span id="cb155-4"><a href="describing-and-estimating-migration-age-structures.html#cb155-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> mx)) <span class="sc">+</span></span>
+<span id="cb155-5"><a href="describing-and-estimating-migration-age-structures.html#cb155-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+</div>
+</div>
+<div id="model-schedules" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Model schedules</h2>
+<div id="model-migration-age-schedules" class="section level3" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Model migration age schedules</h3>
+<ul>
+<li>The <em>migest</em> package contains two sets of parameters for model migration schedules.</li>
+<li>The <code>rc_model_fund</code> are the set of fundamental parameters proposed by Rogers and Castro to represent a typical migration age pattern, based on their analysis of over 500 migration flows</li>
+</ul>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="describing-and-estimating-migration-age-structures.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb156-2"><a href="describing-and-estimating-migration-age-structures.html#cb156-2" aria-hidden="true" tabindex="-1"></a>rc_model_fund</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 2
+##   param    value
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 a1       0.02 
+## 2 alpha1   0.1  
+## 3 a2       0.06 
+## 4 alpha2   0.1  
+## 5 mu2     20    
+## 6 lambda2  0.4  
+## 7 c        0.003</code></pre>
+</div>
+<div id="model-migration-age-schedules-1" class="section level3" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Model migration age schedules</h3>
+<ul>
+<li>Plot of model age schedule based on fundamental parameters</li>
+</ul>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="describing-and-estimating-migration-age-structures.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert data frame to named vector</span></span>
+<span id="cb158-2"><a href="describing-and-estimating-migration-age-structures.html#cb158-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">deframe</span>(rc_model_fund)</span>
+<span id="cb158-3"><a href="describing-and-estimating-migration-age-structures.html#cb158-3" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<pre><code>##      a1  alpha1      a2  alpha2     mu2 lambda2       c 
+##   2e-02   1e-01   6e-02   1e-01   2e+01   4e-01   3e-03</code></pre>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="describing-and-estimating-migration-age-structures.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, </span>
+<span id="cb160-2"><a href="describing-and-estimating-migration-age-structures.html#cb160-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mx =</span> <span class="fu">mig_calculate_rc</span>(<span class="at">ages =</span> x, <span class="at">pars =</span> p)) <span class="sc">%&gt;%</span></span>
+<span id="cb160-3"><a href="describing-and-estimating-migration-age-structures.html#cb160-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> mx)) <span class="sc">+</span></span>
+<span id="cb160-4"><a href="describing-and-estimating-migration-age-structures.html#cb160-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+</div>
+<div id="model-migration-age-schedules-2" class="section level3" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Model migration age schedules</h3>
+<ul>
+<li>Rogers and Castro describe the nice properties in the parameters and their relationships</li>
+<li>Peaking: early versus late peaking (<span class="math inline">\(\mu_2\)</span>)
+<ul>
+<li><span class="math inline">\(\mu_2 = 20\)</span> in the fundamental parameters</li>
+</ul></li>
+<li>Dominance: <span class="math inline">\(\gamma_{12} = a_1/a_2\)</span> as the index of child dependency, and <span class="math inline">\(1/\gamma_{12}\)</span> as index of labor dominance
+<ul>
+<li><span class="math inline">\(\gamma_{12} = 1/3\)</span> in fundamental parameters</li>
+</ul></li>
+<li>Labor asymmetry: <span class="math inline">\(\sigma_2 = \lambda_2/\alpha_2\)</span>
+<ul>
+<li><span class="math inline">\(\sigma_{2} = 4\)</span> in fundamental parameters</li>
+</ul></li>
+<li>Regularity: <span class="math inline">\(\beta_{12} = \alpha_1/\alpha_2\)</span> how the migration rates of children match to the migration rates of parents
+<ul>
+<li><span class="math inline">\(\beta_{12} = 1\)</span> in fundamental parameters</li>
+</ul></li>
+<li>Users can focus on these four measures (peaking, dominance, labor asymmetry and regularity) when describing or deriving their own model schedules</li>
+</ul>
+</div>
+<div id="model-migration-age-schedules-3" class="section level3" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> Model migration age schedules</h3>
+<ul>
+<li>The <code>index_age_rc()</code> function in the migest package returns these ratios given a named vector of the parameters</li>
+</ul>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="describing-and-estimating-migration-age-structures.html#cb161-1" aria-hidden="true" tabindex="-1"></a>rc_model_fund <span class="sc">%&gt;%</span></span>
+<span id="cb161-2"><a href="describing-and-estimating-migration-age-structures.html#cb161-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deframe</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb161-3"><a href="describing-and-estimating-migration-age-structures.html#cb161-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">index_age_rc</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   measure           value
+##   &lt;chr&gt;             &lt;dbl&gt;
+## 1 peaking          20    
+## 2 child_dependency  0.333
+## 3 labor_dependency  3    
+## 4 labor_asymmetry   4    
+## 5 regularity        1</code></pre>
+</div>
+<div id="model-migration-age-schedules-4" class="section level3" number="7.2.5">
+<h3><span class="header-section-number">7.2.5</span> Model migration age schedules</h3>
+<ul>
+<li>The <code>rc_model_un</code> are the set of fundamental parameters proposed in <span class="citation"><a href="#ref-UnitedNations1992" role="doc-biblioref">United Nations Department of Economic and Social Affairs Population Division</a> (<a href="#ref-UnitedNations1992" role="doc-biblioref">1992</a>)</span> for estimating age-specific migration flows in different contexts</li>
+</ul>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="describing-and-estimating-migration-age-structures.html#cb163-1" aria-hidden="true" tabindex="-1"></a>rc_model_un</span></code></pre></div>
+<pre><code>## # A tibble: 84 x 5
+##    schedule         schedule_abb sex   param     value
+##    &lt;chr&gt;            &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;
+##  1 Western standard ws           male  a1       0.0215
+##  2 Western standard ws           male  alpha1   0.105 
+##  3 Western standard ws           male  a2       0.0694
+##  4 Western standard ws           male  alpha2   0.112 
+##  5 Western standard ws           male  mu2     20.0   
+##  6 Western standard ws           male  lambda2  0.391 
+##  7 Western standard ws           male  c        0.0028
+##  8 Low dependency   ld           male  a1       0.0128
+##  9 Low dependency   ld           male  alpha1   0.105 
+## 10 Low dependency   ld           male  a2       0.0804
+## # ... with 74 more rows</code></pre>
+</div>
+<div id="model-migration-age-schedules-5" class="section level3" number="7.2.6">
+<h3><span class="header-section-number">7.2.6</span> Model migration age schedules</h3>
+<ul>
+<li>To calculate model schedules we can use
+<ul>
+<li><code>nest()</code> to group together the parameters</li>
+<li><code>map()</code> to apply the parameters to the <code>mig_calculate_rc()</code> function for each group</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="describing-and-estimating-migration-age-structures.html#cb165-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> rc_model_un <span class="sc">%&gt;%</span></span>
+<span id="cb165-2"><a href="describing-and-estimating-migration-age-structures.html#cb165-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>schedule_abb) <span class="sc">%&gt;%</span></span>
+<span id="cb165-3"><a href="describing-and-estimating-migration-age-structures.html#cb165-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">rc_param =</span> <span class="fu">c</span>(param, value)) <span class="sc">%&gt;%</span></span>
+<span id="cb165-4"><a href="describing-and-estimating-migration-age-structures.html#cb165-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">map</span>(<span class="at">.x =</span> rc_param, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">deframe</span>(.x)),</span>
+<span id="cb165-5"><a href="describing-and-estimating-migration-age-structures.html#cb165-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">mx =</span> <span class="fu">map</span>(<span class="at">.x =</span> p, </span>
+<span id="cb165-6"><a href="describing-and-estimating-migration-age-structures.html#cb165-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">.f =</span> <span class="sc">~</span><span class="fu">mig_calculate_rc</span>(<span class="at">ages =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">80</span>, <span class="at">pars =</span> .x)),</span>
+<span id="cb165-7"><a href="describing-and-estimating-migration-age-structures.html#cb165-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">age =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">80</span>))</span>
+<span id="cb165-8"><a href="describing-and-estimating-migration-age-structures.html#cb165-8" aria-hidden="true" tabindex="-1"></a>d</span></code></pre></div>
+<pre><code>## # A tibble: 12 x 6
+##    schedule                              sex    rc_param    p      mx     age   
+##    &lt;chr&gt;                                 &lt;chr&gt;  &lt;list&gt;      &lt;list&gt; &lt;list&gt; &lt;list&gt;
+##  1 Western standard                      male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  2 Low dependency                        male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  3 High dependency                       male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  4 Young labour force entry              male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  5 Old labour force entry                male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  6 Low dependency low labour force entry male   &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  7 Western standard                      female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  8 Low dependency                        female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+##  9 High dependency                       female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+## 10 Young labour force entry              female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+## 11 Old labour force entry                female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~
+## 12 Low dependency low labour force entry female &lt;tibble [7~ &lt;dbl ~ &lt;dbl ~ &lt;int ~</code></pre>
+</div>
+<div id="model-migration-age-schedules-6" class="section level3" number="7.2.7">
+<h3><span class="header-section-number">7.2.7</span> Model migration age schedules</h3>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="describing-and-estimating-migration-age-structures.html#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first row parameters</span></span>
+<span id="cb167-2"><a href="describing-and-estimating-migration-age-structures.html#cb167-2" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>p[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>##      a1  alpha1      a2  alpha2     mu2 lambda2       c 
+##  0.0215  0.1050  0.0694  0.1120 20.0400  0.3910  0.0028</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="describing-and-estimating-migration-age-structures.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data unnested</span></span>
+<span id="cb169-2"><a href="describing-and-estimating-migration-age-structures.html#cb169-2" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb169-3"><a href="describing-and-estimating-migration-age-structures.html#cb169-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>rc_param, <span class="sc">-</span>p) <span class="sc">%&gt;%</span></span>
+<span id="cb169-4"><a href="describing-and-estimating-migration-age-structures.html#cb169-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(mx, age))</span></code></pre></div>
+<pre><code>## # A tibble: 960 x 4
+##    schedule         sex       mx   age
+##    &lt;chr&gt;            &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt;
+##  1 Western standard male  0.0222     1
+##  2 Western standard male  0.0202     2
+##  3 Western standard male  0.0185     3
+##  4 Western standard male  0.0169     4
+##  5 Western standard male  0.0155     5
+##  6 Western standard male  0.0143     6
+##  7 Western standard male  0.0131     7
+##  8 Western standard male  0.0121     8
+##  9 Western standard male  0.0112     9
+## 10 Western standard male  0.0103    10
+## # ... with 950 more rows</code></pre>
+</div>
+<div id="model-migration-age-schedules-7" class="section level3" number="7.2.8">
+<h3><span class="header-section-number">7.2.8</span> Model migration age schedules</h3>
+<ul>
+<li>Use <code>unnest()</code> to create a data base varying by age for each model schedule and sex for plotting</li>
+</ul>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="describing-and-estimating-migration-age-structures.html#cb171-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb171-2"><a href="describing-and-estimating-migration-age-structures.html#cb171-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(mx, age)) <span class="sc">%&gt;%</span></span>
+<span id="cb171-3"><a href="describing-and-estimating-migration-age-structures.html#cb171-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">schedule =</span> <span class="fu">str_wrap</span>(schedule, <span class="at">width =</span> <span class="dv">20</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb171-4"><a href="describing-and-estimating-migration-age-structures.html#cb171-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mx, <span class="at">colour =</span> schedule)) <span class="sc">+</span></span>
+<span id="cb171-5"><a href="describing-and-estimating-migration-age-structures.html#cb171-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb171-6"><a href="describing-and-estimating-migration-age-structures.html#cb171-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="st">&quot;sex&quot;</span>, <span class="at">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
+</div>
+<div id="model-migration-age-schedules-8" class="section level3" number="7.2.9">
+<h3><span class="header-section-number">7.2.9</span> Model migration age schedules</h3>
+<ul>
+<li>Model migration schedules are useful when we do not have any age information, but require an estimate of age specific migration
+<ul>
+<li>For example, in cohort component projections age specific migration rates are required but might not be available in any data source</li>
+</ul></li>
+<li>We may use an estimate or reported data on total migration to obtain age-specific migration
+<ul>
+<li>Design or select appropriate model age schedule based on existing knowledge of migration age patterns for the given flow.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="describing-and-estimating-migration-age-structures.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example for males based on young labour force entry</span></span>
+<span id="cb172-2"><a href="describing-and-estimating-migration-age-structures.html#cb172-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> rc_model_un <span class="sc">%&gt;%</span></span>
+<span id="cb172-3"><a href="describing-and-estimating-migration-age-structures.html#cb172-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span>, schedule_abb <span class="sc">==</span> <span class="st">&quot;ylfe&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb172-4"><a href="describing-and-estimating-migration-age-structures.html#cb172-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(param, value) <span class="sc">%&gt;%</span></span>
+<span id="cb172-5"><a href="describing-and-estimating-migration-age-structures.html#cb172-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deframe</span>()</span>
+<span id="cb172-6"><a href="describing-and-estimating-migration-age-structures.html#cb172-6" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<pre><code>##      a1  alpha1      a2  alpha2     mu2 lambda2       c 
+##  0.0215  0.1050  0.0691  0.1120 16.0900  0.3910  0.0028</code></pre>
+</div>
+<div id="model-migration-age-schedules-9" class="section level3" number="7.2.10">
+<h3><span class="header-section-number">7.2.10</span> Model migration age schedules</h3>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="describing-and-estimating-migration-age-structures.html#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">90</span>, </span>
+<span id="cb174-2"><a href="describing-and-estimating-migration-age-structures.html#cb174-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mx =</span> <span class="fu">mig_calculate_rc</span>(<span class="at">ages =</span> x, <span class="at">pars =</span> p),</span>
+<span id="cb174-3"><a href="describing-and-estimating-migration-age-structures.html#cb174-3" aria-hidden="true" tabindex="-1"></a>       <span class="co"># calculate number of migrants, given a total estimate of 10,000</span></span>
+<span id="cb174-4"><a href="describing-and-estimating-migration-age-structures.html#cb174-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">Mx =</span> <span class="dv">10000</span> <span class="sc">*</span> mx) <span class="sc">%&gt;%</span></span>
+<span id="cb174-5"><a href="describing-and-estimating-migration-age-structures.html#cb174-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Mx)) <span class="sc">+</span></span>
+<span id="cb174-6"><a href="describing-and-estimating-migration-age-structures.html#cb174-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-89-1.png" width="672" /></p>
+</div>
+</div>
+<div id="fitting-schedules" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Fitting schedules</h2>
+<div id="fitting-roger-castro-migration-age-schedules" class="section level3" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> Fitting Roger Castro migration age schedules</h3>
+<ul>
+<li>If we have age-specific migration data we might want to estimate the parameters of a Rogers Castro age schedule to
+<ul>
+<li>Smooth the data</li>
+<li>Analyse the parameter estimates</li>
+<li>Create projected age schedules based on past patterns of the age schedule parameters</li>
+</ul></li>
+<li>Fitting Rogers Castro migration age schedules can be difficult.
+<ul>
+<li>A number of different software has been used to fit age schedules including <span class="citation"><a href="#ref-Rogers1994" role="doc-biblioref">Rogers and Little</a> (<a href="#ref-Rogers1994" role="doc-biblioref">1994</a>)</span>, TableCurve 2D <span class="citation"><a href="#ref-Rogers1999a" role="doc-biblioref">Rogers and Raymer</a> (<a href="#ref-Rogers1999a" role="doc-biblioref">1999</a>)</span>, MATLAB <span class="citation"><a href="#ref-Rogers2010" role="doc-biblioref">Rogers, Raymer, and Little</a> (<a href="#ref-Rogers2010" role="doc-biblioref">2010</a>)</span>, and Excel <span class="citation"><a href="#ref-Wilson2010" role="doc-biblioref">Wilson</a> (<a href="#ref-Wilson2010" role="doc-biblioref">2010</a>)</span>.</li>
+</ul></li>
+<li>The <code>mig_estimate_rc()</code> function in DemoTools or rcbayes uses Stan, via the rstan package, a Bayesian probabilistic programming language
+<ul>
+<li>Estimation is carried out using MCMC sampling.</li>
+</ul></li>
+<li>Requires two arguments
+<ul>
+<li><code>ages</code> a vector of migration ages</li>
+<li><code>mx</code> a vector of standardized migration intensities for the corresponding ages</li>
+<li>Specify form of age schedule using the <code>pre_working_age</code>, <code>working_age</code>, <code>retirement</code> and <code>post_retirement</code> arguments - set to <code>TRUE</code> or <code>FALSE</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="fitting-roger-castro-migration-age-schedules-1" class="section level3" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> Fitting Roger Castro migration age schedules</h3>
+<ul>
+<li>Demonstrate with five-year data from the <code>italy_area</code> data set in <em>migest</em>
+<ul>
+<li>Calculate the out-migration for Islands (Sicily and Sardinia) in 1970</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="describing-and-estimating-migration-age-structures.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="co"># include a numeric age column for mig_estimate_rc()</span></span>
+<span id="cb175-2"><a href="describing-and-estimating-migration-age-structures.html#cb175-2" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> italy_area <span class="sc">%&gt;%</span></span>
+<span id="cb175-3"><a href="describing-and-estimating-migration-age-structures.html#cb175-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb175-4"><a href="describing-and-estimating-migration-age-structures.html#cb175-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age_grp) <span class="sc">%&gt;%</span></span>
+<span id="cb175-5"><a href="describing-and-estimating-migration-age-structures.html#cb175-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_turnover</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb175-6"><a href="describing-and-estimating-migration-age-structures.html#cb175-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">&quot;Islands&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb175-7"><a href="describing-and-estimating-migration-age-structures.html#cb175-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> age_grp, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;age_min&quot;</span>, <span class="st">&quot;age_max&quot;</span>), </span>
+<span id="cb175-8"><a href="describing-and-estimating-migration-age-structures.html#cb175-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">remove =</span> <span class="cn">FALSE</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Adding missing grouping variables: `age_grp`</code></pre>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="describing-and-estimating-migration-age-structures.html#cb177-1" aria-hidden="true" tabindex="-1"></a>i</span></code></pre></div>
+<pre><code>## # A tibble: 20 x 8
+## # Groups:   age_grp [20]
+##    age_grp age_min age_max region  in_mig out_mig  turn   net
+##    &lt;fct&gt;     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 0-4           0       4 Islands   4532    7876 12408 -3344
+##  2 5-9           5       9 Islands   3592    7271 10863 -3679
+##  3 10-14        10      14 Islands   2228    5779  8007 -3551
+##  4 15-19        15      19 Islands   3064    8526 11590 -5462
+##  5 20-24        20      24 Islands   6861   15629 22490 -8768
+##  6 25-29        25      29 Islands   5891   11224 17115 -5333
+##  7 30-34        30      34 Islands   4042    7046 11088 -3004
+##  8 35-39        35      39 Islands   2480    4612  7092 -2132
+##  9 40-44        40      44 Islands   1737    3634  5371 -1897
+## 10 45-49        45      49 Islands   1383    2783  4166 -1400
+## 11 50-54        50      54 Islands    910    1716  2626  -806
+## 12 55-59        55      59 Islands    899    1587  2486  -688
+## 13 60-64        60      64 Islands    789    1217  2006  -428
+## 14 65-69        65      69 Islands    602     924  1526  -322
+## 15 70-74        70      74 Islands    427     702  1129  -275
+## 16 75-79        75      79 Islands    311     490   801  -179
+## 17 80-84        80      84 Islands    158     268   426  -110
+## 18 85-89        85      89 Islands     59     116   175   -57
+## 19 90-94        90      94 Islands     17      35    52   -18
+## 20 95+          95      NA Islands     95     137   232   -42</code></pre>
+</div>
+<div id="fitting-roger-castro-migration-age-schedules-2" class="section level3" number="7.3.3">
+<h3><span class="header-section-number">7.3.3</span> Fitting Roger Castro migration age schedules</h3>
+<ul>
+<li>Requires a standardized age schedule (where values sum to one)</li>
+<li>Will take a few minutes and print out lots of messages from Stan</li>
+</ul>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="describing-and-estimating-migration-age-structures.html#cb179-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> i<span class="sc">$</span>out_mig<span class="sc">/</span><span class="fu">sum</span>(i<span class="sc">$</span>out_mig)</span>
+<span id="cb179-2"><a href="describing-and-estimating-migration-age-structures.html#cb179-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
+<pre><code>##  [1] 0.0965527387 0.0891359780 0.0708453881 0.1045211592 0.1915976070
+##  [6] 0.1375962340 0.0863776786 0.0565390085 0.0445496004 0.0341170990
+## [11] 0.0210366302 0.0194552052 0.0149193351 0.0113274163 0.0086058942
+## [16] 0.0060069632 0.0032854411 0.0014220566 0.0004290688 0.0016794979</code></pre>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="describing-and-estimating-migration-age-structures.html#cb181-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">mig_estimate_rc</span>(<span class="at">ages =</span> i<span class="sc">$</span>age_min <span class="sc">+</span> <span class="fl">2.5</span>, <span class="at">mx =</span> m,</span>
+<span id="cb181-2"><a href="describing-and-estimating-migration-age-structures.html#cb181-2" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># set model components </span></span>
+<span id="cb181-3"><a href="describing-and-estimating-migration-age-structures.html#cb181-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">pre_working_age =</span> <span class="cn">TRUE</span>, <span class="at">working_age =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb181-4"><a href="describing-and-estimating-migration-age-structures.html#cb181-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">retirement =</span> <span class="cn">FALSE</span>, <span class="at">post_retirement =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;f4d0f16f36ddb7179a67ef654e5d224a&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.576 seconds (Warm-up)
+## Chain 1:                0.594 seconds (Sampling)
+## Chain 1:                1.17 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;f4d0f16f36ddb7179a67ef654e5d224a&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.701 seconds (Warm-up)
+## Chain 2:                0.601 seconds (Sampling)
+## Chain 2:                1.302 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;f4d0f16f36ddb7179a67ef654e5d224a&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.617 seconds (Warm-up)
+## Chain 3:                0.54 seconds (Sampling)
+## Chain 3:                1.157 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;f4d0f16f36ddb7179a67ef654e5d224a&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.58 seconds (Warm-up)
+## Chain 4:                0.639 seconds (Sampling)
+## Chain 4:                1.219 seconds (Total)
+## Chain 4:</code></pre>
+</div>
+<div id="fitting-roger-castro-migration-age-schedules-3" class="section level3" number="7.3.4">
+<h3><span class="header-section-number">7.3.4</span> Fitting Roger Castro migration age schedules</h3>
+<p>The fitted object has two components</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="describing-and-estimating-migration-age-structures.html#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parameter estimates</span></span>
+<span id="cb183-2"><a href="describing-and-estimating-migration-age-structures.html#cb183-2" aria-hidden="true" tabindex="-1"></a>f[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 4
+##   variable     median      lower    upper
+##   &lt;chr&gt;         &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1 a1[1]       0.107    0.0951     0.118  
+## 2 a2[1]       0.342    0.278      0.381  
+## 3 alpha1[1]   0.0322   0.0271     0.0417 
+## 4 alpha2[1]   0.227    0.165      0.296  
+## 5 c           0.00151  0.0000619  0.00740
+## 6 lambda2[1]  0.184    0.151      0.260  
+## 7 mu2[1]     24.6     21.4       27.0</code></pre>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="describing-and-estimating-migration-age-structures.html#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fitted schedule</span></span>
+<span id="cb185-2"><a href="describing-and-estimating-migration-age-structures.html#cb185-2" aria-hidden="true" tabindex="-1"></a>f[[<span class="dv">2</span>]]</span></code></pre></div>
+<pre><code>## # A tibble: 20 x 6
+##      age     data  median   lower  upper     diff_sq
+##    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+##  1   2.5 0.0966   0.100   0.0910  0.111  0.0000152  
+##  2   7.5 0.0891   0.0857  0.0780  0.0935 0.0000121  
+##  3  12.5 0.0708   0.0739  0.0676  0.0803 0.00000908 
+##  4  17.5 0.105    0.107   0.0936  0.121  0.00000697 
+##  5  22.5 0.192    0.183   0.169   0.195  0.0000713  
+##  6  27.5 0.138    0.144   0.133   0.154  0.0000443  
+##  7  32.5 0.0864   0.0842  0.0731  0.0942 0.00000486 
+##  8  37.5 0.0565   0.0505  0.0435  0.0580 0.0000370  
+##  9  42.5 0.0445   0.0349  0.0298  0.0401 0.0000931  
+## 10  47.5 0.0341   0.0271  0.0223  0.0314 0.0000497  
+## 11  52.5 0.0210   0.0222  0.0176  0.0268 0.00000146 
+## 12  57.5 0.0195   0.0188  0.0146  0.0234 0.000000372
+## 13  62.5 0.0149   0.0162  0.0123  0.0207 0.00000167 
+## 14  67.5 0.0113   0.0141  0.0104  0.0184 0.00000744 
+## 15  72.5 0.00861  0.0123  0.00888 0.0165 0.0000133  
+## 16  77.5 0.00601  0.0107  0.00761 0.0149 0.0000223  
+## 17  82.5 0.00329  0.00943 0.00651 0.0136 0.0000378  
+## 18  87.5 0.00142  0.00831 0.00559 0.0126 0.0000474  
+## 19  92.5 0.000429 0.00734 0.00481 0.0116 0.0000478  
+## 20  97.5 0.00168  0.00651 0.00415 0.0108 0.0000234</code></pre>
+</div>
+<div id="fitting-roger-castro-migration-age-schedules-4" class="section level3" number="7.3.5">
+<h3><span class="header-section-number">7.3.5</span> Fitting Roger Castro migration age schedules</h3>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="describing-and-estimating-migration-age-structures.html#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> f[[<span class="dv">2</span>]], </span>
+<span id="cb187-2"><a href="describing-and-estimating-migration-age-structures.html#cb187-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> data)) <span class="sc">+</span></span>
+<span id="cb187-3"><a href="describing-and-estimating-migration-age-structures.html#cb187-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb187-4"><a href="describing-and-estimating-migration-age-structures.html#cb187-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> median), <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb187-5"><a href="describing-and-estimating-migration-age-structures.html#cb187-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+</div>
+<div id="fitting-roger-castro-migration-age-schedules-5" class="section level3" number="7.3.6">
+<h3><span class="header-section-number">7.3.6</span> Fitting Roger Castro migration age schedules</h3>
+<ul>
+<li>The <em>migraR</em> package by Ruiz-Santacruz and Garcés also has functions to estimate parameters in Rogers Castro schedule
+<ul>
+<li>Also not on CRAN</li>
+<li>Uses an optimization procedure (non-Bayesian)</li>
+<li>Functions to select best form schedule</li>
+</ul></li>
+<li>Selecting the form of the schedule usually requires some form of visual inspection</li>
+</ul>
+</div>
+</div>
+<div id="age-indices" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> Age Indices</h2>
+<div id="age-indices-1" class="section level3" number="7.4.1">
+<h3><span class="header-section-number">7.4.1</span> Age Indices</h3>
+<ul>
+<li>Number of criticisms of model age schedules for migration (<span class="citation"><a href="#ref-Bell2002" role="doc-biblioref">Bell et al.</a> (<a href="#ref-Bell2002" role="doc-biblioref">2002</a>)</span>, <span class="citation"><a href="#ref-Bernard2014" role="doc-biblioref">Bernard, Bell, and Charles-Edwards</a> (<a href="#ref-Bernard2014" role="doc-biblioref">2014</a>)</span>)</li>
+<li>Not always clear how many parameters should be included in model schedule
+<ul>
+<li>Parameter estimates sensitive to the choice of model form, making comparisons difficult</li>
+<li>Use statistical accuracy measures to select best form, at the risk of over fitting</li>
+</ul></li>
+<li>Parameter estimates sensitive to initial values
+<ul>
+<li>Unlikely to be the case when using <code>mig_estimate_rc()</code></li>
+</ul></li>
+<li>Unstable parameter estimates
+<ul>
+<li>Sensitive to measurement error in age-specific migration</li>
+</ul></li>
+<li>Interpretation of parameter estimates
+<ul>
+<li>The indexes in <code>index_age_rc()</code> have not been widely adopted, probably because of difficulty in fitting model schedules.</li>
+</ul></li>
+</ul>
+</div>
+<div id="age-indices-2" class="section level3" number="7.4.2">
+<h3><span class="header-section-number">7.4.2</span> Age Indices</h3>
+<ul>
+<li>A number of other measures of age specific migration have been proposed that do not require fitting model age schedules.</li>
+<li>Most a dependent on the migration intensity <span class="math inline">\(m_{as}\)</span>, the number of migrants in a age group and given time period as a percentage of the population at risk of moving.</li>
+<li><span class="citation"><a href="#ref-Rogers1975" role="doc-biblioref">Rogers</a> (<a href="#ref-Rogers1975" role="doc-biblioref">1975</a>)</span> proposed a Gross Migraproduction Rate (GMR) based on the sum of age-specific (and sex-specific) migration intensities
+<span class="math display">\[
+GMR = \sum_{as} m_{as}
+\]</span></li>
+<li><span class="citation"><a href="#ref-Bell2002" role="doc-biblioref">Bell et al.</a> (<a href="#ref-Bell2002" role="doc-biblioref">2002</a>)</span> introduced
+<ul>
+<li>Peak migration intensity, the largest age-specific migration intensity of any age-group</li>
+<li>Peak age, the corresponding age of the peak migration intensity</li>
+</ul></li>
+</ul>
+</div>
+<div id="age-indices-3" class="section level3" number="7.4.3">
+<h3><span class="header-section-number">7.4.3</span> Age Indices</h3>
+<ul>
+<li><span class="citation"><a href="#ref-Bell2009" role="doc-biblioref">Bell and Muhidin</a> (<a href="#ref-Bell2009" role="doc-biblioref">2009</a>)</span> proposed and additional measures
+<ul>
+<li>Breadth of peak based on the sum of the peak migration intensity at the peak age and the five age-groups before and after the peak.</li>
+<li>Peak share based on the percentage of the normalized migration age schedule covered by the peak age and the five age-groups before and after the peak.</li>
+</ul></li>
+<li><span class="citation"><a href="#ref-Bernard2014" role="doc-biblioref">Bernard, Bell, and Charles-Edwards</a> (<a href="#ref-Bernard2014" role="doc-biblioref">2014</a>)</span> provide three additioanl measures
+<ul>
+<li>The Maximum Upward Rate of Change (MURC) for the largest gradient in the slope of the labour force peak before the peak age</li>
+<li>The Maximum Downward Rate of Change (MDRC) for the largest gradient in the slope of the labour force peak after the peak age</li>
+<li>The asymmetry of the labour force peak based on the ratio of MURC and MDRC</li>
+</ul></li>
+<li>Each of these measures area calculated in the <code>age_index()</code> function in the <em>migest</em> package</li>
+</ul>
+</div>
+<div id="age-indices-4" class="section level3" number="7.4.4">
+<h3><span class="header-section-number">7.4.4</span> Age Indices</h3>
+<ul>
+<li>To demonstrate we use the age schedule data of Brazil 2000 and France 2006 in the <code>ipumsi_age</code> data frame of the <em>migest</em> package
+<ul>
+<li>Migration based on five-year transitions between any minor (and major) administrative units.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="describing-and-estimating-migration-age-structures.html#cb188-1" aria-hidden="true" tabindex="-1"></a>ipumsi_age <span class="sc">%&gt;%</span></span>
+<span id="cb188-2"><a href="describing-and-estimating-migration-age-structures.html#cb188-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mi =</span> migrants<span class="sc">/</span>population) <span class="sc">%&gt;%</span></span>
+<span id="cb188-3"><a href="describing-and-estimating-migration-age-structures.html#cb188-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb188-4"><a href="describing-and-estimating-migration-age-structures.html#cb188-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi)) <span class="sc">+</span></span>
+<span id="cb188-5"><a href="describing-and-estimating-migration-age-structures.html#cb188-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb188-6"><a href="describing-and-estimating-migration-age-structures.html#cb188-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="st">&quot;sample&quot;</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
+</div>
+<div id="age-indices-5" class="section level3" number="7.4.5">
+<h3><span class="header-section-number">7.4.5</span> Age Indices</h3>
+<ul>
+<li><span class="citation"><a href="#ref-Bernard2014" role="doc-biblioref">Bernard, Bell, and Charles-Edwards</a> (<a href="#ref-Bernard2014" role="doc-biblioref">2014</a>)</span> recommends smoothing age schedules before calculating index values
+<ul>
+<li>Get very similar results without smoothing - at least in these examples</li>
+</ul></li>
+<li><code>index_age()</code> by default ignores values above 65 (and below 5) when calculating peak index statistics<br />
+
+<ul>
+<li>GMR still sensitive for outliers (e.g. oldest in Brazil)</li>
+</ul></li>
+<li>Index values for Brazil 2000</li>
+</ul>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="describing-and-estimating-migration-age-structures.html#cb189-1" aria-hidden="true" tabindex="-1"></a>ipumsi_age <span class="sc">%&gt;%</span></span>
+<span id="cb189-2"><a href="describing-and-estimating-migration-age-structures.html#cb189-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sample <span class="sc">==</span> <span class="st">&quot;BRA2000&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb189-3"><a href="describing-and-estimating-migration-age-structures.html#cb189-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mi =</span> migrants<span class="sc">/</span>population) <span class="sc">%&gt;%</span></span>
+<span id="cb189-4"><a href="describing-and-estimating-migration-age-structures.html#cb189-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">index_age</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 2
+##   measure        value
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 gmr            7.82 
+## 2 peak_mi       14.3  
+## 3 peak_age      24    
+## 4 peak_breadth 147.   
+## 5 peak_share    18.8  
+## 6 murc          19    
+## 7 mdrc          32    
+## 8 asymmetry      0.594</code></pre>
+</div>
+<div id="age-indices-6" class="section level3" number="7.4.6">
+<h3><span class="header-section-number">7.4.6</span> Age Indices</h3>
+<ul>
+<li>Index values are most useful for comparing age-specific migration in different countries (or regions or time periods)</li>
+</ul>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="describing-and-estimating-migration-age-structures.html#cb191-1" aria-hidden="true" tabindex="-1"></a>ipumsi_age <span class="sc">%&gt;%</span></span>
+<span id="cb191-2"><a href="describing-and-estimating-migration-age-structures.html#cb191-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sample) <span class="sc">%&gt;%</span></span>
+<span id="cb191-3"><a href="describing-and-estimating-migration-age-structures.html#cb191-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mi =</span> migrants<span class="sc">/</span>population) <span class="sc">%&gt;%</span></span>
+<span id="cb191-4"><a href="describing-and-estimating-migration-age-structures.html#cb191-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">index_age</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb191-5"><a href="describing-and-estimating-migration-age-structures.html#cb191-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> sample, <span class="at">values_from =</span> value)</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   measure      BRA2000 FRA2006
+##   &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+## 1 gmr            7.82     9.55
+## 2 peak_mi       14.3     29.5 
+## 3 peak_age      24       26   
+## 4 peak_breadth 147.     295.  
+## 5 peak_share    18.8     30.8 
+## 6 murc          19       18   
+## 7 mdrc          32       30   
+## 8 asymmetry      0.594    0.6</code></pre>
+</div>
+</div>
+<div id="smoothing" class="section level2" number="7.5">
+<h2><span class="header-section-number">7.5</span> Smoothing</h2>
+<div id="general-purpose-smoothing-functions" class="section level3" number="7.5.1">
+<h3><span class="header-section-number">7.5.1</span> General purpose smoothing functions</h3>
+<ul>
+<li>There are many non-parametric smoothing functions in R that can be used to smooth data.</li>
+<li>The <code>stats</code> package, which is loaded when R opens, includes
+<ul>
+<li><code>ksmooth()</code> is a kernel regression smoother</li>
+<li><code>loess.smooth()</code> is a Local Polynomial Regression Fitting method</li>
+<li><code>smooth.spline</code> a cubic spline fit</li>
+</ul></li>
+<li>The DemoTools package contains a <code>smooth_age_5()</code> that is particularly useful for age-heaped data.</li>
+</ul>
+</div>
+<div id="general-purpose-smoothing-functions-1" class="section level3" number="7.5.2">
+<h3><span class="header-section-number">7.5.2</span> General purpose smoothing functions</h3>
+<ul>
+<li>Smoothing methods perform some form of weighting data points on separate subsections (windows or bandwidths of the data)</li>
+<li>In a migration age schedule context, this involves some form of simple local regression or averaging of migration intensities at each age, given data from nearby ages.</li>
+<li>Careful consideration is usually required in choosing the bandwidth.
+<ul>
+<li>The default values are not always sensible for migration age schedules</li>
+</ul></li>
+<li>Might consider censoring the very oldest values where values can become volatile due to small numbers</li>
+</ul>
+</div>
+<div id="general-purpose-smoothing-functions-2" class="section level3" number="7.5.3">
+<h3><span class="header-section-number">7.5.3</span> General purpose smoothing functions</h3>
+<ul>
+<li>Use Brazil 2000 IPUMS International sample data to demonstrate
+<ul>
+<li>Particularly rough at older age groups</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="describing-and-estimating-migration-age-structures.html#cb193-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> ipumsi_age <span class="sc">%&gt;%</span></span>
+<span id="cb193-2"><a href="describing-and-estimating-migration-age-structures.html#cb193-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sample <span class="sc">==</span> <span class="st">&quot;BRA2000&quot;</span>,</span>
+<span id="cb193-3"><a href="describing-and-estimating-migration-age-structures.html#cb193-3" aria-hidden="true" tabindex="-1"></a>         age <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb193-4"><a href="describing-and-estimating-migration-age-structures.html#cb193-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mi =</span> migrants<span class="sc">/</span>population)  </span>
+<span id="cb193-5"><a href="describing-and-estimating-migration-age-structures.html#cb193-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-6"><a href="describing-and-estimating-migration-age-structures.html#cb193-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> b, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi)) <span class="sc">+</span></span>
+<span id="cb193-7"><a href="describing-and-estimating-migration-age-structures.html#cb193-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+</div>
+<div id="general-purpose-smoothing-functions-3" class="section level3" number="7.5.4">
+<h3><span class="header-section-number">7.5.4</span> General purpose smoothing functions</h3>
+<ul>
+<li>Most smoothing function in R require two vectors (<code>x</code> and <code>y</code>)
+<ul>
+<li>Optional arguments to control the smoothness of the fit( names differ for different smoothing functions)</li>
+</ul></li>
+<li>Will return a list with two components (<code>x</code> and <code>y</code>), where the length of x may differ from the original vector provided
+<ul>
+<li>Set a output length argument (names differ for different smoothing functions)</li>
+<li>The <code>x</code> component will match age values</li>
+<li>Can use within <code>mutate()</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="describing-and-estimating-migration-age-structures.html#cb194-1" aria-hidden="true" tabindex="-1"></a>k1 <span class="ot">&lt;-</span> <span class="fu">ksmooth</span>(<span class="at">x =</span> b<span class="sc">$</span>age, <span class="at">y =</span> b<span class="sc">$</span>mi)</span>
+<span id="cb194-2"><a href="describing-and-estimating-migration-age-structures.html#cb194-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(k1)</span></code></pre></div>
+<pre><code>## List of 2
+##  $ x: num [1:100] 6 6.95 7.9 8.85 9.8 ...
+##  $ y: num [1:100] 0.1074 0.104 0.1004 0.0962 0.0969 ...</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="describing-and-estimating-migration-age-structures.html#cb196-1" aria-hidden="true" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> <span class="fu">ksmooth</span>(<span class="at">x =</span> b<span class="sc">$</span>age, <span class="at">y =</span> b<span class="sc">$</span>mi, <span class="at">n.points =</span> <span class="fu">nrow</span>(b))</span>
+<span id="cb196-2"><a href="describing-and-estimating-migration-age-structures.html#cb196-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(k2)</span></code></pre></div>
+<pre><code>## List of 2
+##  $ x: num [1:95] 6 7 8 9 10 11 12 13 14 15 ...
+##  $ y: num [1:95] 0.1074 0.104 0.1004 0.0962 0.0969 ...</code></pre>
+</div>
+<div id="kernal-smoothing" class="section level3" number="7.5.5">
+<h3><span class="header-section-number">7.5.5</span> Kernal smoothing</h3>
+<ul>
+<li>The <code>ksmooth</code> function is unlikely to smooth a migration age schedule as the default bandwidth parameter is too small
+<ul>
+<li>Increase for a more suitable fit</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="describing-and-estimating-migration-age-structures.html#cb198-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> b <span class="sc">%&gt;%</span> </span>
+<span id="cb198-2"><a href="describing-and-estimating-migration-age-structures.html#cb198-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb198-3"><a href="describing-and-estimating-migration-age-structures.html#cb198-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_default =</span> <span class="fu">ksmooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n.points =</span> <span class="fu">n</span>())<span class="sc">$</span>y,</span>
+<span id="cb198-4"><a href="describing-and-estimating-migration-age-structures.html#cb198-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_bw5 =</span> <span class="fu">ksmooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n.points =</span> <span class="fu">n</span>(), <span class="at">bandwidth =</span> <span class="dv">5</span>)<span class="sc">$</span>y,</span>
+<span id="cb198-5"><a href="describing-and-estimating-migration-age-structures.html#cb198-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">k_bw10 =</span> <span class="fu">ksmooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n.points =</span> <span class="fu">n</span>(), <span class="at">bandwidth =</span> <span class="dv">10</span>)<span class="sc">$</span>y</span>
+<span id="cb198-6"><a href="describing-and-estimating-migration-age-structures.html#cb198-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb198-7"><a href="describing-and-estimating-migration-age-structures.html#cb198-7" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div>
+<pre><code>## # A tibble: 95 x 8
+##    sample    age migrants population     mi k_default  k_bw5 k_bw10
+##    &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 BRA2000     6  355723.   3311728. 0.107     0.107  0.104  0.100 
+##  2 BRA2000     7  343852.   3307567. 0.104     0.104  0.102  0.0990
+##  3 BRA2000     8  327166.   3258046. 0.100     0.100  0.101  0.0983
+##  4 BRA2000     9  314905.   3272305. 0.0962    0.0962 0.0986 0.0978
+##  5 BRA2000    10  324066.   3345583. 0.0969    0.0969 0.0964 0.0976
+##  6 BRA2000    11  329525.   3451739. 0.0955    0.0955 0.0949 0.0978
+##  7 BRA2000    12  327113.   3518160. 0.0930    0.0930 0.0944 0.0975
+##  8 BRA2000    13  323180.   3473133. 0.0931    0.0931 0.0942 0.0982
+##  9 BRA2000    14  334783.   3566239. 0.0939    0.0939 0.0950 0.100 
+## 10 BRA2000    15  337297.   3528845. 0.0956    0.0956 0.0973 0.103 
+## # ... with 85 more rows</code></pre>
+</div>
+<div id="kernal-smoothing-1" class="section level3" number="7.5.6">
+<h3><span class="header-section-number">7.5.6</span> Kernal smoothing</h3>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="describing-and-estimating-migration-age-structures.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> b, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi)) <span class="sc">+</span></span>
+<span id="cb200-2"><a href="describing-and-estimating-migration-age-structures.html#cb200-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb200-3"><a href="describing-and-estimating-migration-age-structures.html#cb200-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> k_default), <span class="at">col =</span> <span class="st">&quot;darkgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb200-4"><a href="describing-and-estimating-migration-age-structures.html#cb200-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> k_bw5), <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb200-5"><a href="describing-and-estimating-migration-age-structures.html#cb200-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> k_bw10), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-100-1.png" width="672" /></p>
+</div>
+<div id="loess-smoothing" class="section level3" number="7.5.7">
+<h3><span class="header-section-number">7.5.7</span> Loess smoothing</h3>
+<ul>
+<li>The <code>loess.smooth</code> function is also unlikely to smooth a migration age schedule as the default span parameter is too small
+<ul>
+<li>Adjust the smoothing parameter using <code>spar</code> (between 0 and 1), default is <code>2/3</code></li>
+<li>Use <code>evaluation</code> to set the number of predicted values</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="describing-and-estimating-migration-age-structures.html#cb201-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> b <span class="sc">%&gt;%</span></span>
+<span id="cb201-2"><a href="describing-and-estimating-migration-age-structures.html#cb201-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb201-3"><a href="describing-and-estimating-migration-age-structures.html#cb201-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lo_default =</span> <span class="fu">loess.smooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">evaluation =</span> <span class="fu">n</span>())<span class="sc">$</span>y,</span>
+<span id="cb201-4"><a href="describing-and-estimating-migration-age-structures.html#cb201-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">lo_sp2 =</span> <span class="fu">loess.smooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">evaluation =</span> <span class="fu">n</span>(), <span class="at">span =</span> <span class="fl">0.2</span>)<span class="sc">$</span>y,</span>
+<span id="cb201-5"><a href="describing-and-estimating-migration-age-structures.html#cb201-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">lo_sp1 =</span> <span class="fu">loess.smooth</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">evaluation =</span> <span class="fu">n</span>(), <span class="at">span =</span> <span class="fl">0.1</span>)<span class="sc">$</span>y,</span>
+<span id="cb201-6"><a href="describing-and-estimating-migration-age-structures.html#cb201-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="loess-smoothing-1" class="section level3" number="7.5.8">
+<h3><span class="header-section-number">7.5.8</span> Loess smoothing</h3>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="describing-and-estimating-migration-age-structures.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> b, </span>
+<span id="cb202-2"><a href="describing-and-estimating-migration-age-structures.html#cb202-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi)) <span class="sc">+</span></span>
+<span id="cb202-3"><a href="describing-and-estimating-migration-age-structures.html#cb202-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb202-4"><a href="describing-and-estimating-migration-age-structures.html#cb202-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> lo_default), <span class="at">col =</span> <span class="st">&quot;darkgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb202-5"><a href="describing-and-estimating-migration-age-structures.html#cb202-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> lo_sp2), <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb202-6"><a href="describing-and-estimating-migration-age-structures.html#cb202-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> lo_sp1), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
+</div>
+<div id="cubic-spline-smoothing" class="section level3" number="7.5.9">
+<h3><span class="header-section-number">7.5.9</span> Cubic spline smoothing</h3>
+<ul>
+<li>The <code>smooth.spline</code> function might have a nice smooth fit to migration age schedule
+<ul>
+<li>Adjust the smoothing parameter using <code>spar</code> (between 0 and 1)</li>
+<li>Use <code>n</code> to set the number of predicted values</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="describing-and-estimating-migration-age-structures.html#cb203-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> b <span class="sc">%&gt;%</span></span>
+<span id="cb203-2"><a href="describing-and-estimating-migration-age-structures.html#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb203-3"><a href="describing-and-estimating-migration-age-structures.html#cb203-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">s_default =</span> <span class="fu">smooth.spline</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n =</span> <span class="fu">n</span>())<span class="sc">$</span>y,</span>
+<span id="cb203-4"><a href="describing-and-estimating-migration-age-structures.html#cb203-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">s_sp6 =</span> <span class="fu">smooth.spline</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">spar =</span> <span class="fl">0.6</span>)<span class="sc">$</span>y,</span>
+<span id="cb203-5"><a href="describing-and-estimating-migration-age-structures.html#cb203-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">s_sp8 =</span> <span class="fu">smooth.spline</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi, <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">spar =</span> <span class="fl">0.8</span>)<span class="sc">$</span>y)</span></code></pre></div>
+</div>
+<div id="cubic-spline-smoothing-1" class="section level3" number="7.5.10">
+<h3><span class="header-section-number">7.5.10</span> Cubic spline smoothing</h3>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="describing-and-estimating-migration-age-structures.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> b, </span>
+<span id="cb204-2"><a href="describing-and-estimating-migration-age-structures.html#cb204-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mi)) <span class="sc">+</span></span>
+<span id="cb204-3"><a href="describing-and-estimating-migration-age-structures.html#cb204-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb204-4"><a href="describing-and-estimating-migration-age-structures.html#cb204-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> s_default), <span class="at">col =</span> <span class="st">&quot;darkgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb204-5"><a href="describing-and-estimating-migration-age-structures.html#cb204-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> s_sp6), <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb204-6"><a href="describing-and-estimating-migration-age-structures.html#cb204-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> s_sp8), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+</div>
+</div>
+<div id="graduating" class="section level2" number="7.6">
+<h2><span class="header-section-number">7.6</span> Graduating</h2>
+<div id="graduating-1" class="section level3" number="7.6.1">
+<h3><span class="header-section-number">7.6.1</span> Graduating</h3>
+<ul>
+<li>If you require single year migration age data, but only have data by age groups, then graduating methods can be used to estimate migration for each age that sum to the reported age group totals.</li>
+<li>There a multiple graduating methods available in the <code>graduate()</code> function in the DemoTools package
+<ul>
+<li>Built for interpolating population totals, but also suitable for migration flows</li>
+<li>See the <a href="https://timriffe.github.io/DemoTools/articles/graduation_with_demotools.html">guide</a> for more detail on different methods</li>
+</ul></li>
+<li>Requires users to provide <code>Value</code> and minimum <code>Age</code>.</li>
+<li>Can also specify the maximum value of final open age group, if exists, for certain methods such as <code>pclm</code>.</li>
+</ul>
+</div>
+<div id="graduating-2" class="section level3" number="7.6.2">
+<h3><span class="header-section-number">7.6.2</span> Graduating</h3>
+<ul>
+<li>Using the out-migration to Italian islands area in 1970</li>
+</ul>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="describing-and-estimating-migration-age-structures.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(i)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 8
+## # Groups:   age_grp [6]
+##   age_grp age_min age_max region  in_mig out_mig  turn   net
+##   &lt;fct&gt;     &lt;int&gt;   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 0-4           0       4 Islands   4532    7876 12408 -3344
+## 2 5-9           5       9 Islands   3592    7271 10863 -3679
+## 3 10-14        10      14 Islands   2228    5779  8007 -3551
+## 4 15-19        15      19 Islands   3064    8526 11590 -5462
+## 5 20-24        20      24 Islands   6861   15629 22490 -8768
+## 6 25-29        25      29 Islands   5891   11224 17115 -5333</code></pre>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="describing-and-estimating-migration-age-structures.html#cb207-1" aria-hidden="true" tabindex="-1"></a>mx <span class="ot">&lt;-</span> <span class="fu">graduate</span>(<span class="at">Value =</span> i<span class="sc">$</span>out_mig, <span class="at">Age =</span> i<span class="sc">$</span>age_min, </span>
+<span id="cb207-2"><a href="describing-and-estimating-migration-age-structures.html#cb207-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">&quot;pclm&quot;</span>, <span class="at">OAG =</span>  <span class="cn">TRUE</span>, <span class="at">OAnew =</span> <span class="dv">100</span>)</span>
+<span id="cb207-3"><a href="describing-and-estimating-migration-age-structures.html#cb207-3" aria-hidden="true" tabindex="-1"></a>mx</span></code></pre></div>
+<pre><code>##           0           1           2           3           4           5 
+## 1540.822616 1563.081967 1582.487050 1594.810184 1594.859870 1576.283303 
+##           6           7           8           9          10          11 
+## 1534.233098 1470.025351 1388.679355 1301.771896 1221.108012 1158.023181 
+##          12          13          14          15          16          17 
+## 1121.942083 1119.554144 1158.435391 1247.103598 1398.284195 1623.913611 
+##          18          19          20          21          22          23 
+## 1935.092918 2321.755623 2741.539266 3112.329630 3324.796748 3324.915552 
+##          24          25          26          27          28          29 
+## 3125.320990 2812.139216 2482.216694 2189.772149 1958.656025 1781.415216 
+##          30          31          32          33          34          35 
+## 1641.408137 1521.553492 1407.170481 1293.744997 1182.104397 1077.109503 
+##          36          37          38          39          40          41 
+##  984.353885  906.668010  845.151088  798.771354  765.545510  742.411329 
+##          42          43          44          45          46          47 
+##  725.616964  710.186702  690.289756  660.651697  617.401802  562.289211 
+##          48          49          50          51          52          53 
+##  501.033932  441.541294  391.355174  354.054434  330.929904  320.470746 
+##          54          55          56          57          58          59 
+##  319.333087  323.280116  326.437894  324.340533  314.694694  298.140366 
+##          60          61          62          63          64          65 
+##  278.157544  258.006157  240.321118  226.037262  214.561457  204.846583 
+##          66          67          68          69          70          71 
+##  195.376275  185.304981  174.609045  163.809589  153.997862  145.822900 
+##          72          73          74          75          76          77 
+##  139.398446  134.182156  128.693201  121.517548  111.497757   98.816336 
+##          78          79          80          81          82          83 
+##   85.271323   72.734621   62.959243   56.411258   52.462550   49.962470 
+##          84          85          86          87          88          89 
+##   46.549791   40.446619   31.418669   21.471299   13.559411    8.503983 
+##          90          91          92          93          94          95 
+##    5.890223    4.961916    5.352577    7.481251   12.438906   21.715730 
+##          96          97          98          99         100 
+##   32.832828   36.073090   26.875823   13.368895    4.891892</code></pre>
+</div>
+<div id="graduating-3" class="section level3" number="7.6.3">
+<h3><span class="header-section-number">7.6.3</span> Graduating</h3>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="describing-and-estimating-migration-age-structures.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check for close match between graduate values and out_mig </span></span>
+<span id="cb209-2"><a href="describing-and-estimating-migration-age-structures.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 0-4</span></span>
+<span id="cb209-3"><a href="describing-and-estimating-migration-age-structures.html#cb209-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(mx[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div>
+<pre><code>## [1] 7876.062</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="describing-and-estimating-migration-age-structures.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5-9</span></span>
+<span id="cb211-2"><a href="describing-and-estimating-migration-age-structures.html#cb211-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(mx[<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>])</span></code></pre></div>
+<pre><code>## [1] 7270.993</code></pre>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="describing-and-estimating-migration-age-structures.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(i, age_grp, out_mig)</span></code></pre></div>
+<pre><code>## # A tibble: 20 x 2
+## # Groups:   age_grp [20]
+##    age_grp out_mig
+##    &lt;fct&gt;     &lt;dbl&gt;
+##  1 0-4        7876
+##  2 5-9        7271
+##  3 10-14      5779
+##  4 15-19      8526
+##  5 20-24     15629
+##  6 25-29     11224
+##  7 30-34      7046
+##  8 35-39      4612
+##  9 40-44      3634
+## 10 45-49      2783
+## 11 50-54      1716
+## 12 55-59      1587
+## 13 60-64      1217
+## 14 65-69       924
+## 15 70-74       702
+## 16 75-79       490
+## 17 80-84       268
+## 18 85-89       116
+## 19 90-94        35
+## 20 95+         137</code></pre>
+</div>
+<div id="graduating-4" class="section level3" number="7.6.4">
+<h3><span class="header-section-number">7.6.4</span> Graduating</h3>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="describing-and-estimating-migration-age-structures.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="co"># different scales in y-axis</span></span>
+<span id="cb215-2"><a href="describing-and-estimating-migration-age-structures.html#cb215-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> i, </span>
+<span id="cb215-3"><a href="describing-and-estimating-migration-age-structures.html#cb215-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age_min <span class="sc">+</span> <span class="fl">2.5</span>, <span class="at">y =</span> out_mig)) <span class="sc">+</span></span>
+<span id="cb215-4"><a href="describing-and-estimating-migration-age-structures.html#cb215-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb215-5"><a href="describing-and-estimating-migration-age-structures.html#cb215-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb215-6"><a href="describing-and-estimating-migration-age-structures.html#cb215-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">age =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">mx =</span> mx) <span class="sc">%&gt;%</span></span>
+<span id="cb215-7"><a href="describing-and-estimating-migration-age-structures.html#cb215-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> mx)) <span class="sc">+</span></span>
+<span id="cb215-8"><a href="describing-and-estimating-migration-age-structures.html#cb215-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-108-1.png" width="672" /></p>
+</div>
+<div id="exercise-5-ex5.r" class="section level3" number="7.6.5">
+<h3><span class="header-section-number">7.6.5</span> Exercise 5 (ex5.R)</h3>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="describing-and-estimating-migration-age-structures.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.  a) Load the KOSTAT2021.Rproj file. </span></span>
+<span id="cb216-2"><a href="describing-and-estimating-migration-age-structures.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     Run the getwd() below. It should print the directory where the </span></span>
+<span id="cb216-3"><a href="describing-and-estimating-migration-age-structures.html#cb216-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     KOSTAT2021.Rproj file is located.</span></span>
+<span id="cb216-4"><a href="describing-and-estimating-migration-age-structures.html#cb216-4" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb216-5"><a href="describing-and-estimating-migration-age-structures.html#cb216-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     b) Load the packages used in this exercise</span></span>
+<span id="cb216-6"><a href="describing-and-estimating-migration-age-structures.html#cb216-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb216-7"><a href="describing-and-estimating-migration-age-structures.html#cb216-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb216-8"><a href="describing-and-estimating-migration-age-structures.html#cb216-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DemoTools)</span>
+<span id="cb216-9"><a href="describing-and-estimating-migration-age-structures.html#cb216-9" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb216-10"><a href="describing-and-estimating-migration-age-structures.html#cb216-10" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb216-11"><a href="describing-and-estimating-migration-age-structures.html#cb216-11" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb216-12"><a href="describing-and-estimating-migration-age-structures.html#cb216-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run the code below to read in the population age structure data for flows</span></span>
+<span id="cb216-13"><a href="describing-and-estimating-migration-age-structures.html#cb216-13" aria-hidden="true" tabindex="-1"></a><span class="co">#    from Florida to New York based on the 2015 American Community Survey</span></span>
+<span id="cb216-14"><a href="describing-and-estimating-migration-age-structures.html#cb216-14" aria-hidden="true" tabindex="-1"></a>flny <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./data/florida_new_york_acs_2015.csv&quot;</span>)</span>
+<span id="cb216-15"><a href="describing-and-estimating-migration-age-structures.html#cb216-15" aria-hidden="true" tabindex="-1"></a>flny</span>
+<span id="cb216-16"><a href="describing-and-estimating-migration-age-structures.html#cb216-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run the code below to plot the age schedule for migration from New York to </span></span>
+<span id="cb216-17"><a href="describing-and-estimating-migration-age-structures.html#cb216-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    Florida. Note, the uneven spread of the age groups</span></span>
+<span id="cb216-18"><a href="describing-and-estimating-migration-age-structures.html#cb216-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> x, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> AGE_label, <span class="at">y =</span> mig_in, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb216-19"><a href="describing-and-estimating-migration-age-structures.html#cb216-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb216-20"><a href="describing-and-estimating-migration-age-structures.html#cb216-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb216-21"><a href="describing-and-estimating-migration-age-structures.html#cb216-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb216-22"><a href="describing-and-estimating-migration-age-structures.html#cb216-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Estimate the age schedule based on single years up to 100, based on a </span></span>
+<span id="cb216-23"><a href="describing-and-estimating-migration-age-structures.html#cb216-23" aria-hidden="true" tabindex="-1"></a><span class="co">#    graduation of the migration data in flny</span></span>
+<span id="cb216-24"><a href="describing-and-estimating-migration-age-structures.html#cb216-24" aria-hidden="true" tabindex="-1"></a>mx <span class="ot">&lt;-</span> <span class="do">#####(Value = flny$#####, Age = #####$age_min, </span></span>
+<span id="cb216-25"><a href="describing-and-estimating-migration-age-structures.html#cb216-25" aria-hidden="true" tabindex="-1"></a>               method <span class="ot">=</span> <span class="st">&quot;pclm&quot;</span>, OAG <span class="ot">=</span>  <span class="cn">TRUE</span>, OAnew <span class="ot">=</span> <span class="do">#####)</span></span>
+<span id="cb216-26"><a href="describing-and-estimating-migration-age-structures.html#cb216-26" aria-hidden="true" tabindex="-1"></a>mx</span>
+<span id="cb216-27"><a href="describing-and-estimating-migration-age-structures.html#cb216-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Build a data frame to store the graduated data frame and a migration </span></span>
+<span id="cb216-28"><a href="describing-and-estimating-migration-age-structures.html#cb216-28" aria-hidden="true" tabindex="-1"></a><span class="co">#    intensities (mx rescaled so that age specific intensities sum to one)</span></span>
+<span id="cb216-29"><a href="describing-and-estimating-migration-age-structures.html#cb216-29" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb216-30"><a href="describing-and-estimating-migration-age-structures.html#cb216-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, </span>
+<span id="cb216-31"><a href="describing-and-estimating-migration-age-structures.html#cb216-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">mx =</span> mx,</span>
+<span id="cb216-32"><a href="describing-and-estimating-migration-age-structures.html#cb216-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">mi =</span> <span class="do">#####/sum(mx)</span></span>
+<span id="cb216-33"><a href="describing-and-estimating-migration-age-structures.html#cb216-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb216-34"><a href="describing-and-estimating-migration-age-structures.html#cb216-34" aria-hidden="true" tabindex="-1"></a>d</span>
+<span id="cb216-35"><a href="describing-and-estimating-migration-age-structures.html#cb216-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plot the graduated age schedule </span></span>
+<span id="cb216-36"><a href="describing-and-estimating-migration-age-structures.html#cb216-36" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb216-37"><a href="describing-and-estimating-migration-age-structures.html#cb216-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="do">#####, y = #####)) +</span></span>
+<span id="cb216-38"><a href="describing-and-estimating-migration-age-structures.html#cb216-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb216-39"><a href="describing-and-estimating-migration-age-structures.html#cb216-39" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Use the age and migration intensities in d to fit a 11 parameter Rogers-</span></span>
+<span id="cb216-40"><a href="describing-and-estimating-migration-age-structures.html#cb216-40" aria-hidden="true" tabindex="-1"></a><span class="co">#    Castro age schedule (with a retirement peak, but no post retirement peak)</span></span>
+<span id="cb216-41"><a href="describing-and-estimating-migration-age-structures.html#cb216-41" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">mig_estimate_rc</span>(<span class="at">ages =</span> d<span class="sc">$</span><span class="do">#####, mx = d$mi,</span></span>
+<span id="cb216-42"><a href="describing-and-estimating-migration-age-structures.html#cb216-42" aria-hidden="true" tabindex="-1"></a>                     <span class="at">pre_working_age =</span> <span class="do">#####, working_age = TRUE,</span></span>
+<span id="cb216-43"><a href="describing-and-estimating-migration-age-structures.html#cb216-43" aria-hidden="true" tabindex="-1"></a>                     <span class="at">retirement =</span> <span class="do">#####, post_retirement = FALSE)</span></span>
+<span id="cb216-44"><a href="describing-and-estimating-migration-age-structures.html#cb216-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Run the code below to plot the fitted Rogers Casto age schedule</span></span>
+<span id="cb216-45"><a href="describing-and-estimating-migration-age-structures.html#cb216-45" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> f[[<span class="dv">2</span>]],</span>
+<span id="cb216-46"><a href="describing-and-estimating-migration-age-structures.html#cb216-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> data)) <span class="sc">+</span></span>
+<span id="cb216-47"><a href="describing-and-estimating-migration-age-structures.html#cb216-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb216-48"><a href="describing-and-estimating-migration-age-structures.html#cb216-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> median), <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb216-49"><a href="describing-and-estimating-migration-age-structures.html#cb216-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb216-50"><a href="describing-and-estimating-migration-age-structures.html#cb216-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. Calculate the indices based on the median of the parameter distributions </span></span>
+<span id="cb216-51"><a href="describing-and-estimating-migration-age-structures.html#cb216-51" aria-hidden="true" tabindex="-1"></a><span class="co">#    for the Rogers Castro age schedule</span></span>
+<span id="cb216-52"><a href="describing-and-estimating-migration-age-structures.html#cb216-52" aria-hidden="true" tabindex="-1"></a>f[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span></span>
+<span id="cb216-53"><a href="describing-and-estimating-migration-age-structures.html#cb216-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, median) <span class="sc">%&gt;%</span></span>
+<span id="cb216-54"><a href="describing-and-estimating-migration-age-structures.html#cb216-54" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####() %&gt;%</span></span>
+<span id="cb216-55"><a href="describing-and-estimating-migration-age-structures.html#cb216-55" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####()</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bell2002" class="csl-entry">
+Bell, Martin, Marcus Blake, Paul Boyle, O. Duke-Williams, Philip H. Rees, John Stillwell, and Graeme John Hugo. 2002. <span>“<span class="nocase">Cross-national comparison of internal migration: issues and measures</span>.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 165 (3): 435–64. <a href="https://doi.org/10.1111/1467-985X.00247">https://doi.org/10.1111/1467-985X.00247</a>.
+</div>
+<div id="ref-Bell2009" class="csl-entry">
+Bell, Martin, and Salut Muhidin. 2009. <span>“<span class="nocase">Cross-National Comparisons of Internal Migration</span>.”</span> Human Development Reports. United Nations Development Programme.
+</div>
+<div id="ref-Bernard2014" class="csl-entry">
+Bernard, Aude, Martin Bell, and Elin Charles-Edwards. 2014. <span>“<span class="nocase">Improved measures for the cross-national comparison of age profiles of internal migration</span>.”</span> <em>Population Studies</em> 68 (2): 179–95. <a href="https://doi.org/10.1080/00324728.2014.890243">https://doi.org/10.1080/00324728.2014.890243</a>.
+</div>
+<div id="ref-Rogers1975" class="csl-entry">
+Rogers, Andrei. 1975. <em><span class="nocase">Introduction to Multiregional Mathematical Demography</span></em>. New York, New York, USA: Wiley.
+</div>
+<div id="ref-Rogers1981" class="csl-entry">
+Rogers, Andrei, and Luis J. Castro. 1981. <span>“<span>Model Migration Schedules</span>.”</span> RR-81-30. Vol. 81. Laxenburg, Austria: International Institute for Applied Systems Analysis. <a href="http://webarchive.iiasa.ac.at/Admin/PUB/Documents/RR-81-030.pdf">http://webarchive.iiasa.ac.at/Admin/PUB/Documents/RR-81-030.pdf</a>.
+</div>
+<div id="ref-Rogers1994" class="csl-entry">
+Rogers, Andrei, and Jani S Little. 1994. <span>“<span class="nocase">An International Journal of Parameterizing age patterns of demographic rates with the multiexponential model schedule</span>.”</span> <em>Mathematical Population Studies</em> 4 (3): 175–95. <a href="https://doi.org/10.1080/08898489409525372">https://doi.org/10.1080/08898489409525372</a>.
+</div>
+<div id="ref-Rogers1999a" class="csl-entry">
+———. 1999. <span>“<span class="nocase">Estimating the regional migration patterns of the foreign-born population in the United States: 1950-1990.</span>”</span> <em>Mathematical Population Studies</em> 7 (3): 181–216, 307. <a href="https://doi.org/10.1080/08898489909525457">https://doi.org/10.1080/08898489909525457</a>.
+</div>
+<div id="ref-Rogers2010" class="csl-entry">
+Rogers, Andrei, James Raymer, and Jani Little. 2010. <em><span class="nocase">The Indirect Estimation of Migration</span></em>. Vol. 26. The Springer Series on Demographic Methods and Population Analysis. Dordrecht: Springer Netherlands. <a href="https://doi.org/10.1007/978-90-481-8915-1">https://doi.org/10.1007/978-90-481-8915-1</a>.
+</div>
+<div id="ref-Rogers1987a" class="csl-entry">
+Rogers, Andrei, and John Watkins. 1987. <span>“<span class="nocase">General Versus Elderly Interstate Migration and Population Redistribution in the United States</span>.”</span> <em>Research on Aging</em> 9 (4): 483–529. <a href="https://doi.org/10.1177/0164027587094002">https://doi.org/10.1177/0164027587094002</a>.
+</div>
+<div id="ref-UnitedNations1992" class="csl-entry">
+———. 1992. <em><span class="nocase">Preparing Migration Data for Subnational Population Projections</span></em>. <a href="http://www.un.org/esa/population/techcoop/IntMig/migdata{\_}popproj/migdata{\_}popproj.html">http://www.un.org/esa/population/techcoop/IntMig/migdata{\_}popproj/migdata{\_}popproj.html</a>.
+</div>
+<div id="ref-Wilson2010" class="csl-entry">
+Wilson, Tom. 2010. <span>“<span class="nocase">Model migration schedules incorporating student migration peaks</span>.”</span> <em>Demographic Research</em> 23 (8): 191–222. <a href="https://doi.org/10.4054/DemRes.2010.23.8">https://doi.org/10.4054/DemRes.2010.23.8</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimating-net-migration.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="describing-bilteral-migration-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-age.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

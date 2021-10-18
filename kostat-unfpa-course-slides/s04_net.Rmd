@@ -1,0 +1,459 @@
+---
+title: Estimating Net Migration
+author: Guy J. Abel
+date: 
+fontsize: 10pt
+output:
+  beamer_presentation:
+    theme: "Frankfurt"
+    slide_level: 3
+    keep_tex: true
+    includes:
+      in_header: header.txt
+bibliography: C:\\Users\\Guy\\Documents\\library.bib      
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(prompt= TRUE, collapse = TRUE, comment = NA)
+knitr::knit_hooks$set(purl = hook_purl)
+```
+
+# Net Migration
+
+## .
+
+### Net migration
+
+- At the most basic level demographers are typically interested in the net balance of migration as a component of population change.
+- Might not have an interest in the complexities involved in the different scales of migration to and from each region.
+- Net migration tends to be used as it is readily available.
+    - Data for in- and out-migration require specialized migration question in surveys or censuses. 
+    - Net migration does not require any questions on migration.
+- Most censuses measure population changes accurately enough in order to develop a good estimate of net migration. 
+- Net migration has many weaknesses for the study of migration patterns, migration trends and population projections @rogers1990rnm
+    - Net migrants do not exist
+
+### Net migration estimation
+
+- Three groups of methods to derive net migration
+- First two are residual methods 
+
+    1. Vital statistics based on population change and natural increase data
+    2. Survival methods based on population change data
+    3. Place of birth methods based on changes in migrant stock data. 
+
+- @UnitedNations1983 provides a nice discussion on the relative merits of each method
+
+# Vital Statstics
+
+## .
+
+### Vital statsitics
+
+- The most elementary method to estimate net migration is using the demographic accounting equation
+$$
+M = P^{t+n} - P^{t} - B + D
+$$
+- Simple to calculate.
+- Careful data preparation is required.
+- Commonly applied to estimate net migration by sub-groups of populations where (e.g. sex)
+- Less commonly applied to estimate net migration by age
+$$
+M(x) = P^{t+n}(x+n) - P^{t}(x) + D(x)
+$$ where parenthesis represent age groups $x$ of size $n$
+- Not easy to accurately estimate age-specific death counts that align to period between censuses 
+    
+### Vital statsitics
+
+- The *migest* package has a `net_vs()` function to help obtain net migration estimates using vital statistics. 
+- Demonstrate using the `alabama_1970` data set in migest
+    - Births are given in the under 10 age groups for `pop_1960`
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(migest)
+alabama_1970
+```
+
+### Vital statsitics
+
+- Obtain race and sex population totals
+- Need to remove those not born in the original population `pop_1960`.
+
+```{r}
+d <- alabama_1970 %>%
+  group_by(race, sex) %>%
+  summarise(births = sum(pop_1960[1:2]),
+            pop_1960 = sum(pop_1960) - births,
+            pop_1970 = sum(pop_1970)) %>%
+  ungroup()
+d
+```
+
+### Vital statsitics
+
+- Given the vital statistics `net_vs()` estimate net migration and returns three additional columns
+    - `pop_change` for the population difference
+    - `natural_inc` for the difference in births and deaths
+    - `net` for the net migration based on the two previous columns
+- The `net_vs()` function assumes `births_col = "births"` and `deaths_col = "deaths"`.
+    - Can alter from default if not the case
+```{r}
+d %>%
+  mutate(deaths = c(51449, 58845, 86880, 123220)) %>%
+  net_vs(pop0_col = "pop_1960", pop1_col = "pop_1970")
+```
+
+### Difficulties
+
+- Strictly speaking should refer to net migration estimates as a mixture of net migration and net balance of errors from the other data sources
+- Assumes international migration is nil or negligible.
+- @Bogue1982 list six difficulties with the vital statistics methods, most of which are due to the estimate is a residual from the combination of other data sources
+
+
+1. Requires a stable administrative geography, where regions or countries do not change or at least enumerate population, births and deaths for the same units throughout the interval.
+
+2. Adjustments will be required if there has been a big change in the method to collect census, for example switching from *de jure* to *de facto* for defining place of residence
+
+3. Adjustments will be required if the birth and death periods do not align with the census dates. Typically vital statistics are annual measures starting from 1st January where as census dates are not usually on 1st January.
+
+### Difficulties
+
+4. Births need to be tabulated or adjusted to mothers place of residence and deaths need to be tabulated or adjusted to place of residence or deceased. If place of occurrence is used for either then additional potential for error is created
+
+5. Births and deaths need to be corrected for under-registration if it is known to exist. 
+
+6. Adjustments might be required to include/exclude population groups such as military or students - depending on how each are counted in the censuses and vital statistics registrations.  
+
+
+
+# Survival Methods
+
+## . 
+
+### Survival methods
+
+- Survival ratios can be used to compute mortality over the period, to then determine net migration as a residual.
+- Survival ratios are an estimate of what proportion of a hypothetically closed population would be present at the end of the period.
+    - Survival measures the force of mortality, rather than an overall population change
+- Methods can be applied to total population or age-specific populations
+- Preferred for age-specific net migration estimates as does not require age-specific death counts.
+- Three related approaches using:
+    - Forward survival ratios
+    - Reverse survival ratios
+    - Average survival ratios
+
+    
+### Forward survival ratios
+
+- Difference between the surviving expected population and observed population at the end of the period is an estimate of net migration during the interval
+$$
+M'(x) = P^{t+n}(x+n) - s(x)P^{t}(x) 
+$$ where:
+    - $M'(x)$ is the net migration for between $t$ and $t+n$ for age group $x$
+    - $P^{t+n}(x+n)$ is the observed population at the end of the period ($t+n$) for age group $x$
+    - $s(x)$ is survival rate between $t$ and $t+1$ for age group $x$
+    - $P^{t}(x)$ is the observed population at the start of the period ($t$) for age group $x$
+
+### Reverse survival ratios
+
+- An alternative method is based on the reverse of the previous method
+- Estimate the number of persons that would have been $x$ years of age at the earlier census from the number who are enumerated as $x+n$ years old in the second census by applying *reverse survival ratios* 
+
+$$
+M''(x) = \frac{1}{s(x)}P^{t+n}(x+n) - P^{t}(x) 
+$$
+
+### Average survival ratios
+
+- The average survival ratios averages the net migration estimates form the forward and reverse survival ratios
+
+$$
+\bar{M}(x) = \frac{1}{2}(M'(x) + M''(x) )
+$$
+
+- @Siegel1952 found the average survival ratio method provides the most exact approximation under normal circumstances
+- Summary of assumptions for deaths: 
+    - Forward method: all deaths of migrants are not counted as migrants, equivalent to assuming that they all died at the place of origin. 
+    - Reverse method: the opposite is assumed. All migrants that die are counted as migrants, as are as those that would have moved had they survived the interval. 
+    - Average method: only those that died after moving are counted as migrants (approximately).
+
+
+### Survival methods in R
+
+- The *migest* package contains the `net_sr()` function to calculate all three survival ratio estimates of net migration.
+- Demonstrate using the `bombay_1951` data
+  - Survival ratios come from a UN model life table
+
+```{r}
+bombay_1951
+```
+### Survival methods in R
+
+```{r}
+net_sr(bombay_1951, pop0_col = "pop_1941", pop1_col = "pop_1951")
+```
+<!-- ### Survival methods in R -->
+
+<!-- # use example in exercise -->
+
+<!-- - Second example using `alabama_1970` where race-sex specific survivor ratios come from US census life tables -->
+<!--     - Survival ratios for all age groups are given -->
+<!--     - Births are given in the under 10 age groups for `pop_1960` -->
+
+<!-- ```{r} -->
+<!-- net_sr(alabama_1970, pop0_col = "pop_1960", pop1_col = "pop_1970", -->
+<!--        survival_ratio_col = "us_census_sr") -->
+<!-- ``` -->
+
+<!-- ### Survival methods in R -->
+
+<!-- - Compare results survival methods with earlier estimates using vital start -->
+
+<!-- ```{r} -->
+<!-- net_sr(d, pop0_col = "pop_1960", pop1_col = "pop_1970", -->
+<!--        survival_ratio_col = "us_census_sr") %>% -->
+<!--     group_by(race, sex) %>% -->
+<!--     summarise(across(.cols = contains("net"), .fns = ~sum(.))) -->
+
+<!-- # old estimate from vital statistics -->
+<!-- vs -->
+<!-- ``` -->
+
+
+### Survival methods in R
+
+- Second example using `manila_1970` where survivor ratios come from census life tables for all of the Philippines
+- Births and survival rates of children are unknown
+
+```{r}
+manila_1970
+```
+
+### Survival methods in R
+
+
+- Estimate age-specific net migration for all ages, except children
+```{r}
+net_sr(manila_1970, pop0_col = "pop_1960", pop1_col = "pop_1970",
+       survival_ratio_col = "phl_census_sr")
+```
+
+
+### Survival methods in R
+
+- Estimate children net migration setting `net_children = TRUE`. 
+- Uses method of @Shryock1976[p381] 
+    - Age 0-4: 1/4 (ratio of 0-4 population to 15-44 female population) times net migration for females aged 15-44
+    - Age 5-9: 3/4 (ratio of 5-9 population to 20-49 female population) times net migration for females aged 20-49.
+- Can alter weights in `maternal_exposure` argument 
+    - default is `c(0.25, 0.75)`
+```{r}
+net_sr(manila_1970, pop0_col = "pop_1960", pop1_col = "pop_1970",
+       survival_ratio_col = "phl_census_sr", net_children = TRUE)
+```
+
+    
+### Survival ratios
+
+- The success of the above methods depend on the survival ratios.
+- Ratios can be obtained from 
+    - Life table survival ratios (LTSR) as in `bombay_1951` example
+    - Census survival ratios (CSR) as in `manila_1970` example
+    
+
+- Life table survival ratios are derived from the $L_x$ columns of the life table; the ratio of persons in stationary population at age group $x$ that are alive in comparisons to a previous age group $x-n$. 
+$$
+s_n(x) = \frac{L(x+n)}{L(x)}
+$$
+- Can also be derived from mortality rates, if known.
+
+
+### Life table survival ratios
+
+- For an accurate net migration estimate, $s_n(x)$ should 
+    - Measure the average mortality conditions of the period
+    - Reasonably applicable to the area and population for which migration estimates are required. 
+- Age data to derive life tables may be inaccurate. Errors will impact the net migration estimates. 
+
+### Census survival ratios
+
+- Where appropriate life tables are not available or not appropriate, survival ratios can be computed from census age distributions
+- A census survival ratio (CSR) is the ratio of the population aged $x+n$ at a given census to the population aged $x$ at the census $n$ years earlier. 
+- Computed for a nation as a whole assuming a "closed" population.
+    - Adjust data for international migration before calculating CSR if international migration is a influential part of population change for a given area or group.
+    
+    
+### Age-specfic birthplace data
+
+- Example to derive the birthplace-age-specific survival ratios from the 1950 and 1960 census data, given in `usa_1960`
+
+```{r}
+usa_1960
+```
+
+### Age-specfic birthplace data
+
+- Focus on white males for example later on
+```{r}
+s <- usa_1960 %>%
+  filter(sex == "male",
+         race == "white") %>%
+  mutate(sr = pop_1960/pop_1950) %>%
+  select(-contains("pop"))
+s
+```
+
+
+
+### Census survival ratios
+
+- The CSR method tends to correct for systematic errors in the age data.
+    - For example, get $s_n(x)$ in adolescent years greater than one as larger under-registration in 0-4 compared to 5-9 or 10-14 age groups.
+- Systematic errors in the censuses might lead to survivor ratios to incorporate net census errors, that might lead to better estimate of net migration compared to LTSR.
+- CSR tend to be less smooth than LTSR,
+    - Perhaps more realistic age-patterns of net migration.
+
+
+### Limitations of census survival ratios
+
+A number of weaknesses for CSR
+
+- Assumes a closed population, so data must be adjusted for international migration before calculating CSR. 
+    - Good data on international migration data not always available
+- Mortality may vary greatly in each region, so using a CSR based on national level data not always appropriate. 
+    - Build in regional correction factors
+- Census enumeration may vary greatly in each region. 
+    - Build in regional correction factors
+- A single census can not provide CSR for children. 
+    - Use birth statistics to approximate new born population for CSR calculation
+    - If birth statistics are not reliable, use an approximation method using the ratio of women to children and female estimated net migration
+    
+
+
+
+
+
+
+# Birthplace
+
+## .
+
+### Birthplace
+
+- If data on lifetime migration at the start and end of the period are available, net migration can be estimated for each migrant group.
+- Different procedure can be applied, depending on the availability of data
+    1. Lifetime migration totals without age characteristics
+    2. Lifetime migration data with age characteristics
+
+- Both rely on a survival approach
+    - Survival ratios are calculated by birthplace (and possibly other factors)
+- If you view birthplace as just another dimension (such as sex) then the method is near identical to the survival ratio methods.
+    - Can use the `net_sr()` function in migest once data is in correct format
+
+### Birthplace totals
+
+- To demonstrate arranging birthplace totals with no age dimension and the application of `net_sv()` we use the `indian_sub` data in the *migest* package.
+
+```{r}
+indian_sub
+```
+
+### Birthplace totals
+
+- Separate columns for populations depending on birthplace         
+    - In state of birth or out of the state of birth.
+- Rearrange data using `pivot_longer()` and `pivot_wider()` in the *tidyr* package
+    - Location in its own column
+    - Populations in each year in own columns
+    - Work with male populations between 1921 and 1931 for those born in four selected states
+    - Drop `net_migrants`, `sex` and `zone` columns
+
+```{r}
+d <- indian_sub %>%
+  filter(between(year, 1921, 1931),
+                 sex == "male",
+                 state %in% c("Assam", "Madras", "Mysore", "Bombay")) %>%
+  select(-net_migrants, -zone, -sex) %>%
+  pivot_longer(cols = contains("migrants"), names_to =  "location",
+               values_to = "pop") %>%
+  rename(birthplace = state)
+```
+
+### Birthplace totals
+
+```{r}
+d
+```
+
+### Birthplace totals
+
+```{r}
+d <- d %>%
+  mutate(location = case_when(
+    location == "in_migrants" ~ "in-state",
+    location == "out_migrants" ~ "out-of-state"
+  )) %>%
+  pivot_wider(names_from = year, values_from = pop, names_prefix = "pop_")
+d
+```
+### Birthplace totals
+
+- Can now apply survival ratios to estimate net migration over a period
+- Use a censuses survival ratio of 0.81 for both in migrants and out migrants
+```{r}
+d <- d %>%
+  mutate(sr = 0.81) %>%
+  net_sr(pop0_col = "pop_1921", pop1_col = "pop_1931")
+d
+```
+### Birthplace totals
+
+- To derive the net migration flow estimate for each of the states we need to make one more step 
+    - Subtract the net migration for the out-of-state migrants from the net migration for the in-state migrants
+    
+```{r}
+d %>%
+  group_by(birthplace) %>%
+  summarise(net = net_forward[location == "in-state"] -
+              net_forward[location == "out-of-state"])
+```
+
+### Age-specfic birthplace data
+
+- To demonstrate arranging age-specific birthplace data and the application of `net_sv()` we use the `new_england_1960` data in the *migest* package.
+    - New England population totals by birthplace for white males.
+
+```{r}
+new_england_1960
+```
+
+### Age-specfic birthplace data
+
+- Apply the age-sex-race-birthplace specific census suruviorshp rate based on the US census (see previous CSR slide)
+```{r}
+d <- new_england_1960 %>%
+  left_join(s)
+d
+```
+
+### Age-specfic birthplace data
+
+- Use the national age-sex-race-birthplace CSR to estimate net migration by birthplace and age in New England for white males
+```{r}
+d %>%
+  net_sr(pop0_col = "pop_1950", pop1_col = "pop_1960") %>%
+  relocate(contains("net"))
+```
+
+### Exercise (ex4.R)
+
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('../exercise/ex4.R') }
+```
+
+
+### References
+
+\scriptsize

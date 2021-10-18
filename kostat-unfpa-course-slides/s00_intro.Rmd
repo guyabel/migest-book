@@ -1,0 +1,63 @@
+---
+title: Course Introduction
+author: Guy J. Abel
+date: 
+fontsize: 10pt
+output:
+  beamer_presentation:
+    theme: "Frankfurt"
+    slide_level: 3
+    keep_tex: false
+    includes:
+      in_header: header-no-r-code.txt
+bibliography: C:\\Users\\Guy\\Documents\\library.bib
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(prompt= TRUE, collapse = TRUE, comment = NA)
+knitr::knit_hooks$set(purl = hook_purl)
+```
+
+# Outline
+
+## .
+
+###  IUSSP Workshop on Migration Estimation
+
+- Course outline
+    - Part 1: Migration data and concepts
+    - Part 2: Handling migration data in R
+    - Part 3: Summary migration indices
+    - Part 4: Estimating net migration
+    - Part 5: Describing and estimating migration age structure
+    - Part 6: Describing bilateral migration data
+    - Part 7: Estimating bilateral migration
+    - Part 8: Chord diagrams for visualising bilateral migration 
+    - Part 9: Sankey plots for visualising bilateral migration 
+- Folder with slides, code in slides, exercises and exercise solutions on dropbox
+    - `http://bit.ly/kostat2021mig`
+- The `slides-code` folder contains the R functions in the PDF's of each slide
+    - Ignore the first few lines (with `knitr` functions) - they are by-product of using Rmarkdown to create the slide PDFs
+
+
+
+# General Points
+
+## .
+
+### General Points
+
+1. Please be patient. Teaching classes that involve R is never smooth. 
+    - Everyone has different computers, R versions, package versions
+    - Remote learning and getting used to Zoom
+2. I am assuming you have some knowledge on using R, especially the *tidyverse* set of packages. If you do not, then try working your way through an online course to get up to speed:
+    - `https://r-bootcamp.netlify.app/` (free)
+3. Throughout the course we will work on some exercises. You might get stuck, especially if you are new to R. Be patient and remember that the frustration is a normal part of learning a programming language.
+4. The exercise solutions are provided. If you do not have time to complete the exercises in class, spend some extra time to keep working on the exercises. 
+    - Some days we will not have time to finish all the exercises
+    
+5. If you having trouble installing R, RStudio or the packages I have set up an RStudio cloud project where everything is installed for you:
+    - `https://rstudio.cloud/project/1593361`
+    - Need to create a RStudio account
+    - Save changes using button on top right

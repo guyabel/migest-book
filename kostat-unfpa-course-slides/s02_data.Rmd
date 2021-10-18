@@ -1,0 +1,356 @@
+---
+title: Handling Migration Data in R
+author: Guy J. Abel
+date: 
+fontsize: 10pt
+output:
+  beamer_presentation:
+    theme: "Frankfurt"
+    slide_level: 3
+    keep_tex: true
+    includes:
+      in_header: header.txt
+bibliography: C:\\Users\\Guy\\Documents\\library.bib      
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(prompt= TRUE, collapse = TRUE, comment = NA)
+knitr::knit_hooks$set(purl = hook_purl)
+```
+
+# Contingency Table
+
+## .
+
+### Contingency Table
+
+- Bilateral migration flow data are commonly represented in square tables. 
+- Values in non-diagonal cells represent a origin-destination count of migration between a specified set of regions. 
+- Values in diagonal cells represent some form of non-moving population, or those that move within a region, which are typically not presented. 
+
+\begin{center}
+\begin{tabular}{lrrrrrcrrcrrr}																											
+\toprule																											
+\cmidrule{1-6}																											
+\textit{Origin}  	&	 \multicolumn{5}{c}{\textit{Destination}} 									\\																
+\cmidrule{2-6}																											
+\textit{ }  	&	 A 	&	 B 	&	 C 	&	 D 	&	 Sum 	\\																
+\cmidrule{1-6}																											
+A 	&		&	100	&	30	&	70	&	200	\\																
+B 	&	50	&		&	45	&	5	&	100	\\																
+C 	&	60	&	35	&		&	40	&	135	\\																
+D 	&	20	&	25	&	20	&		&	65	\\																
+Sum	&	130	&	160	&	95	&	115	&	500	\\																
+\bottomrule																											
+\end{tabular}																											
+\end{center}
+
+### Contingency Table
+
+- Often denoted as $m_{ij}$
+    - Row totals, the out-migration counts: $\sum_j m_{ij} = m_{i+}$
+    - Column totals, the in-migration counts: $\sum_i m_{ij} = m_{+j}$
+    - Net migration totals: $m_{i+} - m_{i+}$
+    - Total migration: $m_{++}$
+    
+# Data Manipulation
+
+## .
+
+### R `matrix` and `array`
+
+
+- Some functions for describing and estimating migration in R require flow tables as `matrix` or `array` type objects
+- Create a `matrix` in R using the `matrix()` function
+    - Data read in by column. Change change using `byrow = FALSE`
+    - Use the `dimnames` argument to supply region names
+
+```{r}
+# create region labels
+r <- LETTERS[1:4]
+r
+
+# create matrix
+m0 <- matrix(data = c(0, 100, 30, 70, 50, 0, 45, 5, 60, 35, 0, 40, 20, 25, 20, 0), 
+             nrow = 4, ncol = 4, byrow = TRUE,
+             dimnames = list(orig = r, dest = r))
+m0
+```
+
+### R `matrix` and `array`
+
+- Create an `array` in R using the `array()` function
+
+```{r}
+m1 <- array(data = sample(x = 1:100, size = 32), 
+            dim = c(4, 4, 2), 
+            dimnames = list(orig = r, dest = r, sex = c("female", "male")))
+m1
+```
+
+### Show totals
+
+- The `addmargins()` functions adds extra row, column and tables to display the dimension sums.
+```{r}
+addmargins(A = m0)
+```
+
+
+
+### Convert to matrix
+
+- Data will not always come as an `matrix` or an `array`.
+- There a couple of useful functions in R to convert data to when working with migration tables in R
+- The `xtab()` function converts data frames into a `matrix` or `array`
+    - `formula` column names with 
+        - left hand side the column name to fill the `matrix` or `array`
+        - a `~` to separate the left and right hand side
+        - right hand side the columns to cross-classifying the left hand variable (separated by `+`).
+    - `data` containing the variables for `formula`
+- The `as.data.frame.table()` function takes a `matrix` or `array`  and converts it to a `data.frame` based on the array dimension names.
+    - `responseName` to set the column name of based on the cells of the `matrix` or `array`
+
+
+### Convert to matrix
+
+```{r, message=FALSE, echo=FALSE}
+library(tidyverse)
+d0 <- expand_grid(orig = r, dest = r) %>%
+  mutate(flow = 1:16)
+```
+
+```{r}
+# tidy migration data
+d0
+```
+
+### Convert to matrix
+
+```{r}
+# convert to matrix
+m2 <- xtabs(formula = flow ~ orig + dest, data = d0)
+m2
+```
+
+
+### Convert to data frame
+
+```{r}
+# convert back to tibble
+m2 %>%
+  as.data.frame.table(responseName = "flow") %>%
+  as_tibble()
+```
+
+### Convert to data frame
+
+```{r}
+# convert array to tibble
+d1 <- m1 %>%
+  as.data.frame.table(responseName = "flow") %>%
+  as_tibble()
+d1
+```
+# Matrix Operations
+
+## . 
+
+### Displaying migration matrics
+
+- When dealing with migration `matrix` objects in R, they often are difficult to view
+    - Lengthy dimension names, 
+    - Unit size
+    - Diagonal terms included but not of interest
+- Some helpful R functions to adapt objects for easier viewing
+- Demonstrate with the `uar_1960` object in the *migest* package      
+    - Lifetime migration matrix for Governorates of United Arab Republic in 1960 used in the manual of @UnitedNations1983
+
+### Displaying migration matrics
+
+```{r}
+library(migest)
+uar_1960
+```
+
+### Abbriviate names
+
+- View and alter the `matrix` dimension names using `rownames()` and `colnames()` or `dimnames()`
+- The `abbreviate()` function applies an algorithm to shorten names
+```{r}
+dimnames(uar_1960)
+# make a copy
+u0 <- uar_1960
+# new abbreviated region names
+r <- list(orig = uar_1960 %>%
+            rownames() %>%
+            abbreviate(),
+          dest = uar_1960 %>%
+            colnames() %>%
+            abbreviate())
+```
+
+### Abbriviate names
+
+```{r}
+r
+# apply the abbreviated region names
+dimnames(u0) <- r
+```
+
+
+### Abbriviate names
+
+```{r}
+u0
+```
+
+### Data scaling
+
+- Basic arithmetic operators to scale the data to an appropriate level
+- The `round()` function to specify precision of numbers
+```{r}
+u1 <- round(x = u0/1000, digits = 1)
+u1
+```
+
+### Diagonal elements
+
+- Set diagonal terms (non-movers) to zero using the `diag()` function
+```{r}
+u2 <- u0
+diag(u2) <- 0
+u2
+```
+
+
+# Summaries
+
+## . 
+
+### Net flows and counterflows
+
+- The *migest* package contains a number of functions to provide summaries of origin-destination migration data
+- The `counter()` function calculates the counter flow and net flow
+    - Accepts `matrix` or `data.frame` (or `tibble`) inputs
+
+```{r}
+counter(m0)
+```
+### Net flows and counterflows
+
+```{r}
+d1 %>%
+  group_by(sex) %>%
+  counter()
+```
+
+
+### Totals
+
+- The `sum_turnover()` provides summary in-migration, out-migration, net-migration and turnover totals for each region
+    - Accepts `matrix` or `data.frame` (or `tibble`) inputs
+    - Setting `type = "international"` to change labels in outputs
+
+```{r}
+sum_turnover(m0)
+```
+
+### Totals
+
+```{r}
+sum_turnover(m = d0, type = "international")
+```
+
+
+### Totals
+
+- The `sum_turnover()` function can be applied with to large data sets spanning multiple years (groups)
+- Demonstrate using international flow estimates of @Abel2019
+```{r, cache = TRUE, message=FALSE, warning=FALSE}
+# read data from web depository
+f <- read_csv("https://ndownloader.figshare.com/files/26239945")
+f
+```
+
+
+### Totals
+
+```{r, cache = TRUE}
+# single period
+f %>% 
+  filter(year0 == 1990) %>%
+  sum_turnover(flow_col = "da_pb_closed", type = "international")
+```
+
+### Totals
+
+```{r, cache = TRUE}
+# all periods using group_by
+f %>% 
+  group_by(year0) %>%
+  sum_turnover(flow_col = "da_pb_closed", type = "international") %>%
+  arrange(country)
+```
+
+### Rest of categroies
+
+- The `sum_lump()` function can be used to aggregate up smaller regions.
+    - Specify the the desired level of small flows using the `threshold` argument 
+    - Specify the `lump` argument to apply the `threshold` argument to either the `flow` values or the `in` and `out` totals.
+
+```{r}
+m0
+
+# threshold on flows (default)
+sum_lump(m0, threshold = 50)
+```
+
+### Rest of categroies
+
+
+```{r}
+addmargins(m0)
+# threshold on in and out totals
+sum_lump(m0, threshold = 120, lump = c("in", "out"))
+```
+
+### Rest of categroies
+
+- Useful to reduce the number of corridors when plotting large data sets:
+
+```{r, warning=FALSE}
+# add continental regions to the global flow data set
+library(countrycode)
+d <- f %>% 
+  filter(year0 == 2015) %>%
+  mutate(
+    orig_reg = 
+      countrycode(sourcevar = orig, origin = "iso3c", dest = "un.region.name"),
+    dest_reg = 
+      countrycode(sourcevar = dest, origin = "iso3c", dest = "un.region.name")) %>%
+  relocate(contains("orig"), contains("dest"))
+d
+```
+
+### Rest of categroies
+
+- Apply the `sum_lump()` function to lump together smaller flows (less than 100,000) within and between continents.
+
+```{r, warning=FALSE}
+d %>%
+  group_by(orig_reg, dest_reg) %>%
+  sum_lump(threshold = 1e5, flow_col = "da_pb_closed")
+```
+
+
+
+### Exercise (ex2.R)
+
+
+```{r eval = FALSE, prompt=FALSE,  code = readLines('../exercise/ex2.R') }
+```
+
+### References 
+
+\scriptsize
